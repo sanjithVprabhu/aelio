@@ -1,0 +1,88 @@
+# apps/channel-worker — Channel Adapters (Fastify). Stateless except WebSocket
+# connections, which are sticky via Redis-backed sessions (§11.3).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: channel-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: channel-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: channel-worker
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: channel-worker
+        app.kubernetes.io/part-of: aelio
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3100"
+        prometheus.io/path: "/metrics"
+    spec:
+      nodeSelector:
+        aelio.dev/node-pool: general
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      # Give in-flight WebSocket/web-chat connections time to drain on rollout.
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: channel-worker
+          image: REGISTRY/aelio/channel-worker:latest # patched per-env
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3100
+          envFrom:
+            - configMapRef:
+                name: aelio-shared-config
+            - secretRef:
+                name: aelio-app-secrets
+          env:
+            - name: APP_NAME
+              value: "channel-worker"
+            - name: PORT
+              value: "3100"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "384Mi"
+            limits:
+              cpu: "1"
+              memory: "768Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

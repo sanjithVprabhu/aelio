@@ -1,0 +1,105 @@
+# apps/voice-worker — Real-time Voice (Fastify + native WebSocket).
+# Each call holds one WebSocket. Vertical-first: 4 vCPU / 4 GB per pod,
+# ~50 concurrent calls per pod (§11.4). Runs on the dedicated, tainted
+# "voice" node group (c6i.2xlarge) — see tolerations + nodeSelector.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voice-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: voice-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  # Capacity-planned by concurrent call count; HPA scales on active connections.
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: voice-worker
+  strategy:
+    # Mid-call failover is not possible (§11.4). Roll one pod at a time and let
+    # active calls drain rather than surging + cutting connections aggressively.
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: voice-worker
+        app.kubernetes.io/part-of: aelio
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3200"
+        prometheus.io/path: "/metrics"
+    spec:
+      # Schedule only onto the dedicated voice node group (§12.1 taint).
+      nodeSelector:
+        aelio.dev/node-pool: voice
+      tolerations:
+        - key: "aelio.dev/voice"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      # Long grace period so in-progress calls can finish before pod removal.
+      terminationGracePeriodSeconds: 300
+      containers:
+        - name: voice-worker
+          image: REGISTRY/aelio/voice-worker:latest # patched per-env
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3200
+          envFrom:
+            - configMapRef:
+                name: aelio-shared-config
+            - secretRef:
+                name: aelio-app-secrets
+          env:
+            - name: APP_NAME
+              value: "voice-worker"
+            - name: PORT
+              value: "3200"
+          # Vertical-first sizing: 4 vCPU / 4 GB per pod (§11.4).
+          resources:
+            requests:
+              cpu: "3500m"
+              memory: "3584Mi"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          # Graceful drain: stop accepting new calls, let active ones complete.
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 280"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

@@ -1,0 +1,21 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit real terraform.tfvars.
+environment        = "staging"
+region             = "us-east-1"
+vpc_cidr           = "10.10.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+kubernetes_version = "1.30"
+
+# IRSA role ARNs that may GenerateDataKey/Decrypt with the regional KMS key.
+app_role_arns = [
+  # "arn:aws:iam::123456789012:role/aelio-api",
+]
+
+# ACM cert covering *.staging.example.com (must already exist in this region).
+acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/REPLACE_ME"
+
+# Regional WAF web ACL ARN from `terraform output -raw web_acl_arn` in shared/waf.
+waf_web_acl_arn = null
+
+# Alert routing endpoints (§13.1).
+pagerduty_endpoint = null
+slack_endpoint     = null

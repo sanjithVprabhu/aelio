@@ -1,0 +1,68 @@
+# syntax=docker/dockerfile:1.7
+#
+# apps/api — Core Backend (NestJS-in-manual / Fastify here), Node 22.
+# Multi-stage build: the monorepo is built once with pnpm, then a slim runtime
+# stage runs the app via its `start` script (`tsx src/server.ts`).
+#
+# Build context MUST be the monorepo root:
+#   docker build -f infra/docker/Dockerfile.api -t aelio/api .
+#
+# ---------------------------------------------------------------------------
+# Stage 1: base — pin Node 22 + corepack-managed pnpm.
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm-slim AS base
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+# pnpm version is pinned by the root package.json "packageManager" field.
+RUN corepack enable
+WORKDIR /repo
+
+# ---------------------------------------------------------------------------
+# Stage 2: deps — install the full workspace with a frozen lockfile.
+# Copying the lockfile + workspace manifest first maximizes layer caching;
+# the install layer is only invalidated when dependencies change.
+# ---------------------------------------------------------------------------
+FROM base AS deps
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# Copy every app/package manifest so pnpm can resolve the workspace graph.
+# (Glob copy keeps this Dockerfile valid as new apps/packages are added.)
+COPY apps/ ./apps/
+COPY packages/ ./packages/
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+# ---------------------------------------------------------------------------
+# Stage 3: build — compile the API and its workspace dependencies.
+# ---------------------------------------------------------------------------
+FROM deps AS build
+COPY . .
+RUN pnpm --filter @aelio/api... build
+
+# ---------------------------------------------------------------------------
+# Stage 4: runtime — slim image, non-root, runs via tsx (start script).
+# We keep node_modules + source because the app is executed with tsx, not
+# from a transpiled dist/ bundle (matches apps/api "start": tsx src/server.ts).
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm-slim AS runtime
+ENV NODE_ENV=production
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
+WORKDIR /repo
+
+# Drop privileges — the base image ships a `node` user (uid 1000).
+USER node
+
+# Bring over the fully-installed + built workspace from the build stage.
+COPY --chown=node:node --from=build /repo .
+
+ENV APP_NAME=api
+ENV PORT=3000
+EXPOSE 3000
+
+# Healthcheck mirrors §11.1: GET /healthz returns {db, redis, queue} status.
+HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
+# Runs `tsx src/server.ts` for @aelio/api.
+CMD ["pnpm", "--filter", "@aelio/api", "start"]

@@ -1,0 +1,25 @@
+# §11.2: edge-deployed / CDN-cached. Most static traffic is absorbed by
+# CloudFront, so the origin pod count stays small. Modest CPU-based HPA for
+# SSR / server-action bursts.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: admin
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: admin
+    app.kubernetes.io/part-of: aelio
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: admin
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 65

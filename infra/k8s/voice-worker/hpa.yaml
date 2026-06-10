@@ -1,0 +1,44 @@
+# §11.4 scaling: autoscale on ACTIVE CONNECTION COUNT, not CPU. Vertical-first
+# (big pods), with a modest horizontal range bounded by the voice node group
+# (c6i.2xlarge, 2–10 nodes). The custom metric `voice_active_calls` is exported
+# by the app and made available to the HPA via the Prometheus/Datadog adapter.
+#
+# Target ~40 active calls/pod (headroom under the ~50/pod ceiling in §11.4).
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: voice-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: voice-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: voice-worker
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Pods
+      pods:
+        metric:
+          name: voice_active_calls
+        target:
+          type: AverageValue
+          averageValue: "40"
+  behavior:
+    scaleUp:
+      # Add capacity quickly when call volume spikes.
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 60
+    scaleDown:
+      # Never cut a pod that may still hold live calls; drain slowly.
+      stabilizationWindowSeconds: 900
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 300

@@ -1,0 +1,15 @@
+# Keep the API available during voluntary disruptions (node drains, rollouts).
+# With a min floor of 3 replicas, allowing 1 unavailable preserves quorum.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/part-of: aelio
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api

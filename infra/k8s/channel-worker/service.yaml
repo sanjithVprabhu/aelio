@@ -1,0 +1,25 @@
+# Service for apps/channel-worker. Hosts the web-chat WebSocket server
+# (/ws/chat/:tenantSlug). Client affinity is keyed by ClientIP so a given
+# WebSocket client tends to land on the same pod; cross-pod fan-out for
+# outbound still works via Redis pub/sub (§11.3).
+apiVersion: v1
+kind: Service
+metadata:
+  name: channel-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: channel-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: channel-worker
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+  ports:
+    - name: http
+      port: 3100
+      targetPort: http
+      protocol: TCP

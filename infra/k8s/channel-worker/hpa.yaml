@@ -1,0 +1,32 @@
+# §11.3 scaling: horizontal 3–10 replicas. WebSocket-heavy, so we autoscale on
+# CPU primarily and keep a generous scale-down window to protect live sockets.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: channel-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: channel-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: channel-worker
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 65
+  behavior:
+    scaleDown:
+      # Long window: scaling in drops WebSocket connections, so be cautious.
+      stabilizationWindowSeconds: 600
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120

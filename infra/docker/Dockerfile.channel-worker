@@ -1,0 +1,47 @@
+# syntax=docker/dockerfile:1.7
+#
+# apps/channel-worker — Channel Adapters (Fastify), Node 22.
+# Outbound delivery + web-chat WebSocket server. Runs via `tsx` start script.
+#
+# Build context MUST be the monorepo root:
+#   docker build -f infra/docker/Dockerfile.channel-worker -t aelio/channel-worker .
+#
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm-slim AS base
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
+WORKDIR /repo
+
+FROM base AS deps
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/ ./apps/
+COPY packages/ ./packages/
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+FROM deps AS build
+COPY . .
+RUN pnpm --filter @aelio/channel-worker... build
+
+# ---------------------------------------------------------------------------
+# Runtime — slim, non-root.
+# ---------------------------------------------------------------------------
+FROM node:22-bookworm-slim AS runtime
+ENV NODE_ENV=production
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
+WORKDIR /repo
+USER node
+COPY --chown=node:node --from=build /repo .
+
+ENV APP_NAME=channel-worker
+ENV PORT=3100
+EXPOSE 3100
+
+# WebSocket server + outbound delivery worker. Liveness via /healthz.
+HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3100)+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
+CMD ["pnpm", "--filter", "@aelio/channel-worker", "start"]

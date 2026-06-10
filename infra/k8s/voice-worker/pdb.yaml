@@ -1,0 +1,15 @@
+# Voice has no mid-call failover, so be strict: only ever allow ONE voice-worker
+# pod to be voluntarily disrupted at a time (node drain, rollout).
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: voice-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: voice-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: voice-worker

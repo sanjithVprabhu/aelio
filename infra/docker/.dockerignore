@@ -1,0 +1,39 @@
+# Build context is the monorepo root. Keep images small and builds reproducible
+# by excluding everything that should be (re)generated inside the image or that
+# leaks host/dev state.
+
+# Dependencies — reinstalled with `pnpm install --frozen-lockfile` in-image.
+**/node_modules
+.pnpm-store
+
+# Build outputs / caches
+**/dist
+**/.next
+**/.turbo
+**/*.tsbuildinfo
+**/coverage
+
+# VCS / CI
+.git
+.gitignore
+.github
+
+# Local env & secrets — must never enter an image layer.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Editor / OS cruft
+.vscode
+.idea
+**/.DS_Store
+
+# Infra/docs not needed at app runtime
+infra
+docs
+Reference
+**/*.md
+!**/README.md
+
+# Local dev infra
+docker-compose.yml

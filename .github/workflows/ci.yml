@@ -1,0 +1,34 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: 'pnpm' }
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm turbo typecheck
+
+      - name: Unit + integration tests (coverage)
+        run: pnpm turbo test
+
+      - name: Build (all packages + apps, incl. Next.js admin)
+        run: pnpm turbo build
+
+      - name: Cross-layer scenario smoke
+        run: pnpm --filter @aelio/api demo
+
+      - name: Eval suite gate (boots api, runs eval-runner)
+        run: |
+          PORT=3000 pnpm --filter @aelio/api start &
+          API_PID=$!
+          for i in $(seq 1 30); do curl -sf localhost:3000/healthz && break || sleep 1; done
+          API_BASE_URL=http://localhost:3000 TENANT=acme pnpm --filter @aelio/eval-runner run
+          kill $API_PID

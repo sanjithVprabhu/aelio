@@ -1,0 +1,25 @@
+# Service for apps/voice-worker. Sticky sessions enforced via session affinity
+# (§11.4 "Critical: Sticky sessions enforced via session affinity on Service").
+# A call's Twilio media-stream WebSocket must stay pinned to one pod for its
+# lifetime; affinity timeout exceeds the longest expected call.
+apiVersion: v1
+kind: Service
+metadata:
+  name: voice-worker
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: voice-worker
+    app.kubernetes.io/part-of: aelio
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: voice-worker
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800 # 3h — comfortably longer than any single call
+  ports:
+    - name: http
+      port: 3200
+      targetPort: http
+      protocol: TCP

@@ -1,0 +1,93 @@
+# apps/api — Core Backend. Stateless, no sticky sessions (§11.1).
+# Image tag is set by ArgoCD/CI (main-SHA or release tag); kustomize/Helm
+# overlays patch `image:` per environment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/part-of: aelio
+spec:
+  # Floor matches the HPA minReplicas (3). HPA owns the live replica count.
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+        app.kubernetes.io/part-of: aelio
+      annotations:
+        # Scraped by the Datadog/Prometheus agent (§13.1).
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/metrics"
+    spec:
+      # General node pool (m6i.xlarge). Karpenter may place on spot (§12.1).
+      nodeSelector:
+        aelio.dev/node-pool: general
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: REGISTRY/aelio/api:latest # patched per-env by CI/ArgoCD
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: aelio-shared-config
+            - secretRef:
+                name: aelio-app-secrets
+          env:
+            - name: APP_NAME
+              value: "api"
+            - name: PORT
+              value: "3000"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "1Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          # §11.1: /healthz -> {db, redis, queue}; /readyz adds queue depth +
+          # migration version.
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          # tsx + node need a writable tmp when root FS is read-only.
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

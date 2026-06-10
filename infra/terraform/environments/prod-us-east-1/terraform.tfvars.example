@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit real terraform.tfvars.
+environment        = "prod"
+region             = "us-east-1"
+vpc_cidr           = "10.20.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+kubernetes_version = "1.30"
+
+app_role_arns = [
+  # "arn:aws:iam::123456789012:role/aelio-api",
+]
+
+acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/REPLACE_ME"
+waf_web_acl_arn     = null
+
+# DR target (exports-/recordings- replication). Set to the EU region + its KMS key.
+dr_destination_region      = "eu-west-1"
+dr_destination_kms_key_arn = "arn:aws:kms:eu-west-1:123456789012:key/REPLACE_ME"
+
+pagerduty_endpoint = null
+slack_endpoint     = null

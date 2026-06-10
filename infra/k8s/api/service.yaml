@@ -1,0 +1,20 @@
+# Cluster-internal Service for apps/api. ALB (via Ingress/target-group binding)
+# fronts this for external traffic; channel-worker / voice-worker reach it at
+# http://api.aelio.svc.cluster.local:3000 (§11.3, §11.4 internal HTTP).
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: aelio
+  labels:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/part-of: aelio
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+      protocol: TCP

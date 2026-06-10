@@ -1,0 +1,13 @@
+# Namespace for all Aelio application workloads in a single region/cluster.
+# Each AWS region runs an isolated EKS cluster (§12.1); this namespace is
+# applied identically into each. Pod Security Admission is set to "restricted"
+# to match the non-root, no-privilege-escalation posture of §13.2.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aelio
+  labels:
+    app.kubernetes.io/part-of: aelio
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted
