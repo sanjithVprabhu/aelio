@@ -122,18 +122,32 @@ app.post<{ Params: { slug: string }; Body: { From: string; code: string } }>(
   },
 );
 
-// Media-stream WebSocket: {event:'transcript', text} → {event:'speak', text}.
+// Media-stream WebSocket (Twilio-style). Accepts:
+//   {event:'transcript', text}      — pre-transcribed (testing / Twilio SpeechResult)
+//   {event:'media', audio:<base64>} — raw audio → STT (Deepgram when configured)
+// Responds with {event:'speak', text} and, when ElevenLabs is configured,
+// {event:'audio', data:<base64>} for true synthesized speech.
 app.register(async (instance) => {
   instance.get<{ Params: { sessionId: string } }>('/voice/stream/:sessionId', { websocket: true }, (socket, req) => {
     const slug = (req.query as { slug?: string }).slug ?? 'acme';
     const from = (req.query as { from?: string }).from ?? `call_${req.params.sessionId}`;
     socket.on('message', async (raw: Buffer) => {
       try {
-        const msg = JSON.parse(raw.toString()) as { event: string; text?: string };
-        if (msg.event === 'transcript' && msg.text) {
-          const result = await ingest(slug, from, await stt.transcribe(msg.text), req.params.sessionId);
-          const spoken = await tts.synthesize(replyText(result));
-          socket.send(JSON.stringify({ event: 'speak', text: spoken }));
+        const msg = JSON.parse(raw.toString()) as { event: string; text?: string; audio?: string };
+        let transcript: string | undefined;
+        if (msg.event === 'transcript' && msg.text) transcript = await stt.transcribe(msg.text);
+        else if (msg.event === 'media' && msg.audio) transcript = await stt.transcribe(msg.audio);
+
+        if (transcript) {
+          const result = await ingest(slug, from, transcript, req.params.sessionId);
+          const text = replyText(result);
+          socket.send(JSON.stringify({ event: 'speak', text: await tts.synthesize(text) }));
+          // Real audio when a TTS provider supports it (ElevenLabs).
+          const synthAudio = (tts as { synthesizeAudio?: (t: string) => Promise<Buffer> }).synthesizeAudio;
+          if (synthAudio) {
+            const audio = await synthAudio(text);
+            socket.send(JSON.stringify({ event: 'audio', data: audio.toString('base64') }));
+          }
         }
       } catch (err) {
         socket.send(JSON.stringify({ event: 'error', message: err instanceof Error ? err.message : 'bad frame' }));

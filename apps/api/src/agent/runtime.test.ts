@@ -110,7 +110,7 @@ describe('AgentRuntime — cross-layer scenarios', () => {
   it('RAG retrieval surfaces knowledge-base context to the agent', async () => {
     await verify();
     // The seeded "Help docs" collection is in scope for the active state.
-    const chunks = c.rag.retrieve(tenantId, 'do refunds happen when I cancel?', [
+    const chunks = await c.rag.retrieve(tenantId, 'do refunds happen when I cancel?', [
       c.store.listCollections(tenantId)[0]!.id,
     ]);
     expect(chunks.length).toBeGreaterThan(0);

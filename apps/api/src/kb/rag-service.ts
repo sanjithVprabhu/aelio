@@ -1,7 +1,7 @@
 import type { KbChunk, KbCollection, KbSource, RetrievedChunk } from '@aelio/types';
 import type { Store } from '../store/store.js';
 import { uuid } from '../util/id.js';
-import { cosine, HashingEmbedder, type Embedder } from './embedder.js';
+import { cosine, HashingEmbedder, selectEmbedder, type Embedder } from './embedder.js';
 
 const MIN_RELEVANCE = 0.01; // RRF fused scores are small (~1/(k+rank))
 const MAX_CONTEXT_CHUNKS = 4;
@@ -9,9 +9,14 @@ const RRF_K = 60;
 
 /** Layer 4 — KB management + hybrid retrieval (semantic + keyword) with RRF fusion. */
 export class RagService {
-  private embedder: Embedder = new HashingEmbedder();
+  private embedder: Embedder;
+  private seedEmbedder: HashingEmbedder;
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store) {
+    const { embedder, seed } = selectEmbedder();
+    this.embedder = embedder;
+    this.seedEmbedder = seed;
+  }
 
   createCollection(
     tenantId: string,
@@ -36,12 +41,12 @@ export class RagService {
     return col;
   }
 
-  /** Add a text/url/file source and index it immediately (offline = synchronous). */
-  addSource(
+  /** Add a text/url/file source and index it (uses the configured embedder; async). */
+  async addSource(
     tenantId: string,
     collectionId: string,
     input: { type: 'file' | 'url' | 'text'; name: string; url?: string; content: string },
-  ): KbSource {
+  ): Promise<KbSource> {
     const col = this.store.getCollection(tenantId, collectionId);
     if (!col) throw new Error('collection not found');
     const source: KbSource = {
@@ -56,19 +61,59 @@ export class RagService {
       createdAt: new Date(),
     };
     this.store.putSource(source);
-    this.indexSource(col, source, input.content);
+    await this.indexSource(col, source, input.content);
     return source;
   }
 
-  reindex(tenantId: string, collectionId: string, sourceId: string, content: string): void {
+  async reindex(tenantId: string, collectionId: string, sourceId: string, content: string): Promise<void> {
     const col = this.store.getCollection(tenantId, collectionId);
     const source = this.store.listSources(tenantId, collectionId).find((s) => s.id === sourceId);
     if (!col || !source) return;
     this.store.clearChunksForSource(sourceId);
-    this.indexSource(col, source, content);
+    await this.indexSource(col, source, content);
   }
 
-  private indexSource(col: KbCollection, source: KbSource, content: string): void {
+  /** Synchronous seed indexing (always hashing) so container construction stays sync. */
+  seedSource(
+    tenantId: string,
+    collectionId: string,
+    input: { type: 'file' | 'url' | 'text'; name: string; content: string },
+  ): void {
+    const col = this.store.getCollection(tenantId, collectionId);
+    if (!col) return;
+    // The seed always uses hashing; pin the collection's model so retrieval matches.
+    col.embeddingModel = this.seedEmbedder.model;
+    this.store.putCollection(col);
+    const source: KbSource = {
+      id: uuid(),
+      collectionId,
+      tenantId,
+      type: input.type,
+      name: input.name,
+      status: 'indexed',
+      chunkCount: 0,
+      createdAt: new Date(),
+    };
+    const chunks = chunkText(input.content, col.chunkSize, col.overlap);
+    for (const text of chunks) {
+      this.store.putChunk({
+        id: uuid(),
+        tenantId,
+        collectionId,
+        sourceId: source.id,
+        sourceTitle: source.name,
+        content: text,
+        embedding: this.seedEmbedder.embedSync(text),
+        tokenCount: Math.ceil(text.length / 4),
+        createdAt: new Date(),
+      });
+    }
+    source.chunkCount = chunks.length;
+    source.indexedAt = new Date();
+    this.store.putSource(source);
+  }
+
+  private async indexSource(col: KbCollection, source: KbSource, content: string): Promise<void> {
     const chunks = chunkText(content, col.chunkSize, col.overlap);
     for (const text of chunks) {
       const chunk: KbChunk = {
@@ -78,7 +123,7 @@ export class RagService {
         sourceId: source.id,
         sourceTitle: source.name,
         content: text,
-        embedding: this.embedder.embed(text),
+        embedding: await this.embedder.embed(text),
         tokenCount: Math.ceil(text.length / 4),
         createdAt: new Date(),
       };
@@ -91,12 +136,15 @@ export class RagService {
   }
 
   /** Hybrid retrieval: semantic (cosine) + keyword (token overlap), fused via RRF. */
-  retrieve(tenantId: string, query: string, collectionIds: string[]): RetrievedChunk[] {
+  async retrieve(tenantId: string, query: string, collectionIds: string[]): Promise<RetrievedChunk[]> {
     if (collectionIds.length === 0) return [];
     const chunks = this.store.listChunks(tenantId, collectionIds);
     if (chunks.length === 0) return [];
 
-    const qVec = this.embedder.embed(query);
+    // Match the query to the embedder that indexed these chunks (by model).
+    const model = this.store.getCollection(tenantId, collectionIds[0]!)?.embeddingModel;
+    const embedder = model === this.embedder.model ? this.embedder : this.seedEmbedder;
+    const qVec = await embedder.embed(query);
     const qTokens = new Set(
       query.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((t) => t.length > 1),
     );

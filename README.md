@@ -52,9 +52,17 @@ The richer **Next.js dashboard** (separate app) talks to the same API:
 
 ```bash
 pnpm --filter @aelio/api dev &       # :3000
-pnpm --filter @aelio/admin dev       # :3001 — Dashboard, Conversations, Users, Audit,
-                                     #         Playbooks, Actions, Channels, Settings, Playground
+pnpm --filter @aelio/admin dev       # :3001 — fully interactive admin
 ```
+The admin app is a real working console (sign in at `/login` with
+`admin@acme.com` / `password`): live Dashboard / Conversations / Users / Audit,
+an **actions policy editor** (toggle exposure, change tiers, edit confirmation
+copy, test Tier-0 calls), **playbook deploy** + a **visual playbook editor**
+(node-graph of lifecycle states with trigger edges, behavior-bundle inspector),
+**KB management** (create collections, add sources, test retrieval), **inbox**
+(claim/reply/resolve), **settings/team/billing**, a **wired onboarding wizard**
+at `/setup` (paste an OpenAPI spec → review actions → go live), and a live
+**Playground** chat.
 
 Channel + voice workers (point real WhatsApp/Twilio/Slack webhooks at them):
 
@@ -172,7 +180,10 @@ See [docs/SECURITY.md](docs/SECURITY.md) and [docs/OBSERVABILITY.md](docs/OBSERV
 | Observability + security posture | ✅ docs + hooks |
 | CI: typecheck, test, build, demo, eval gate | ✅ green |
 | Real Postgres + Redis + BullMQ paths | ✅ implemented & verified against Docker |
-| Real LLM (Anthropic/OpenAI/Google) + Langfuse + channel/voice transports | ✅ implemented, env-activated (need provider keys to run) |
+| Real LLM (Anthropic/OpenAI/Google) + real embeddings + Langfuse + channel/voice transports | ✅ implemented, env-activated (need provider keys to run) |
+| Admin auth (scrypt + JWT, opt-in guard, roles) | ✅ implemented + tested |
+| Interactive admin: write UI, visual playbook editor, wired onboarding wizard | ✅ built & build-verified |
+| WebSocket chat streaming + voice media-stream | ✅ verified (101 handshake) |
 | Voice latency <800ms / multi-region `terraform apply` / SOC2 evidence | ⛔ needs real telephony + cloud accounts |
 
 © 2026 UNIQ Global Labs Pvt. Ltd.

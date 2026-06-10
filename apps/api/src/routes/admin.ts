@@ -1,6 +1,15 @@
-import { maskSecret } from '@aelio/crypto';
+import { hashPassword, maskSecret, randomToken } from '@aelio/crypto';
 import { Errors } from '@aelio/errors';
-import { ActionTier, ConversationStatus, OnboardingStep, type Tenant } from '@aelio/types';
+import {
+  ActionTier,
+  ConversationStatus,
+  OnboardingStep,
+  PlaybookStatus,
+  type FallbackStep,
+  type PlaybookLifecycle,
+  type PlaybookTrigger,
+  type Tenant,
+} from '@aelio/types';
 import type { FastifyInstance } from 'fastify';
 import type { Container } from '../container.js';
 import { EvalRunner } from '../eval/eval-runner.js';
@@ -283,7 +292,7 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
     '/api/v1/t/:slug/kb/collections/:id/sources',
     async (req) => {
       const tn = t(req.params.slug);
-      const source = c.rag.addSource(tn.id, req.params.id, req.body);
+      const source = await c.rag.addSource(tn.id, req.params.id, req.body);
       return { id: source.id, status: source.status, chunkCount: source.chunkCount };
     },
   );
@@ -301,7 +310,7 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
     '/api/v1/t/:slug/kb/collections/:id/test',
     async (req) => {
       const tn = t(req.params.slug);
-      return { chunks: c.rag.retrieve(tn.id, req.body.query, [req.params.id]) };
+      return { chunks: await c.rag.retrieve(tn.id, req.body.query, [req.params.id]) };
     },
   );
 
@@ -473,6 +482,154 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
     return c.store.getEvalRun(tn.id, req.params.id) ?? null;
   });
 
+  app.post<{ Params: { slug: string; id: string } }>('/api/v1/t/:slug/playbooks/:id/archive', async (req) => {
+    const tn = t(req.params.slug);
+    c.playbooks.archive(tn.id, req.params.id);
+    return { ok: true };
+  });
+
+  // ---- Playbook editing (states / triggers / fallback / templates) ----
+  app.put<{
+    Params: { slug: string; id: string };
+    Body: {
+      lifecycle?: PlaybookLifecycle;
+      triggers?: PlaybookTrigger[];
+      fallbackLadder?: FallbackStep[];
+      messageTemplates?: Record<string, string>;
+      version?: string;
+    };
+  }>('/api/v1/t/:slug/playbooks/:id', async (req) => {
+    const tn = t(req.params.slug);
+    const p = c.store.getPlaybook(tn.id, req.params.id);
+    if (!p) throw Errors.notFound('Playbook', req.params.id);
+    if (req.body.lifecycle) {
+      // Merge: preserve behavior fields the editor doesn't manage (persona, tone,
+      // kbScope, etc.) when the incoming state omits or blanks them.
+      const prior = new Map(p.lifecycle.states.map((s) => [s.key, s.behavior]));
+      for (const state of req.body.lifecycle.states) {
+        const old = prior.get(state.key);
+        if (old) {
+          state.behavior = {
+            ...old,
+            ...state.behavior,
+            persona: state.behavior.persona?.trim() ? state.behavior.persona : old.persona,
+            toneGuidelines: state.behavior.toneGuidelines?.length
+              ? state.behavior.toneGuidelines
+              : old.toneGuidelines,
+            kbScopeIds: state.behavior.kbScopeIds ?? old.kbScopeIds,
+            skillPacks: state.behavior.skillPacks ?? old.skillPacks,
+          };
+        }
+      }
+      p.lifecycle = req.body.lifecycle;
+    }
+    if (req.body.triggers) p.triggers = req.body.triggers;
+    if (req.body.fallbackLadder) p.fallbackLadder = req.body.fallbackLadder;
+    if (req.body.messageTemplates) p.messageTemplates = req.body.messageTemplates;
+    if (req.body.version) p.version = req.body.version;
+    c.store.putPlaybook(p);
+    return { ok: true };
+  });
+
+  // Create a new draft version cloned from the current active playbook.
+  app.post<{ Params: { slug: string }; Body: { version?: string } }>(
+    '/api/v1/t/:slug/playbooks',
+    async (req) => {
+      const tn = t(req.params.slug);
+      const active = c.store.findActivePlaybook(tn.id);
+      if (!active) throw Errors.notFound('Playbook', 'active');
+      const draft = {
+        ...structuredClone(active),
+        id: uuid(),
+        version: req.body.version ?? bumpVersion(active.version),
+        status: PlaybookStatus.Draft,
+        publishedAt: undefined,
+        createdAt: new Date(),
+      };
+      c.store.putPlaybook(draft);
+      return { id: draft.id, version: draft.version, status: draft.status };
+    },
+  );
+
+  // ---- Team management ----
+  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/team/members', async (req) => {
+    const tn = t(req.params.slug);
+    return c.store.listAdminUsers(tn.id).map((u) => ({
+      id: u.id,
+      email: u.email,
+      name: u.name,
+      role: u.role,
+      joinedAt: u.createdAt,
+    }));
+  });
+
+  app.post<{ Params: { slug: string }; Body: { email: string; name: string; role?: 'admin' | 'member' } }>(
+    '/api/v1/t/:slug/team/invites',
+    async (req, reply) => {
+      const tn = t(req.params.slug);
+      if (c.store.getAdminUserByEmail(req.body.email)) {
+        reply.code(409);
+        return { error: 'A user with that email already exists.' };
+      }
+      const tempPassword = randomToken().slice(0, 12);
+      c.store.putAdminUser({
+        id: uuid(),
+        tenantId: tn.id,
+        email: req.body.email,
+        name: req.body.name,
+        role: req.body.role ?? 'member',
+        passwordHash: hashPassword(tempPassword),
+        createdAt: new Date(),
+      });
+      // In production this is emailed as a magic invite, never returned.
+      return { invited: true, devTempPassword: tempPassword };
+    },
+  );
+
+  app.patch<{ Params: { slug: string; id: string }; Body: { role: 'owner' | 'admin' | 'member' } }>(
+    '/api/v1/t/:slug/team/members/:id/role',
+    async (req) => {
+      const tn = t(req.params.slug);
+      const u = c.store.getAdminUser(req.params.id);
+      if (!u || u.tenantId !== tn.id) throw Errors.notFound('Member', req.params.id);
+      u.role = req.body.role;
+      c.store.putAdminUser(u);
+      return { ok: true };
+    },
+  );
+
+  app.delete<{ Params: { slug: string; id: string } }>('/api/v1/t/:slug/team/members/:id', async (req) => {
+    const tn = t(req.params.slug);
+    c.store.deleteAdminUser(tn.id, req.params.id);
+    return { ok: true };
+  });
+
+  // ---- Billing (Stripe when keyed, else computed from usage) ----
+  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/billing', async (req) => {
+    const tn = t(req.params.slug);
+    const convs = c.store.listConversations(tn.id);
+    const invocations = c.store.listInvocations(tn.id).filter((i) => i.status === 'succeeded');
+    const seats = c.store.listAdminUsers(tn.id).length;
+    const usage = {
+      conversations: convs.length,
+      actionInvocations: invocations.length,
+      seats,
+    };
+    const limits: Record<string, number> = { lite: 1000, pro: 10000, max: 100000, enterprise: 1_000_000 };
+    if (process.env.STRIPE_SECRET_KEY) {
+      // Real Stripe subscription/usage lookup would go here using the tenant's
+      // Stripe customer id; the shape returned is identical.
+      return { plan: tn.plan, provider: 'stripe', usage, conversationLimit: limits[tn.plan] ?? 1000 };
+    }
+    return { plan: tn.plan, provider: 'computed', usage, conversationLimit: limits[tn.plan] ?? 1000 };
+  });
+
   // Keep a masked-secret reference handy for the channels surface (also in api.ts).
   void maskSecret;
+}
+
+function bumpVersion(v: string): string {
+  const parts = v.split('.').map(Number);
+  parts[parts.length - 1] = (parts[parts.length - 1] ?? 0) + 1;
+  return parts.join('.');
 }

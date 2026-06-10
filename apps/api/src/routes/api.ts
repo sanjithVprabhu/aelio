@@ -90,11 +90,22 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
         key: s.key,
         label: s.label,
         description: s.description,
+        persona: s.behavior.persona,
+        toneGuidelines: s.behavior.toneGuidelines,
         openingBehavior: s.behavior.openingBehavior,
         allowedActions: s.behavior.allowedActionKeys,
+        kbScopeIds: s.behavior.kbScopeIds,
+        confidenceFloor: s.behavior.confidenceFloor,
         requireConfirmationForTier: s.behavior.requireConfirmationForTier,
       })),
-      triggers: p.triggers.map((tr) => ({ id: tr.id, label: tr.label, enabled: tr.enabled })),
+      triggers: p.triggers.map((tr) => ({
+        id: tr.id,
+        label: tr.label,
+        enabled: tr.enabled,
+        event: tr.event,
+        condition: tr.condition,
+        action: tr.action,
+      })),
       fallbackLadder: p.fallbackLadder,
     };
   });

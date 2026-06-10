@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import UserMenu from './UserMenu';
 
 const TITLES: Record<string, string> = {
   '/': 'Dashboard',
@@ -8,8 +9,10 @@ const TITLES: Record<string, string> = {
   '/users': 'Users',
   '/audit': 'Audit log',
   '/playbooks': 'Playbooks',
+  '/playbooks/editor': 'Playbook editor',
   '/actions': 'Actions',
   '/knowledge': 'Knowledge',
+  '/inbox': 'Inbox',
   '/channels': 'Channels',
   '/settings': 'Settings',
   '/playground': 'Playground',
@@ -28,7 +31,7 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <h1>{titleFor(pathname)}</h1>
-      <div className="topbar-meta">acme · production</div>
+      <UserMenu />
     </header>
   );
 }

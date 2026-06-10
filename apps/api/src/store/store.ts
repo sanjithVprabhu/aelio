@@ -29,6 +29,16 @@ export interface LongTermFact {
   extractedAt: Date;
 }
 
+export interface AdminUserRecord {
+  id: string;
+  tenantId: string;
+  email: string;
+  name: string;
+  role: 'owner' | 'admin' | 'member';
+  passwordHash: string;
+  createdAt: Date;
+}
+
 export interface AuditEvent {
   id: string;
   tenantId: string;
@@ -67,6 +77,7 @@ export class Store {
   private evalScenarios = new Map<string, EvalScenario>();
   private evalRuns = new Map<string, EvalRun>();
   private longTerm: LongTermFact[] = [];
+  private adminUsers = new Map<string, AdminUserRecord>();
 
   // Optional durable mirror (Postgres). Sync reads stay in-memory; writes are
   // mirrored through fire-and-forget. Suppressed during hydration.
@@ -107,6 +118,7 @@ export class Store {
       for (const sc of (s.eval_scenarios ?? []) as EvalScenario[]) this.evalScenarios.set(sc.id, sc);
       for (const r of (s.eval_runs ?? []) as EvalRun[]) this.evalRuns.set(r.id, r);
       this.longTerm.push(...((s.long_term ?? []) as LongTermFact[]));
+      for (const u of (s.admin_users ?? []) as AdminUserRecord[]) this.adminUsers.set(u.id, u);
     } finally {
       this.hydrating = false;
     }
@@ -413,6 +425,28 @@ export class Store {
   }
   listFacts(tenantId: string, identityId: string): LongTermFact[] {
     return this.longTerm.filter((f) => f.tenantId === tenantId && f.identityId === identityId);
+  }
+
+  // ---- Admin users ----
+  putAdminUser(u: AdminUserRecord): void {
+    this.adminUsers.set(u.id, u);
+    this.save('admin_users', u);
+  }
+  getAdminUser(id: string): AdminUserRecord | undefined {
+    return this.adminUsers.get(id);
+  }
+  getAdminUserByEmail(email: string): AdminUserRecord | undefined {
+    return [...this.adminUsers.values()].find((u) => u.email.toLowerCase() === email.toLowerCase());
+  }
+  listAdminUsers(tenantId: string): AdminUserRecord[] {
+    return [...this.adminUsers.values()].filter((u) => u.tenantId === tenantId);
+  }
+  deleteAdminUser(tenantId: string, id: string): void {
+    const u = this.adminUsers.get(id);
+    if (u && u.tenantId === tenantId) {
+      this.adminUsers.delete(id);
+      this.remove('admin_users', id);
+    }
   }
 
   // ---- GDPR erasure ----

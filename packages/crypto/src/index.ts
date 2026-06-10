@@ -3,6 +3,7 @@ import {
   createDecipheriv,
   createHmac,
   randomBytes,
+  scryptSync,
   timingSafeEqual,
 } from 'node:crypto';
 
@@ -75,7 +76,7 @@ export async function decrypt(enc: EncryptedValue): Promise<string> {
 export interface TokenPayload {
   tenantId: string;
   endUserId: string;
-  purpose: 'magic_link' | 'step_up' | 'web_session' | 'confirmation';
+  purpose: 'magic_link' | 'step_up' | 'web_session' | 'confirmation' | 'admin';
   issuedAt: number; // epoch seconds
   expiresAt: number; // epoch seconds
   /** Optional opaque extra payload (e.g. action key + args hash for confirmations). */
@@ -124,4 +125,23 @@ export function randomToken(): string {
 export function maskSecret(value: string): string {
   if (value.length <= 4) return '••••';
   return '••••••••' + value.slice(-4);
+}
+
+// ---------- Password hashing (scrypt) ----------
+
+/** Hash a password with a random salt → `scrypt$<saltHex>$<hashHex>`. */
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16);
+  const hash = scryptSync(password, salt, 64);
+  return `scrypt$${salt.toString('hex')}$${hash.toString('hex')}`;
+}
+
+/** Constant-time verify a password against a stored hash. */
+export function verifyPassword(password: string, stored: string): boolean {
+  const parts = stored.split('$');
+  if (parts.length !== 3 || parts[0] !== 'scrypt') return false;
+  const salt = Buffer.from(parts[1]!, 'hex');
+  const expected = Buffer.from(parts[2]!, 'hex');
+  const actual = scryptSync(password, salt, expected.length);
+  return actual.length === expected.length && timingSafeEqual(actual, expected);
 }

@@ -6,6 +6,8 @@ import {
   verifyToken,
   TokenError,
   maskSecret,
+  hashPassword,
+  verifyPassword,
 } from './index.js';
 
 describe('crypto', () => {
@@ -52,5 +54,16 @@ describe('crypto', () => {
 
   it('maskSecret keeps only the last 4 chars', () => {
     expect(maskSecret('EAAGabcd1234WXYZ')).toBe('••••••••WXYZ');
+  });
+
+  it('hashPassword + verifyPassword roundtrips and rejects wrong passwords', () => {
+    const hash = hashPassword('correct horse battery staple');
+    expect(hash.startsWith('scrypt$')).toBe(true);
+    expect(verifyPassword('correct horse battery staple', hash)).toBe(true);
+    expect(verifyPassword('wrong password', hash)).toBe(false);
+  });
+
+  it('hashPassword produces a different hash each call (random salt)', () => {
+    expect(hashPassword('same')).not.toBe(hashPassword('same'));
   });
 });

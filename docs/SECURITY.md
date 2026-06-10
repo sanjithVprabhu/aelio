@@ -50,6 +50,15 @@ response (`maskSecret`, applied in `routes/api.ts` and `routes/admin.ts`).
   hashed reference only (append-only).
 - Data residency is pinned per tenant (`region`).
 
+## Admin authentication (enforced)
+Admin accounts use **scrypt-hashed passwords** (`@aelio/crypto` `hashPassword`/
+`verifyPassword`, random salt, constant-time compare) and **HMAC-signed JWT**
+sessions (`AuthService`, `purpose: 'admin'`, 7-day TTL). `POST /api/v1/auth/{signup,login}`
+issue tokens; `GET /api/v1/auth/me` validates them. An **opt-in route guard**
+(`ADMIN_AUTH_REQUIRED=true`) requires a valid admin bearer on the entire
+tenant-scoped admin surface; it's off by default so the offline demo/tests run
+without auth. First user on a tenant becomes `owner`; roles are owner/admin/member.
+
 ## Service-to-service auth (enforced)
 The worker→api `/internal/*` mesh requires the shared `INTERNAL_SERVICE_SECRET`
 header. Provider webhooks verify signatures: **Meta `X-Hub-Signature-256`** and

@@ -27,6 +27,7 @@ import { Telemetry } from './agent/telemetry.js';
 import { FallbackLadder } from './playbook/fallback.js';
 import { PlaybookService } from './playbook/playbook-service.js';
 import { buildDefaultPlaybook } from './playbook/bootstrap.js';
+import { hashPassword } from '@aelio/crypto';
 import { SAMPLE_OPENAPI } from './seed/sample-spec.js';
 import { uuid } from './util/id.js';
 
@@ -166,6 +167,17 @@ function seedDemoTenant(deps: {
   };
   store.putTenant(tenant);
 
+  // A demo admin owner: admin@acme.com / "password".
+  store.putAdminUser({
+    id: uuid(),
+    tenantId,
+    email: 'admin@acme.com',
+    name: 'Acme Admin',
+    role: 'owner',
+    passwordHash: hashPassword('password'),
+    createdAt: now,
+  });
+
   // Ingest the sample spec and expose all actions (onboarding "expose all").
   const { spec } = specService.ingest({
     tenantId,
@@ -176,7 +188,7 @@ function seedDemoTenant(deps: {
 
   // Seed a knowledge base and index help content so RAG is exercised.
   const collection = rag.createCollection(tenantId, 'Help docs', 'Product help and policies');
-  rag.addSource(tenantId, collection.id, {
+  rag.seedSource(tenantId, collection.id, {
     type: 'text',
     name: 'Billing & plans',
     content:
@@ -185,7 +197,7 @@ function seedDemoTenant(deps: {
       'Plan changes take effect at the next renewal. Cancellations apply at the end of the current billing period and do not issue a refund. ' +
       'Invoices are emailed monthly and are available in the billing area.',
   });
-  rag.addSource(tenantId, collection.id, {
+  rag.seedSource(tenantId, collection.id, {
     type: 'text',
     name: 'Reports & sharing',
     content:

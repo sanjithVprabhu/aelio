@@ -3,6 +3,7 @@ import type { Store } from './store.js';
 /** Logical entity kinds mirrored to durable storage (map to Postgres tables). */
 export type PersistKind =
   | 'tenants'
+  | 'admin_users'
   | 'channels'
   | 'identities'
   | 'identity_channels'
@@ -43,6 +44,7 @@ export interface Persistence {
 /** A full snapshot used to bulk-load the Store during hydration. */
 export interface StoreSnapshot {
   tenants?: unknown[];
+  admin_users?: unknown[];
   channels?: unknown[];
   identities?: unknown[];
   identity_channels?: unknown[];

@@ -182,7 +182,7 @@ export class AgentRuntime {
     //    RAG retrieval over the state's KB scope + known long-term facts).
     const behavior = this.behaviorFor(playbook, conversation.currentUserState);
     const tools = toolsForBehavior(behavior, this.store.listExposedActions(input.tenantId));
-    const kbChunks = this.rag.retrieve(input.tenantId, input.text, behavior.kbScopeIds);
+    const kbChunks = await this.rag.retrieve(input.tenantId, input.text, behavior.kbScopeIds);
     const facts = this.memory
       .facts(input.tenantId, identity.id)
       .map((f) => ({ key: f.key, value: f.value }));

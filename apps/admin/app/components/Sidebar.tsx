@@ -12,6 +12,7 @@ const GROUPS: Group[] = [
     items: [
       { href: '/', label: 'Dashboard' },
       { href: '/conversations', label: 'Conversations' },
+      { href: '/inbox', label: 'Inbox' },
       { href: '/users', label: 'Users' },
       { href: '/audit', label: 'Audit log' },
     ],
@@ -26,7 +27,10 @@ const GROUPS: Group[] = [
   },
   {
     label: 'Connect',
-    items: [{ href: '/channels', label: 'Channels' }],
+    items: [
+      { href: '/channels', label: 'Channels' },
+      { href: '/setup', label: 'Setup wizard' },
+    ],
   },
   {
     label: 'Develop',

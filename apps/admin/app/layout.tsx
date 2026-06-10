@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Hanken_Grotesk } from 'next/font/google';
 import './globals.css';
-import Sidebar from './components/Sidebar';
-import Topbar from './components/Topbar';
+import Shell from './components/Shell';
 
 const hanken = Hanken_Grotesk({
   subsets: ['latin'],
@@ -20,13 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={hanken.variable}>
       <body>
-        <div className="shell">
-          <Sidebar />
-          <div className="main">
-            <Topbar />
-            <main className="content">{children}</main>
-          </div>
-        </div>
+        <Shell>{children}</Shell>
       </body>
     </html>
   );

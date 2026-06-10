@@ -15,6 +15,7 @@ interface TableSpec {
 
 const TABLES: Record<PersistKind, TableSpec> = {
   tenants: { table: schema.tenants, pk: schema.tenants.id },
+  admin_users: { table: schema.adminUsers, pk: schema.adminUsers.id },
   channels: { table: schema.channels, pk: schema.channels.id },
   identities: { table: schema.endUserIdentities, pk: schema.endUserIdentities.id },
   identity_channels: { table: schema.identityChannels, pk: schema.identityChannels.id },
@@ -134,6 +135,7 @@ export class DrizzlePersistence implements Persistence {
     const db = this.conn.db;
     const [
       tenants,
+      admin_users,
       channels,
       identities,
       identity_channels,
@@ -155,6 +157,7 @@ export class DrizzlePersistence implements Persistence {
       long_term,
     ] = await Promise.all([
       db.select().from(schema.tenants),
+      db.select().from(schema.adminUsers),
       db.select().from(schema.channels),
       db.select().from(schema.endUserIdentities),
       db.select().from(schema.identityChannels),
@@ -178,6 +181,7 @@ export class DrizzlePersistence implements Persistence {
 
     const snapshot: StoreSnapshot = {
       tenants,
+      admin_users,
       channels,
       // The runtime reads channels via listIdentityChannels, so [] is fine here.
       identities: identities.map((i) => ({ ...i, channels: [] })),

@@ -1,5 +1,6 @@
 import { apiGet, tenantPath, Playbook } from '../lib/api';
 import { OfflineState, StatusBadge, TierBadge, Toggle } from '../components/ui';
+import PlaybooksClient from './PlaybooksClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +14,18 @@ export default async function PlaybooksPage() {
         <p>The conversation policy: lifecycle states, triggers, and the fallback ladder.</p>
       </div>
 
-      {!res.ok ? <OfflineState error={res.error} /> : <PlaybookView pb={res.data} />}
+      <div className="section" style={{ marginTop: 0 }}>
+        <h3>Versions</h3>
+        <PlaybooksClient />
+      </div>
+
+      {!res.ok ? (
+        <div className="section">
+          <OfflineState error={res.error} />
+        </div>
+      ) : (
+        <PlaybookView pb={res.data} />
+      )}
     </>
   );
 }
@@ -25,17 +37,17 @@ function PlaybookView({ pb }: { pb: Playbook }) {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: 10, marginBottom: 6, alignItems: 'center' }}>
-        <span className="chip">v{pb.version}</span>
-        <StatusBadge status={pb.status} />
-        <span className="muted" style={{ fontSize: 12.5 }}>
-          default state · <span className="mono">{pb.defaultState}</span>
-        </span>
-      </div>
-
       <div className="section">
-        <h3>Lifecycle states</h3>
-        <div className="cards-grid">
+        <h3>Active playbook</h3>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 6, alignItems: 'center' }}>
+          <span className="chip">v{pb.version}</span>
+          <StatusBadge status={pb.status} />
+          <span className="muted" style={{ fontSize: 12.5 }}>
+            default state · <span className="mono">{pb.defaultState}</span>
+          </span>
+        </div>
+
+        <div className="cards-grid" style={{ marginTop: 14 }}>
           {states.map((s) => (
             <div className="card state-card" key={s.key}>
               <h4>{s.label}</h4>
@@ -131,9 +143,7 @@ function PlaybookView({ pb }: { pb: Playbook }) {
                     <td>
                       <span className="badge badge-soft">{f.strategy}</span>
                     </td>
-                    <td className="mono muted">
-                      {f.config ? JSON.stringify(f.config) : '—'}
-                    </td>
+                    <td className="mono muted">{f.config ? JSON.stringify(f.config) : '—'}</td>
                   </tr>
                 ))
               )}
