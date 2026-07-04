@@ -64,6 +64,9 @@ export class GoogleClient implements LLMClient {
           })),
         },
       ];
+      body.toolConfig = {
+        functionCallingConfig: { mode: 'AUTO' },
+      };
     }
 
     let res: Response;

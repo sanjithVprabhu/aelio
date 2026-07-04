@@ -1,0 +1,163 @@
+
+> aelio@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio
+> turbo typecheck
+
+• turbo 2.9.17
+
+   • Packages in scope: @aelio/admin, @aelio/api, @aelio/channel-worker, @aelio/config, @aelio/crypto, @aelio/db, @aelio/errors, @aelio/eval-runner, @aelio/llm, @aelio/logger, @aelio/queue, @aelio/types, @aelio/voice-worker, @aelio/widget-sdk
+   • Running typecheck in 14 packages
+   • Remote caching disabled
+
+@aelio/types:typecheck: cache miss, executing c56ec25207d54fc8
+@aelio/admin:typecheck: cache miss, executing 6da380ab934f262e
+@aelio/widget-sdk:typecheck: cache hit, replaying logs b4038597879d85a0
+@aelio/widget-sdk:typecheck: 
+@aelio/widget-sdk:typecheck: > @aelio/widget-sdk@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/widget-sdk
+@aelio/widget-sdk:typecheck: > tsc --noEmit
+@aelio/widget-sdk:typecheck: 
+@aelio/errors:build: cache hit, replaying logs 58e1a675b1fc40ee
+@aelio/crypto:build: cache hit, replaying logs 8273aa5362f96935
+@aelio/errors:build: 
+@aelio/errors:build: > @aelio/errors@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/errors
+@aelio/errors:build: > tsc --noEmit
+@aelio/errors:build: 
+@aelio/config:build: cache hit, replaying logs 7fe616875e02a990
+@aelio/crypto:build: 
+@aelio/crypto:build: > @aelio/crypto@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/crypto
+@aelio/crypto:build: > tsc --noEmit
+@aelio/crypto:build: 
+@aelio/config:build: 
+@aelio/config:build: > @aelio/config@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/config
+@aelio/config:build: > tsc --noEmit
+@aelio/config:build: 
+@aelio/logger:typecheck: cache hit, replaying logs c2bd4ff863612945
+@aelio/logger:typecheck: 
+@aelio/logger:typecheck: > @aelio/logger@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/logger
+@aelio/logger:typecheck: > tsc --noEmit
+@aelio/logger:typecheck: 
+@aelio/types:build: cache miss, executing 5f8fa21aa3f22b9f
+@aelio/logger:build: cache hit, replaying logs fd9c5b422ab16ad7
+@aelio/crypto:typecheck: cache hit, replaying logs 643edbef1df1007a
+@aelio/logger:build: 
+@aelio/logger:build: > @aelio/logger@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/logger
+@aelio/logger:build: > tsc --noEmit
+@aelio/crypto:typecheck: 
+@aelio/crypto:typecheck: > @aelio/crypto@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/crypto
+@aelio/crypto:typecheck: > tsc --noEmit
+@aelio/crypto:typecheck: 
+@aelio/logger:build: 
+@aelio/config:typecheck: cache hit, replaying logs e02b90762b54153b
+@aelio/config:typecheck: 
+@aelio/config:typecheck: > @aelio/config@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/config
+@aelio/config:typecheck: > tsc --noEmit
+@aelio/config:typecheck: 
+@aelio/errors:typecheck: cache hit, replaying logs c1aaa9433b1d8822
+@aelio/errors:typecheck: 
+@aelio/errors:typecheck: > @aelio/errors@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/errors
+@aelio/errors:typecheck: > tsc --noEmit
+@aelio/errors:typecheck: 
+@aelio/types:build: 
+@aelio/types:build: > @aelio/types@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/types
+@aelio/types:build: > tsc --noEmit
+@aelio/types:build: 
+@aelio/types:typecheck: 
+@aelio/types:typecheck: > @aelio/types@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/types
+@aelio/types:typecheck: > tsc --noEmit
+@aelio/types:typecheck: 
+@aelio/admin:typecheck: 
+@aelio/admin:typecheck: > @aelio/admin@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/apps/admin
+@aelio/admin:typecheck: > next build --no-lint || tsc --noEmit
+@aelio/admin:typecheck: 
+@aelio/admin:typecheck:  ⚠ Linting is disabled.
+@aelio/admin:typecheck:    ▲ Next.js 15.5.19
+@aelio/admin:typecheck: 
+@aelio/eval-runner:typecheck: cache miss, executing fc15622f2ac6006f
+@aelio/channel-worker:typecheck: cache miss, executing a3dcd80acebf23f9
+@aelio/llm:build: cache miss, executing a109626b289ede4c
+@aelio/db:build: cache miss, executing c4059b37846f277e
+@aelio/llm:typecheck: cache miss, executing 47226c0f1b3d5fd8
+@aelio/db:typecheck: cache miss, executing 31243c43a0415bdc
+@aelio/voice-worker:typecheck: cache miss, executing 80483f4c73082c89
+@aelio/queue:typecheck: cache miss, executing 9c23e4c8b47ff93a
+@aelio/admin:typecheck:    Creating an optimized production build ...
+@aelio/channel-worker:typecheck: 
+@aelio/channel-worker:typecheck: > @aelio/channel-worker@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/apps/channel-worker
+@aelio/channel-worker:typecheck: > tsc --noEmit
+@aelio/channel-worker:typecheck: 
+@aelio/queue:typecheck: 
+@aelio/queue:typecheck: > @aelio/queue@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/queue
+@aelio/queue:typecheck: > tsc --noEmit
+@aelio/queue:typecheck: 
+@aelio/llm:build: 
+@aelio/llm:build: > @aelio/llm@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/llm
+@aelio/llm:build: > tsc --noEmit
+@aelio/llm:build: 
+@aelio/eval-runner:typecheck: 
+@aelio/eval-runner:typecheck: > @aelio/eval-runner@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/apps/eval-runner
+@aelio/eval-runner:typecheck: > tsc --noEmit
+@aelio/eval-runner:typecheck: 
+@aelio/db:typecheck: 
+@aelio/db:typecheck: > @aelio/db@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/db
+@aelio/db:typecheck: > tsc --noEmit
+@aelio/db:typecheck: 
+@aelio/db:build: 
+@aelio/db:build: > @aelio/db@0.1.0 build /home/sanjith/SanjithTS/Aelio/packages/db
+@aelio/db:build: > tsc --noEmit
+@aelio/db:build: 
+@aelio/llm:typecheck: 
+@aelio/llm:typecheck: > @aelio/llm@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/packages/llm
+@aelio/llm:typecheck: > tsc --noEmit
+@aelio/llm:typecheck: 
+@aelio/voice-worker:typecheck: 
+@aelio/voice-worker:typecheck: > @aelio/voice-worker@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/apps/voice-worker
+@aelio/voice-worker:typecheck: > tsc --noEmit
+@aelio/voice-worker:typecheck: 
+@aelio/api:typecheck: cache miss, executing 62a27ff70b1ec29d
+@aelio/api:typecheck: 
+@aelio/api:typecheck: > @aelio/api@0.1.0 typecheck /home/sanjith/SanjithTS/Aelio/apps/api
+@aelio/api:typecheck: > tsc --noEmit
+@aelio/api:typecheck: 
+@aelio/admin:typecheck:  ✓ Compiled successfully in 15.8s
+@aelio/admin:typecheck:    Checking validity of types ...
+@aelio/admin:typecheck:    Collecting page data ...
+@aelio/admin:typecheck:    Generating static pages (0/16) ...
+@aelio/admin:typecheck:    Generating static pages (4/16) 
+@aelio/admin:typecheck:    Generating static pages (8/16) 
+@aelio/admin:typecheck:    Generating static pages (12/16) 
+@aelio/admin:typecheck:  ✓ Generating static pages (16/16)
+@aelio/admin:typecheck:    Finalizing page optimization ...
+@aelio/admin:typecheck:    Collecting build traces ...
+@aelio/admin:typecheck: 
+@aelio/admin:typecheck: Route (app)                                 Size  First Load JS
+@aelio/admin:typecheck: ┌ ○ /                                      348 B         110 kB
+@aelio/admin:typecheck: ├ ○ /_not-found                            993 B         103 kB
+@aelio/admin:typecheck: ├ ○ /audit                               1.71 kB         111 kB
+@aelio/admin:typecheck: ├ ○ /channels                             1.9 kB         111 kB
+@aelio/admin:typecheck: ├ ○ /conversations                       1.68 kB         111 kB
+@aelio/admin:typecheck: ├ ○ /inbox                               2.13 kB         112 kB
+@aelio/admin:typecheck: ├ ○ /knowledge                           2.89 kB         112 kB
+@aelio/admin:typecheck: ├ ○ /login                                 123 B         109 kB
+@aelio/admin:typecheck: ├ ○ /playbooks                           2.47 kB         112 kB
+@aelio/admin:typecheck: ├ ƒ /playbooks/[id]                      68.6 kB         178 kB
+@aelio/admin:typecheck: ├ ○ /settings                            3.12 kB         113 kB
+@aelio/admin:typecheck: ├ ○ /setup                               5.15 kB         107 kB
+@aelio/admin:typecheck: ├ ○ /signup                                123 B         109 kB
+@aelio/admin:typecheck: ├ ○ /specs                               2.41 kB         112 kB
+@aelio/admin:typecheck: └ ○ /users                               1.76 kB         111 kB
+@aelio/admin:typecheck: + First Load JS shared by all             102 kB
+@aelio/admin:typecheck:   ├ chunks/4557610a-fefa5be19e77ed4a.js  54.2 kB
+@aelio/admin:typecheck:   ├ chunks/785-778584e14f2dca51.js       45.8 kB
+@aelio/admin:typecheck:   └ other shared chunks (total)          1.94 kB
+@aelio/admin:typecheck: 
+@aelio/admin:typecheck: 
+@aelio/admin:typecheck: ○  (Static)   prerendered as static content
+@aelio/admin:typecheck: ƒ  (Dynamic)  server-rendered on demand
+@aelio/admin:typecheck: 
+
+ Tasks:    21 successful, 21 total
+Cached:    9 cached, 21 total
+  Time:    1m13.25s 
+
+ WARNING  no output files found for task @aelio/db#build. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/llm#build. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/types#build. Please check your `outputs` key in `turbo.json`

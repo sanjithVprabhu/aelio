@@ -11,14 +11,15 @@ All markup and styles live inside a shadow root (`:host { all: initial }`), so
 the widget can never inherit or leak host-page CSS. Everything is vanilla DOM —
 no React, no runtime dependencies.
 
-## Install (embed via script tag)
+## Install (embed via module script)
 
-The simplest integration is a single script tag. Configuration is read from
-`data-*` attributes and the widget auto-initializes:
+The simplest no-framework integration is a module script. Configuration is read
+from `data-*` attributes and the widget auto-initializes:
 
 ```html
 <script
-  src="https://cdn.aelio.com/aelio-widget.js"
+  type="module"
+  src="https://cdn.aelio.com/aelio-widget/embed.js"
   data-tenant="acme"
   data-api="https://api.aelio.com"
   data-accent="#0A0A0A"
@@ -29,8 +30,8 @@ The simplest integration is a single script tag. Configuration is read from
 
 | Attribute       | Required | Description                                     |
 | --------------- | -------- | ----------------------------------------------- |
-| `data-tenant`   | yes      | Your Aelio tenant slug.                         |
-| `data-api`      | yes      | Base URL of the Aelio API.                      |
+| `data-tenant`   | yes      | Your Aelio tenant slug.                          |
+| `data-api`      | yes      | Base URL of the Aelio API.                       |
 | `data-accent`   | no       | Accent color (any CSS color). Defaults to black.|
 | `data-name`     | no       | Panel header title. Defaults to `Aelio.`        |
 | `data-launcher` | no       | Launcher button label. Defaults to `Chat`.      |
@@ -43,17 +44,28 @@ import { initAelio } from '@aelio/widget-sdk';
 const widget = initAelio({
   tenantSlug: 'acme',
   apiBaseUrl: 'https://api.aelio.com',
+  identityTokenProvider: async (sessionId) => {
+    const res = await fetch('/api/aelio/identity-token', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    });
+    const json = await res.json();
+    return json.identityToken as string;
+  },
   accentColor: '#0A0A0A', // optional
   widgetName: 'Acme Support', // optional
   launcherText: 'Chat with us', // optional
+  container: '#support-chat', // optional
+  inline: true, // optional
 });
 
 widget.open();
 widget.send('Hello!');
 ```
 
-When loaded via the bundled `embed.ts` IIFE without data-attributes, the factory
-is exposed as `window.initAelio(...)` and the live instance as
+When loaded via `@aelio/widget-sdk/embed`, the factory is exposed as
+`window.initAelio(...)` and the live instance as
 `window.AelioWidget`.
 
 ## API
@@ -66,9 +78,13 @@ Creates and mounts the widget. `config`:
 interface AelioConfig {
   tenantSlug: string;
   apiBaseUrl: string;
+  identityToken?: string;
+  identityTokenProvider?: (sessionId: string) => string | null | Promise<string | null>;
   accentColor?: string;
   widgetName?: string;
   launcherText?: string;
+  container?: string | HTMLElement;
+  inline?: boolean;
 }
 ```
 
@@ -78,9 +94,24 @@ interface AelioConfig {
 | -------------------- | ---------------------------------------- |
 | `open()` / `close()` | Show / hide the chat panel.              |
 | `toggle()`           | Toggle the panel.                        |
+| `identify(token)`    | Bind the visitor session to a signed user identity. |
 | `send(text)`         | Send a message programmatically.         |
 | `getSessionId()`     | The persisted visitor session id.        |
 | `destroy()`          | Unmount and release references.          |
+
+## Build output
+
+```bash
+pnpm --filter @aelio/widget-sdk build
+```
+
+This emits:
+
+- `dist/index.js` / `dist/index.d.ts`
+- `dist/embed.js` / `dist/embed.d.ts`
+
+Use `dist/index.js` for bundler/programmatic integration and `dist/embed.js`
+for direct browser module-script embedding.
 
 ## Protocol
 
@@ -90,6 +121,19 @@ Messages are POSTed to:
 POST ${apiBaseUrl}/api/v1/chat/${tenantSlug}/message
 { "sessionId": "aelio_sess_…", "text": "…" }
 ```
+
+If you want the widget bound to a known customer account, first mint a signed
+identity token on your backend with `@aelio/convox-sdk` and let the widget send
+it to:
+
+```text
+POST ${apiBaseUrl}/api/v1/chat/${tenantSlug}/identify
+{ "identityToken": "…" }
+```
+
+The recommended production pattern is `identityTokenProvider(sessionId)`, so
+the browser asks your backend for a short-lived token and never holds your
+Convox signing key.
 
 Expected response:
 

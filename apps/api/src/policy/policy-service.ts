@@ -11,7 +11,7 @@ import {
 import type { Store } from '../store/store.js';
 import type { Kv } from '../store/kv.js';
 import { ulid } from '../util/id.js';
-import { AuthProxy } from './auth-proxy.js';
+import type { ConvoxExecutor } from '../convox/executor.js';
 import {
   extractAuditFields,
   redactPII,
@@ -66,7 +66,7 @@ export class PolicyService {
   constructor(
     private readonly store: Store,
     private readonly kv: Kv,
-    private readonly authProxy: AuthProxy,
+    private readonly executor: ConvoxExecutor,
     private readonly stepUp: StepUpPort,
   ) {}
 
@@ -208,7 +208,14 @@ export class PolicyService {
 
     const started = Date.now();
     try {
-      const data = await this.authProxy.call(req.tenantId, req.identity, action, effectiveArgs);
+      const data = await this.executor.call(
+        req.tenantId,
+        req.identity,
+        req.session,
+        action,
+        effectiveArgs,
+        auditEventId,
+      );
       this.audit(auditEventId, req, 'action.succeeded', {
         actionKey: action.key,
         responseFields: extractAuditFields(data, action.auditFields),

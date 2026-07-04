@@ -1,0 +1,50 @@
+@aelio/llm:test:       Tests  5 passed (5)
+@aelio/llm:test:    Start at  18:48:05
+@aelio/llm:test:    Duration  4.42s (transform 1.83s, setup 0ms, collect 1.89s, tests 60ms, environment 1ms, prepare 1.13s)
+@aelio/llm:test: 
+@aelio/channel-worker:test: 
+@aelio/channel-worker:test:  Test Files  1 passed (1)
+@aelio/channel-worker:test:       Tests  4 passed (4)
+@aelio/channel-worker:test:    Start at  18:48:05
+@aelio/channel-worker:test:    Duration  4.44s (transform 1.53s, setup 0ms, collect 1.84s, tests 42ms, environment 1ms, prepare 797ms)
+@aelio/channel-worker:test: 
+@aelio/voice-worker:test:  ✓ src/voice.test.ts (5 tests) 30ms
+@aelio/voice-worker:test: 
+@aelio/voice-worker:test:  Test Files  1 passed (1)
+@aelio/voice-worker:test:       Tests  5 passed (5)
+@aelio/voice-worker:test:    Start at  18:48:06
+@aelio/voice-worker:test:    Duration  3.35s (transform 588ms, setup 0ms, collect 283ms, tests 30ms, environment 1ms, prepare 910ms)
+@aelio/voice-worker:test: 
+@aelio/api:test:  ✓ src/playbook/trigger-engine.test.ts (3 tests) 34ms
+@aelio/api:test:  ✓ src/integration/tiering.test.ts (5 tests) 14ms
+@aelio/api:test:  ✓ src/integration/parsers.test.ts (5 tests) 38ms
+@aelio/queue:test:  ✓ src/index.test.ts (2 tests) 23ms
+@aelio/api:test:  ✓ src/integration/openapi-parser.test.ts (3 tests) 59ms
+@aelio/queue:test: 
+@aelio/queue:test:  Test Files  1 passed (1)
+@aelio/queue:test:       Tests  2 passed (2)
+@aelio/queue:test:    Start at  18:48:05
+@aelio/queue:test:    Duration  5.33s (transform 1.10s, setup 0ms, collect 2.58s, tests 23ms, environment 7ms, prepare 936ms)
+@aelio/queue:test: 
+@aelio/api:test:  ✓ src/auth/auth-service.test.ts (4 tests) 794ms
+@aelio/api:test:    ✓ AuthService > logs in with correct credentials and rejects wrong ones 449ms
+@aelio/api:test:  ✓ src/agent/runtime.test.ts (8 tests) 1151ms
+@aelio/api:test: 
+@aelio/api:test:  Test Files  6 passed (6)
+@aelio/api:test:       Tests  28 passed (28)
+@aelio/api:test:    Start at  18:48:06
+@aelio/api:test:    Duration  6.10s (transform 3.20s, setup 0ms, collect 6.46s, tests 2.09s, environment 10ms, prepare 3.81s)
+@aelio/api:test: 
+
+ Tasks:    20 successful, 20 total
+Cached:    12 cached, 20 total
+  Time:    11.652s 
+
+ WARNING  no output files found for task @aelio/api#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/channel-worker#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/db#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/eval-runner#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/llm#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/queue#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/types#test. Please check your `outputs` key in `turbo.json`
+ WARNING  no output files found for task @aelio/voice-worker#test. Please check your `outputs` key in `turbo.json`

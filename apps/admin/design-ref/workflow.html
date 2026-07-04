@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aelio — Workflow Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("c37d0e0d-ccdf-4333-beea-aa6dc4a97f63") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("404599cf-141a-4a4a-b2a0-577f0715748f") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("9f008d84-a583-4ea0-ab5b-8cdd3d529d79") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("e3408361-441e-454f-9464-8a3357f1b86d") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<script src="bc8eaa11-3149-4a9e-8fd1-0ecb704b3a0b" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="6ad02e23-6c01-4180-bf27-3f0afe29cde8" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="1f3af2fb-6292-48cd-95ef-33adbf032244" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="1633dbaa-ffa0-4f89-b757-eee4452c2882"></script>
+<style>
+:root {
+  --black:#0A0A0A; --cream:#F5F0E8; --white:#FFFFFF; --bg:#FAFAFA;
+  --ink:#0A0A0A; --ink-70:rgba(10,10,10,.68); --ink-45:rgba(10,10,10,.45);
+  --ink-22:rgba(10,10,10,.22); --ink-10:rgba(10,10,10,.10); --ink-05:rgba(10,10,10,.05);
+  --ease:cubic-bezier(0.22,.61,.36,1);
+  --green:#3C9B6A; --green-bg:rgba(60,155,106,.09);
+  --amber:#B8840E; --amber-bg:rgba(184,132,14,.09);
+  --blue:#3562C8;  --blue-bg:rgba(53,98,200,.09);
+  --orange:#C4612A;
+  --red:#C43838;   --red-bg:rgba(196,56,56,.09);
+  --purple:#7C51D8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;font-family:'Hanken Grotesk',system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px;}
+#root{width:100%;height:100%;display:flex;overflow:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--ink-10);border-radius:100px;}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-22);}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:.9;transform:scale(1.1)}}
+</style>
+
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef, useEffect, useCallback, memo } = React;
+
+/* ─── Icons ─── */
+const I = {
+  grid:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+  chat:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>,
+  users:   ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  log:     ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>,
+  flow:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>,
+  face:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
+  cycle:   ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
+  zap:     ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  brain:   ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+  plug:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="9" y1="2" x2="9" y2="7"/><line x1="15" y1="2" x2="15" y2="7"/><rect x="5" y="7" width="14" height="7" rx="2"/><line x1="12" y1="14" x2="12" y2="22"/></svg>,
+  key:     ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>,
+  code:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>,
+  terminal:()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+  gear:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+  chevD:   ()=><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>,
+  menu:    ()=><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
+  plus:    ()=><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  trash:   ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>,
+  arrow:   ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
+  search:  ()=><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+  bell:    ()=><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+  sparkle: ()=><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 17l-6.2 4L8.2 13.7 2 9.2h7.6z"/></svg>,
+  copy:    ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
+  detach:  ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
+  rename:  ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+  play:    ()=><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
+  diff:    ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  upload:  ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>,
+  chevR:   ()=><svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>,
+  grip:    ()=><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2.5" cy="2" r="1.2"/><circle cx="7.5" cy="2" r="1.2"/><circle cx="2.5" cy="6" r="1.2"/><circle cx="7.5" cy="6" r="1.2"/><circle cx="2.5" cy="10" r="1.2"/><circle cx="7.5" cy="10" r="1.2"/></svg>,
+  pencil:  ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+  eyeOff:  ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>,
+  check:   ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>,
+  warning: ()=><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+};
+
+/* ─── Navigation ─── */
+const NAV = [
+  { section:'OBSERVE', items:[
+    {id:'dashboard',  label:'Dashboard',     Ico:I.grid},
+    {id:'convos',     label:'Conversations', Ico:I.chat},
+    {id:'customers',  label:'Users',         Ico:I.users},
+    {id:'audit',      label:'Audit log',     Ico:I.log},
+  ]},
+  { section:'BUILD', items:[
+    {id:'playbooks',  label:'Playbooks',     Ico:I.flow},
+    {id:'skills',     label:'Skills',        Ico:I.zap},
+    {id:'knowledge',  label:'Knowledge',     Ico:I.brain},
+    {id:'personas',   label:'Personalities', Ico:I.face},
+    {id:'lifecycle',  label:'Lifecycle',     Ico:I.cycle},
+  ]},
+  { section:'CONNECT', items:[
+    {id:'channels',   label:'Channels',      Ico:I.plug},
+    {id:'vault',      label:'Token vault',   Ico:I.key},
+    {id:'specs',      label:'Specs',         Ico:I.code},
+  ]},
+  { section:'DEVELOP', items:[
+    {id:'sdks',       label:'SDKs',          Ico:I.terminal},
+    {id:'settings',   label:'Settings',      Ico:I.gear},
+  ]},
+];
+
+/* ─── Lifecycle states ─── */
+const LIFECYCLE_STATES = [
+  { id:'unverified', label:'UNVERIFIED', sublabel:'Pre-auth user',                color:'#9598A1', open:false,
+    skills:[
+      {id:'uv-welcome', label:'Welcome message',     status:'active'},
+      {id:'uv-signup',  label:'Signup nudge',         status:'draft'},
+    ]},
+  { id:'verified',   label:'VERIFIED',   sublabel:'Authenticated, no setup',      color:'#3562C8', open:true,
+    skills:[
+      {id:'vr-invite',  label:'Onboarding invite',    status:'active'},
+      {id:'vr-confirm', label:'Account confirmation', status:'draft'},
+    ]},
+  { id:'onboarding', label:'ONBOARDING', sublabel:'First-time setup in progress', color:'#3C9B6A', open:true,
+    skills:[
+      {id:'ob-guide',   label:'Setup guide',           status:'active'},
+      {id:'ob-import',  label:'Import data prompt',    status:'active'},
+      {id:'ob-nudge',   label:'First action nudge',    status:'draft'},
+    ]},
+  { id:'discovery',  label:'DISCOVERY',  sublabel:'Exploring features',           color:'#7C51D8', open:false,
+    skills:[
+      {id:'dc-tour',    label:'Feature tour',          status:'active'},
+      {id:'dc-tips',    label:'Pro tip suggestions',   status:'paused'},
+    ]},
+  { id:'activation', label:'ACTIVATION', sublabel:'Setting up a feature',         color:'#B8840E', open:true,
+    skills:[
+      {id:'ac-assist',  label:'Setup assistance',      status:'active'},
+      {id:'ac-checkin', label:'Completion check-in',   status:'paused'},
+    ]},
+  { id:'poweruser',  label:'POWER USER', sublabel:'Fully activated, recurring',   color:'#C4612A', open:false,
+    skills:[
+      {id:'pu-adv',     label:'Advanced tips',         status:'active'},
+      {id:'pu-upsell',  label:'Upsell opportunity',    status:'active'},
+    ]},
+];
+
+/* ═══ CANVAS DATA ═══════════════════════════════════════════════════════ */
+const NW = 210, NH = 248; /* node width, height */
+
+const NT = {
+  trigger: { label:'TRIGGER', color:'#B8840E', bg:'rgba(184,132,14,.08)' },
+  action:  { label:'ACTION',  color:'#3562C8', bg:'rgba(53,98,200,.08)'  },
+  error:   { label:'FALLBACK',color:'#C43838', bg:'rgba(196,56,56,.08)'  },
+};
+
+/* Horizontal layout: nodes side-by-side within each skill row */
+const H_STEP = NW + 36;        /* horizontal step = node width + gap (246) */
+const NX     = 52;             /* x of first node in every row */
+const SY     = [20, 340, 660]; /* top y of each skill bounding box */
+const NY     = SY.map(s => s + 50);
+
+const SKILLS_DEF = [
+  { id:'s1', label:'Intent Router',  status:'active', c:{bg:'rgba(60,155,106,.055)',bdr:'rgba(60,155,106,.22)',txt:'#3C9B6A'} },
+  { id:'s2', label:'Refund Handler', status:'active', c:{bg:'rgba(53,98,200,.055)', bdr:'rgba(53,98,200,.22)', txt:'#3562C8'} },
+  { id:'s3', label:'Escalation',     status:'draft',  c:{bg:'rgba(184,132,14,.055)',bdr:'rgba(184,132,14,.22)',txt:'#B8840E'} },
+];
+
+const NODES_DEF = [
+  /* ── s1: Intent Router — 4 nodes left → right ── */
+  { id:'n1',  skill:'s1', type:'trigger', label:'Message received',    sub:'on: message.inbound',       x:NX,          y:NY[0] },
+  { id:'n2',  skill:'s1', type:'action',  label:'Classify intent',     sub:'fn: classify_intent',       x:NX+H_STEP,   y:NY[0] },
+  { id:'n3',  skill:'s1', type:'action',  label:'Route by intent',     sub:'fn: skill_router',          x:NX+2*H_STEP, y:NY[0] },
+  { id:'n4',  skill:'s1', type:'error',   label:'Unknown intent',      sub:'fallback: human_review',    x:NX+3*H_STEP, y:NY[0] },
+  /* ── s2: Refund Handler — 4 nodes left → right ── */
+  { id:'n5',  skill:'s2', type:'trigger', label:'Intent: refund',      sub:'when: intent == "refund"',  x:NX,          y:NY[1] },
+  { id:'n6',  skill:'s2', type:'action',  label:'Verify eligibility',  sub:'fn: check_order_history',   x:NX+H_STEP,   y:NY[1] },
+  { id:'n7',  skill:'s2', type:'action',  label:'Process refund',      sub:'fn: payment.refund',        x:NX+2*H_STEP, y:NY[1] },
+  { id:'n8',  skill:'s2', type:'action',  label:'Send confirmation',   sub:'fn: email.send_receipt',    x:NX+3*H_STEP, y:NY[1] },
+  /* ── s3: Escalation — 2 nodes left → right ── */
+  { id:'n9',  skill:'s3', type:'trigger', label:'Escalation triggered', sub:'when: user.wants_human',   x:NX,          y:NY[2] },
+  { id:'n10', skill:'s3', type:'action',  label:'Queue for agent',     sub:'fn: support.queue_agent',   x:NX+H_STEP,   y:NY[2] },
+];
+
+const EDGES_DEF = [
+  { id:'e1', from:'n1', to:'n2' },
+  { id:'e2', from:'n2', to:'n3' },
+  { id:'e3', from:'n3', to:'n4', warn:true },
+  { id:'e4', from:'n5', to:'n6' },
+  { id:'e5', from:'n6', to:'n7' },
+  { id:'e6', from:'n7', to:'n8' },
+  { id:'e7', from:'n9', to:'n10' },
+];
+
+const NCONF = {
+  n1:  { desc:'Fires on every inbound message, regardless of content or channel.',
+         fields:[{l:'Trigger Type',v:'User Request',m:1},{l:'Condition',v:'Always'},{l:'Personality',v:'Calm guide'},{l:'Policy',v:'confirm · escalate'}],
+         apis:3, out:['message.text','message.id','user.id','session.id'], prompt:null },
+  n2:  { desc:'Classifies user intent using a small, fast language model.',
+         fields:[{l:'Personality',v:'Calm guide'},{l:'Policy',v:'read-only'}],
+         apis:1, inp:['message.text'], out:['intent.label','intent.confidence'],
+         prompt:['You are an intent classifier for a SaaS product.','','Classify the message into one of:','  refund · cancel · billing · support · other','','Respond with JSON:','{ "intent": string, "confidence": float }'] },
+  n3:  { desc:'Routes execution to the appropriate downstream skill based on classified intent.',
+         fields:[{l:'Personality',v:'Calm guide'},{l:'Policy',v:'route-only'}],
+         apis:2, inp:['intent.label'], out:['routed_skill','route_params'], prompt:null },
+  n4:  { desc:'Catches messages where intent confidence falls below the acceptable threshold.',
+         fields:[{l:'Personality',v:'Empathetic'},{l:'Policy',v:'escalate'}],
+         apis:0, out:['escalation.reason'], prompt:null },
+  n5:  { desc:'Triggers when the intent classifier returns "refund" with sufficient confidence.',
+         fields:[{l:'Trigger Type',v:'Platform Event',m:1},{l:'Condition',v:'intent == "refund"'},{l:'Personality',v:'Calm guide'},{l:'Policy',v:'confirm · destructive'}],
+         apis:2, out:['refund.context','user.id'], prompt:null },
+  n6:  { desc:'Checks order history to determine whether the user is eligible for a refund.',
+         fields:[{l:'Personality',v:'Calm guide'},{l:'Policy',v:'read-only'}],
+         apis:1, inp:['user.id','message.text'], out:['eligibility.ok','order.id','order.amount'], prompt:null },
+  n7:  { desc:'Initiates a refund via the payment processor API. Requires the "confirm" policy.',
+         fields:[{l:'Personality',v:'Calm guide'},{l:'Policy',v:'confirm · destructive'}],
+         apis:1, inp:['order.id','order.amount'], out:['refund.id','refund.status'], prompt:null },
+  n8:  { desc:'Sends an email receipt and in-app notification confirming the refund.',
+         fields:[{l:'Personality',v:'Calm guide'},{l:'Policy',v:'notify'}],
+         apis:2, inp:['user.id','refund.id'], out:[], prompt:null },
+  n9:  { desc:'Triggers when the user explicitly requests to speak with a human support agent.',
+         fields:[{l:'Trigger Type',v:'User Request',m:1},{l:'Condition',v:'user.wants_human == true'},{l:'Personality',v:'Empathetic'},{l:'Policy',v:'escalate'}],
+         apis:1, out:['escalation.reason','session.transcript'], prompt:null },
+  n10: { desc:'Adds the user to the human support queue with an estimated wait time.',
+         fields:[{l:'Personality',v:'Empathetic'},{l:'Policy',v:'escalate'}],
+         apis:1, inp:['user.id','escalation.reason'], out:['queue.position','queue.eta'], prompt:null },
+};
+
+/* ─── Sidebar ─── */
+function Sidebar({ active, setActive, open }) {
+  return (
+    <aside style={{width:open?226:52,flexShrink:0,background:'var(--white)',borderRight:'1px solid var(--ink-10)',display:'flex',flexDirection:'column',overflow:'hidden',height:'100%',transition:'width 0.22s var(--ease)'}}>
+      <div style={{padding:open?'18px 18px 14px':'14px 8px 10px',flexShrink:0,overflow:'hidden'}}>
+        <div style={{display:'flex',alignItems:'center',gap:11,marginBottom:open?16:12,justifyContent:open?'flex-start':'center'}}>
+          <div style={{width:36,height:36,borderRadius:9,background:'var(--black)',color:'var(--white)',fontSize:15,fontWeight:800,letterSpacing:'-0.02em',display:'grid',placeItems:'center',flexShrink:0}}>A.</div>
+          {open && <div><div style={{fontSize:14,fontWeight:700,letterSpacing:'-0.015em',lineHeight:1.2}}>Aelio.</div><div style={{fontSize:10,fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'var(--ink-45)'}}>Control Plane</div></div>}
+        </div>
+        {open && <div style={{display:'flex',alignItems:'center',gap:10,padding:'8px 10px',borderRadius:10,border:'1px solid var(--ink-10)',background:'var(--bg)',cursor:'pointer'}}
+          onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--ink-22)';e.currentTarget.style.background='var(--white)';}}
+          onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--ink-10)';e.currentTarget.style.background='var(--bg)';}}>
+          <div style={{width:24,height:24,borderRadius:6,background:'var(--cream)',fontSize:11,fontWeight:700,display:'grid',placeItems:'center',flexShrink:0,color:'var(--ink-70)',border:'1px solid var(--ink-10)'}}>AC</div>
+          <span style={{fontSize:13.5,fontWeight:500,flex:1,letterSpacing:'-0.01em'}}>acme-corp</span>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{color:'var(--ink-45)',flexShrink:0}}><path d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+        </div>}
+      </div>
+      <nav style={{flex:1,overflowY:'auto',padding:open?'2px 10px 10px':'2px 6px 10px'}}>
+        {NAV.map(sec => (
+          <div key={sec.section} style={{marginBottom:4}}>
+            {open && <span style={{display:'block',fontSize:10.5,fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'var(--ink-45)',padding:'14px 8px 6px'}}>{sec.section}</span>}
+            {!open && <div style={{height:10}}/>}
+            {sec.items.map(({id,label,Ico}) => {
+              const on = active===id;
+              return (
+                <div key={id} onClick={()=>setActive(id)} title={!open?label:undefined}
+                  style={{display:'flex',alignItems:'center',justifyContent:open?'flex-start':'center',gap:11,padding:open?'8px 10px':'9px',borderRadius:9,cursor:'pointer',userSelect:'none',fontSize:14.5,fontWeight:on?600:400,color:on?'var(--ink)':'var(--ink-70)',background:on?'var(--ink-05)':'transparent',transition:'background 0.15s',marginBottom:1}}
+                  onMouseEnter={e=>{if(!on)e.currentTarget.style.background='var(--ink-05)';}}
+                  onMouseLeave={e=>{if(!on)e.currentTarget.style.background='transparent';}}>
+                  <span style={{opacity:on?1:0.55,display:'flex',flexShrink:0}}><Ico /></span>
+                  {open && label}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </nav>
+      <div style={{padding:open?'12px 14px 16px':'10px 6px 14px',borderTop:'1px solid var(--ink-10)',flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:open?'flex-start':'center',gap:11,cursor:'pointer',borderRadius:9,padding:open?'6px 8px':'6px',transition:'background 0.15s'}}
+          onMouseEnter={e=>e.currentTarget.style.background='var(--ink-05)'}
+          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+          <div style={{width:34,height:34,borderRadius:'50%',background:'var(--black)',fontSize:13,fontWeight:700,display:'grid',placeItems:'center',flexShrink:0,color:'var(--white)',position:'relative'}}>
+            AM<span style={{position:'absolute',bottom:0,right:0,width:10,height:10,borderRadius:'50%',background:'var(--green)',border:'2px solid var(--white)'}}></span>
+          </div>
+          {open && <div style={{flex:1,minWidth:0}}><div style={{fontSize:13.5,fontWeight:600,letterSpacing:'-0.01em'}}>Ada Maxwell</div><div style={{fontSize:11.5,color:'var(--ink-45)'}}>Owner</div></div>}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ─── Playbook Panel ─── */
+function PlaybookPanel({ sel, setSel }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [states, setStates] = useState(LIFECYCLE_STATES);
+  const [openStates, setOpenStates] = useState(()=>
+    Object.fromEntries(LIFECYCLE_STATES.map(s=>[s.id, s.open]))
+  );
+  const [hoveredSkill, setHoveredSkill] = useState(null);
+  const [hoveredState, setHoveredState] = useState(null);
+  const [dragStateId, setDragStateId] = useState(null);
+  const [dragOverStateId, setDragOverStateId] = useState(null);
+  const [dragSkill, setDragSkill] = useState(null);
+  const [dragOverSkillId, setDragOverSkillId] = useState(null);
+  const [skillStatuses, setSkillStatuses] = useState(()=> {
+    const m = {};
+    LIFECYCLE_STATES.forEach(s=>s.skills.forEach(sk=>{ m[sk.id]=sk.status; }));
+    return m;
+  });
+  const [statusPopup, setStatusPopup] = useState(null);
+  const [addingState, setAddingState] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newSub, setNewSub]   = useState('');
+  const [newColor, setNewColor] = useState('#3562C8');
+  const [addingSkill, setAddingSkill] = useState(null); // { stateId } | null
+  const [customSkillName, setCustomSkillName] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [skillSearch, setSkillSearch] = useState('');
+  const COLOR_SWATCHES = ['#3562C8','#3C9B6A','#B8840E','#C4612A','#7C51D8','#9598A1','#C43838','#1A8FA6'];
+  const SKILL_TEMPLATES = [
+    { id:'t-welcome',  label:'Welcome message',   desc:'Greet users on first contact',     Icon:I.chat    },
+    { id:'t-classify', label:'Intent classifier',  desc:'Detect user intent with an LLM',   Icon:I.brain   },
+    { id:'t-router',   label:'Skill router',       desc:'Route to the right handler',        Icon:I.flow    },
+    { id:'t-refund',   label:'Refund handler',     desc:'Process refund requests end-to-end',Icon:I.arrow   },
+    { id:'t-escalate', label:'Escalation',         desc:'Hand off to a human agent',         Icon:I.warning },
+    { id:'t-notify',   label:'Send notification',  desc:'Email, push or SMS to the user',    Icon:I.bell    },
+    { id:'t-lookup',   label:'Data lookup',        desc:'Query an external system or API',   Icon:I.search  },
+    { id:'t-confirm',  label:'Confirmation step',  desc:'Ask user to confirm before acting', Icon:I.check   },
+  ];
+
+  const handleStateDragStart = (e, id) => { setDragStateId(id); e.dataTransfer.effectAllowed='move'; };
+  const handleStateDragOver  = (e, id) => { e.preventDefault(); if(id!==dragStateId) setDragOverStateId(id); };
+  const handleStateDrop = (e, targetId) => {
+    e.preventDefault();
+    if (!dragStateId||dragStateId===targetId) { setDragStateId(null); setDragOverStateId(null); return; }
+    setStates(prev => {
+      const arr=[...prev], fi=arr.findIndex(s=>s.id===dragStateId), ti=arr.findIndex(s=>s.id===targetId);
+      const [item]=arr.splice(fi,1); arr.splice(ti,0,item); return arr;
+    });
+    setDragStateId(null); setDragOverStateId(null);
+  };
+  const handleStateDragEnd = () => { setDragStateId(null); setDragOverStateId(null); };
+
+  const handleSkillDragStart = (e, skillId, stateId) => { e.stopPropagation(); setDragSkill({skillId,stateId}); e.dataTransfer.effectAllowed='move'; };
+  const handleSkillDragOver  = (e, skillId) => { e.preventDefault(); e.stopPropagation(); if(dragSkill&&skillId!==dragSkill.skillId) setDragOverSkillId(skillId); };
+  const handleSkillDrop = (e, tSkillId, tStateId) => {
+    e.preventDefault(); e.stopPropagation();
+    if (!dragSkill||dragSkill.skillId===tSkillId||dragSkill.stateId!==tStateId) { setDragSkill(null); setDragOverSkillId(null); return; }
+    setStates(prev=>prev.map(s=>{
+      if(s.id!==tStateId) return s;
+      const arr=[...s.skills], fi=arr.findIndex(sk=>sk.id===dragSkill.skillId), ti=arr.findIndex(sk=>sk.id===tSkillId);
+      const [item]=arr.splice(fi,1); arr.splice(ti,0,item); return {...s,skills:arr};
+    }));
+    setDragSkill(null); setDragOverSkillId(null);
+  };
+  const handleSkillDragEnd = () => { setDragSkill(null); setDragOverSkillId(null); };
+
+  const tog = id => setOpenStates(o=>({...o,[id]:!o[id]}));
+  const STATUS_COLOR = { active:'var(--green)', draft:'var(--amber)', paused:'var(--ink-22)' };
+  const STATUS_OPTIONS = [
+    { value:'active', label:'Active', color:'var(--green)',  bg:'var(--green-bg)', Icon:I.check   },
+    { value:'draft',  label:'Draft',  color:'var(--amber)',  bg:'var(--amber-bg)', Icon:I.pencil  },
+    { value:'delete', label:'Delete', color:'var(--red)',    bg:'var(--red-bg)',   Icon:I.trash, danger:true },
+  ];
+  const handleAddState = () => {
+    if (!newName.trim()) return;
+    const id = 'custom-' + Date.now();
+    setStates(s=>[...s,{id,label:newName.trim().toUpperCase(),sublabel:newSub.trim()||'Custom state',color:newColor,open:true,skills:[]}]);
+    setOpenStates(o=>({...o,[id]:true}));
+    setNewName(''); setNewSub(''); setNewColor('#3562C8'); setAddingState(false);
+  };
+  const handleAddSkill = (label) => {
+    if (!label || !label.trim() || !addingSkill) return;
+    const newSkill = { id:'sk-'+Date.now(), label:label.trim(), status:'draft' };
+    setStates(prev=>prev.map(s=>s.id!==addingSkill.stateId ? s : {...s, skills:[...s.skills, newSkill]}));
+    setOpenStates(o=>({...o,[addingSkill.stateId]:true}));
+    setAddingSkill(null); setCustomSkillName(''); setSelectedTemplate(null); setSkillSearch('');
+  };
+
+  return (
+    <div style={{width:collapsed?40:252,flexShrink:0,background:'var(--bg)',borderRight:'1px solid var(--ink-10)',display:'flex',flexDirection:'column',overflow:'hidden',transition:'width 0.22s var(--ease)'}}>
+
+      {collapsed && (
+        <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',padding:'12px 0 16px',gap:14,cursor:'pointer'}} onClick={()=>setCollapsed(false)}>
+          <span style={{color:'var(--ink-45)',display:'flex',padding:'4px',borderRadius:6,transition:'background 0.15s'}}
+            onMouseEnter={e=>e.currentTarget.style.background='var(--ink-05)'}
+            onMouseLeave={e=>e.currentTarget.style.background='transparent'}><I.arrow /></span>
+          <span style={{writingMode:'vertical-rl',textOrientation:'mixed',transform:'rotate(180deg)',fontSize:11,fontWeight:700,letterSpacing:'0.06em',color:'var(--ink-45)',userSelect:'none',whiteSpace:'nowrap'}}>State Management</span>
+        </div>
+      )}
+
+      {statusPopup && (
+        <>
+          <div style={{position:'fixed',inset:0,zIndex:98}} onClick={()=>setStatusPopup(null)} />
+          <div style={{position:'fixed',left:statusPopup.x,top:statusPopup.y,zIndex:99,background:'var(--white)',border:'1px solid var(--ink-10)',borderRadius:9,boxShadow:'0 4px 20px rgba(0,0,0,0.10)',padding:'4px',minWidth:128}}>
+            {STATUS_OPTIONS.map(opt => {
+              const isCur = skillStatuses[statusPopup.skillId]===opt.value;
+              return (
+                <div key={opt.value} onClick={()=>{
+                    if (opt.danger) {
+                      setStates(prev=>prev.map(s=>({...s,skills:s.skills.filter(sk=>sk.id!==statusPopup.skillId)})));
+                    } else {
+                      setSkillStatuses(s=>({...s,[statusPopup.skillId]:opt.value}));
+                    }
+                    setStatusPopup(null);
+                  }}
+                  style={{display:'flex',alignItems:'center',gap:8,padding:'6px 10px',borderRadius:6,cursor:'pointer',fontSize:12.5,fontWeight:isCur?600:400,background:isCur?opt.bg:'transparent',transition:'background 0.1s'}}
+                  onMouseEnter={e=>e.currentTarget.style.background=opt.danger?'var(--red-bg)':isCur?opt.bg:'var(--ink-05)'}
+                  onMouseLeave={e=>e.currentTarget.style.background=isCur?opt.bg:'transparent'}>
+                  <span style={{display:'flex',color:opt.color,flexShrink:0}}><opt.Icon /></span>
+                  <span style={{flex:1,color:opt.danger?'var(--red)':'inherit'}}>{opt.label}</span>
+                  {isCur && !opt.danger && <span style={{fontSize:10,color:opt.color}}>✓</span>}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {!collapsed && (
+        <div style={{padding:'12px 14px 10px',borderBottom:'1px solid var(--ink-10)',flexShrink:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            {(addingState||addingSkill)
+              ? <span style={{color:'var(--ink-45)',display:'flex',cursor:'pointer',transform:'rotate(180deg)'}} onClick={()=>{setAddingState(false);setAddingSkill(null);setCustomSkillName('');setSelectedTemplate(null);setSkillSearch('');}}><I.arrow /></span>
+              : <span style={{color:'var(--ink-45)',display:'flex'}}><I.cycle /></span>}
+            <span style={{fontSize:14,fontWeight:700,letterSpacing:'-0.015em',flex:1}}>{addingSkill?'New Skill':addingState?'New State':'State Management'}</span>
+            {!addingState && (
+              <span style={{color:'var(--ink-22)',display:'flex',cursor:'pointer',padding:'3px',borderRadius:5,transition:'background 0.15s,color 0.15s'}}
+                onClick={()=>setCollapsed(true)}
+                onMouseEnter={e=>{e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink-70)';}}
+                onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='var(--ink-22)';}}>
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!collapsed && (addingSkill ? (
+        <div style={{flex:1,overflowY:'auto',padding:'12px 14px'}}>
+          {/* Search bar */}
+          <div style={{display:'flex',alignItems:'center',gap:7,padding:'7px 10px',background:'var(--white)',border:'1px solid var(--ink-22)',borderRadius:8,marginBottom:12,transition:'border-color 0.15s',boxShadow:'0 1px 4px rgba(0,0,0,.05)'}}
+            onFocusCapture={e=>e.currentTarget.style.borderColor='var(--ink-45)'}
+            onBlurCapture={e=>e.currentTarget.style.borderColor='var(--ink-10)'}>
+            <span style={{display:'flex',color:'var(--ink-45)',flexShrink:0}}><I.search /></span>
+            <input autoFocus value={skillSearch} onChange={e=>setSkillSearch(e.target.value)} placeholder="Search skills..."
+              style={{flex:1,border:'none',outline:'none',fontSize:13,color:'var(--ink)',background:'transparent',fontFamily:'inherit'}} />
+            {skillSearch && (
+              <span onClick={()=>setSkillSearch('')} style={{display:'flex',color:'var(--ink-22)',cursor:'pointer',padding:'2px',borderRadius:4,transition:'color 0.12s'}}
+                onMouseEnter={e=>e.currentTarget.style.color='var(--ink-70)'}
+                onMouseLeave={e=>e.currentTarget.style.color='var(--ink-22)'}>
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+            )}
+          </div>
+          {/* Template list */}
+          {(() => {
+            const filtered = SKILL_TEMPLATES.filter(t =>
+              !skillSearch || t.label.toLowerCase().includes(skillSearch.toLowerCase()) || t.desc.toLowerCase().includes(skillSearch.toLowerCase())
+            );
+            return filtered.length === 0 ? (
+              <div style={{textAlign:'center',padding:'18px 0',color:'var(--ink-22)',fontSize:12.5}}>No skills match "{skillSearch}"</div>
+            ) : (
+              <div style={{display:'flex',flexDirection:'column',gap:4,marginBottom:14}}>
+                {filtered.map(t => {
+                  const isSel = selectedTemplate===t.id;
+                  return (
+                    <div key={t.id} onClick={()=>setSelectedTemplate(isSel?null:t.id)}
+                      style={{display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:9,border:'1.5px solid '+(isSel?'var(--ink)':'var(--ink-10)'),background:isSel?'var(--ink)':'var(--white)',cursor:'pointer',transition:'all 0.12s',userSelect:'none'}}
+                      onMouseEnter={e=>{if(!isSel){e.currentTarget.style.borderColor='var(--ink-22)';e.currentTarget.style.background='var(--ink-05)';}}}
+                      onMouseLeave={e=>{if(!isSel){e.currentTarget.style.borderColor='var(--ink-10)';e.currentTarget.style.background='var(--white)';}}}
+                    >
+                      <span style={{display:'flex',flexShrink:0,color:isSel?'rgba(255,255,255,.65)':'var(--ink-45)'}}><t.Icon /></span>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontSize:12.5,fontWeight:600,color:isSel?'var(--white)':'var(--ink)',lineHeight:1.25}}>{t.label}</div>
+                        <div style={{fontSize:10.5,color:isSel?'rgba(255,255,255,.48)':'var(--ink-45)',marginTop:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{t.desc}</div>
+                      </div>
+                      {isSel && (
+                        <span style={{display:'flex',color:'rgba(255,255,255,.7)',flexShrink:0}}>
+                          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          {selectedTemplate && (
+            <button onClick={()=>handleAddSkill(SKILL_TEMPLATES.find(t=>t.id===selectedTemplate)?.label)}
+              style={{width:'100%',padding:'8px 0',fontSize:13,fontWeight:600,background:'var(--ink)',color:'var(--white)',border:'none',borderRadius:8,cursor:'pointer',fontFamily:'inherit',marginBottom:12,transition:'opacity 0.15s'}}
+              onMouseEnter={e=>e.currentTarget.style.opacity='.8'}
+              onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+              Add — {SKILL_TEMPLATES.find(t=>t.id===selectedTemplate)?.label}
+            </button>
+          )}
+          <div style={{display:'flex',alignItems:'center',gap:8,margin:'4px 0 12px'}}>
+            <div style={{flex:1,height:1,background:'var(--ink-10)'}}/>
+            <span style={{fontSize:10.5,fontWeight:500,color:'var(--ink-45)'}}>or custom</span>
+            <div style={{flex:1,height:1,background:'var(--ink-10)'}}/>
+          </div>
+          <div style={{marginBottom:10}}>
+            <label style={{display:'block',fontSize:11,fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:6}}>Skill name</label>
+            <input value={customSkillName} onChange={e=>setCustomSkillName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleAddSkill(customSkillName)} placeholder="e.g. Upsell prompt"
+              style={{width:'100%',padding:'8px 10px',fontSize:13,border:'1px solid var(--ink-22)',borderRadius:8,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',transition:'border-color 0.15s'}}
+              onFocus={e=>e.target.style.borderColor='var(--ink-70)'} onBlur={e=>e.target.style.borderColor='var(--ink-22)'} />
+          </div>
+          <button onClick={()=>handleAddSkill(customSkillName)}
+            style={{width:'100%',padding:'9px 0',fontSize:13,fontWeight:600,background:customSkillName.trim()?'var(--ink)':'var(--ink-10)',color:customSkillName.trim()?'var(--white)':'var(--ink-45)',border:'none',borderRadius:8,cursor:customSkillName.trim()?'pointer':'not-allowed',fontFamily:'inherit',transition:'background 0.15s,color 0.15s'}}>
+            Create skill
+          </button>
+        </div>
+      ) : addingState ? (
+        <div style={{flex:1,overflowY:'auto',padding:'16px 14px'}}>
+          <div style={{marginBottom:16}}>
+            <label style={{display:'block',fontSize:11,fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:6}}>State name</label>
+            <input autoFocus value={newName} onChange={e=>setNewName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleAddState()} placeholder="e.g. CHURNED"
+              style={{width:'100%',padding:'8px 10px',fontSize:13,fontWeight:500,border:'1px solid var(--ink-22)',borderRadius:8,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',letterSpacing:'0.02em',transition:'border-color 0.15s'}}
+              onFocus={e=>e.target.style.borderColor='var(--ink-70)'} onBlur={e=>e.target.style.borderColor='var(--ink-22)'} />
+          </div>
+          <div style={{marginBottom:18}}>
+            <label style={{display:'block',fontSize:11,fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:6}}>Description</label>
+            <input value={newSub} onChange={e=>setNewSub(e.target.value.slice(0,30))} onKeyDown={e=>e.key==='Enter'&&handleAddState()} placeholder="Where the user is in their journey" maxLength={30}
+              style={{width:'100%',padding:'8px 10px',fontSize:13,border:'1px solid var(--ink-22)',borderRadius:8,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',transition:'border-color 0.15s'}}
+              onFocus={e=>e.target.style.borderColor='var(--ink-70)'} onBlur={e=>e.target.style.borderColor='var(--ink-22)'} />
+            <div style={{textAlign:'right',fontSize:11,color:newSub.length>=26?'var(--orange)':'var(--ink-22)',marginTop:4}}>{newSub.length}/30</div>
+          </div>
+          <div style={{marginBottom:24}}>
+            <label style={{display:'block',fontSize:11,fontWeight:600,letterSpacing:'0.05em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:8}}>Colour</label>
+            <div style={{display:'flex',flexWrap:'wrap',gap:7}}>
+              {COLOR_SWATCHES.map(c=>(
+                <div key={c} onClick={()=>setNewColor(c)}
+                  style={{width:22,height:22,borderRadius:6,background:c,cursor:'pointer',outline:newColor===c?'1.5px solid '+c:'1.5px solid transparent',outlineOffset:2,transition:'outline 0.12s,transform 0.12s',transform:newColor===c?'scale(1.15)':'scale(1)'}}/>
+              ))}
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginTop:14,padding:'8px 10px',background:'var(--ink-05)',borderRadius:8}}>
+              <span style={{width:3,height:20,borderRadius:100,background:newColor,flexShrink:0}}/>
+              <div>
+                <div style={{fontSize:10.5,fontWeight:700,letterSpacing:'0.08em',color:'var(--ink)'}}>{newName.toUpperCase()||'STATE NAME'}</div>
+                <div style={{fontSize:10.5,color:'var(--ink-45)'}}>{newSub||'Description'}</div>
+              </div>
+            </div>
+          </div>
+          <button onClick={handleAddState}
+            style={{width:'100%',padding:'9px 0',fontSize:13,fontWeight:600,background:newName.trim()?'var(--ink)':'var(--ink-10)',color:newName.trim()?'var(--white)':'var(--ink-45)',border:'none',borderRadius:8,cursor:newName.trim()?'pointer':'not-allowed',fontFamily:'inherit',transition:'background 0.15s,color 0.15s'}}>
+            Create state
+          </button>
+        </div>
+      ) : (
+        <div style={{flex:1,overflowY:'auto',padding:'4px 0 8px'}}>
+          {states.map(state => {
+            const isOpen = openStates[state.id];
+            return (
+              <div key={state.id} draggable
+                onDragStart={e=>handleStateDragStart(e,state.id)}
+                onDragOver={e=>handleStateDragOver(e,state.id)}
+                onDrop={e=>handleStateDrop(e,state.id)}
+                onDragEnd={handleStateDragEnd}
+                onMouseEnter={()=>setHoveredState(state.id)}
+                onMouseLeave={()=>setHoveredState(null)}
+                style={{marginBottom:1,opacity:dragStateId===state.id?0.4:1,borderTop:dragOverStateId===state.id?'2px solid var(--ink-22)':'2px solid transparent',transition:'opacity 0.15s,border-color 0.1s'}}>
+                <div onClick={()=>tog(state.id)}
+                  style={{display:'flex',alignItems:'center',gap:7,padding:'7px 12px',cursor:'pointer',userSelect:'none',transition:'background 0.15s'}}
+                  onMouseEnter={e=>e.currentTarget.style.background='var(--ink-05)'}
+                  onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+                  <span style={{opacity:hoveredState===state.id?0.28:0,display:'flex',flexShrink:0,color:'var(--ink)',cursor:'grab',transition:'opacity 0.12s',marginRight:-2}} onClick={e=>e.stopPropagation()}><I.grip /></span>
+                  <span style={{color:'var(--ink-22)',display:'flex',transform:isOpen?'rotate(0deg)':'rotate(-90deg)',transition:'transform 0.18s var(--ease)',flexShrink:0}}><I.chevD /></span>
+                  <span style={{width:3,height:20,borderRadius:100,background:state.color,flexShrink:0}}/>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:10.5,fontWeight:700,letterSpacing:'0.08em',color:'var(--ink)',lineHeight:1.3}}>{state.label}</div>
+                    <div style={{fontSize:10.5,color:'var(--ink-45)',fontWeight:400,lineHeight:1.3,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{state.sublabel}</div>
+                  </div>
+                  <span style={{fontSize:10,fontWeight:600,color:'var(--ink-45)',background:'var(--ink-05)',borderRadius:4,padding:'1px 5px',flexShrink:0,minWidth:16,textAlign:'center'}}>{state.skills.length}</span>
+                </div>
+                {isOpen && (
+                  <div style={{paddingBottom:2}}>
+                    {state.skills.map(skill => {
+                      const on = sel===skill.id;
+                      const curStatus = skillStatuses[skill.id]||skill.status;
+                      return (
+                        <div key={skill.id} draggable
+                          onDragStart={e=>handleSkillDragStart(e,skill.id,state.id)}
+                          onDragOver={e=>handleSkillDragOver(e,skill.id)}
+                          onDrop={e=>handleSkillDrop(e,skill.id,state.id)}
+                          onDragEnd={handleSkillDragEnd}
+                          onClick={()=>setSel(skill.id)}
+                          onMouseEnter={()=>setHoveredSkill(skill.id)}
+                          onMouseLeave={()=>setHoveredSkill(null)}
+                          style={{display:'flex',alignItems:'center',gap:6,padding:'5px 12px 5px 40px',cursor:'pointer',fontSize:12.5,fontWeight:on?500:400,background:on?'var(--white)':'transparent',boxShadow:on?'inset 2px 0 0 '+state.color:'inset 2px 0 0 transparent',opacity:dragSkill?.skillId===skill.id?0.4:1,borderTop:dragOverSkillId===skill.id?'2px solid '+state.color:'2px solid transparent',transition:'background 0.12s,box-shadow 0.12s,opacity 0.15s,border-color 0.1s'}}>
+                          <span style={{opacity:(hoveredSkill===skill.id||on)?0.6:0,display:'flex',flexShrink:0,color:'var(--ink)',cursor:'grab',transition:'opacity 0.12s'}}><I.grip /></span>
+                          <span style={{flex:1,lineHeight:1.4,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',color:on?'var(--ink)':curStatus==='paused'?'var(--ink-22)':'var(--ink-70)'}}>{skill.label}</span>
+                          <span title={'Status: '+curStatus}
+                            onClick={e=>{ e.stopPropagation(); const r=e.currentTarget.getBoundingClientRect(); setStatusPopup({skillId:skill.id,x:r.right+6,y:r.top-6}); }}
+                            style={{width:8,height:8,borderRadius:'50%',background:STATUS_COLOR[curStatus],flexShrink:0,opacity:curStatus==='paused'?0.35:0.85,cursor:'pointer',transition:'transform 0.12s,opacity 0.12s'}}
+                            onMouseEnter={e=>{ e.stopPropagation(); e.currentTarget.style.transform='scale(1.5)'; e.currentTarget.style.opacity='1'; }}
+                            onMouseLeave={e=>{ e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.opacity=curStatus==='paused'?'0.35':'0.85'; }}
+                          />
+                        </div>
+                      );
+                    })}
+                    <div onClick={()=>{setAddingSkill({stateId:state.id});setCustomSkillName('');setSelectedTemplate(null);setSkillSearch('');}}
+                      style={{display:'flex',alignItems:'center',gap:5,padding:'4px 12px 4px 34px',fontSize:11.5,color:'var(--ink-22)',cursor:'pointer',userSelect:'none',transition:'color 0.15s'}}
+                      onMouseEnter={e=>e.currentTarget.style.color='var(--ink-70)'}
+                      onMouseLeave={e=>e.currentTarget.style.color='var(--ink-22)'}>
+                      <I.plus /><span>New skill</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          <div style={{display:'flex',alignItems:'center',gap:6,padding:'7px 12px 12px',cursor:'pointer',userSelect:'none',transition:'color 0.15s',color:'var(--ink-22)'}}
+            onClick={()=>setAddingState(true)}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink-70)'}
+            onMouseLeave={e=>e.currentTarget.style.color='var(--ink-22)'}>
+            <I.plus /><span style={{fontSize:12,fontWeight:500}}>Add state</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Topbar ─── */
+function Topbar({ sidebarOpen, setSidebarOpen, selSkill }) {
+  const allSkills = LIFECYCLE_STATES.flatMap(s => s.skills.map(sk => ({...sk, stateName: s.label})));
+  const currentSkill = allSkills.find(sk => sk.id === selSkill);
+  const currentState = LIFECYCLE_STATES.find(s => s.skills.some(sk => sk.id === selSkill));
+  return (
+    <div style={{height:52,background:'var(--white)',borderBottom:'1px solid var(--ink-10)',display:'flex',alignItems:'center',padding:'0 14px 0 16px',gap:10,flexShrink:0,position:'relative',zIndex:10}}>
+      <button onClick={()=>setSidebarOpen(o=>!o)} style={{width:32,height:32,background:'none',border:'none',cursor:'pointer',color:'var(--ink-70)',borderRadius:7,display:'grid',placeItems:'center',flexShrink:0,transition:'background 0.15s,color 0.15s'}}
+        onMouseEnter={e=>{e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink)';}}
+        onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='var(--ink-70)';}}>
+        <I.menu />
+      </button>
+      <div style={{display:'flex',alignItems:'center',gap:7,fontSize:13,color:'var(--ink-45)'}}>
+        <span style={{display:'flex',alignItems:'center',gap:5,color:'var(--ink)',fontWeight:600}}><I.flow />Playbooks</span>
+        <span style={{color:'var(--ink-22)'}}>›</span>
+        <span>{currentState ? currentState.label.charAt(0) + currentState.label.slice(1).toLowerCase() : 'Onboarding'}</span>
+        <span style={{color:'var(--ink-22)'}}>›</span>
+        <span style={{color:'var(--ink)',fontWeight:500}}>{currentSkill ? currentSkill.label : 'Setup guide'}</span>
+      </div>
+      {/* Search — absolutely centred in the bar */}
+      <div style={{position:'absolute',left:'50%',transform:'translateX(-50%)',display:'flex',alignItems:'center',gap:8,background:'var(--bg)',border:'1px solid var(--ink-10)',borderRadius:8,padding:'6px 12px',fontSize:13,color:'var(--ink-45)',width:280,cursor:'text',transition:'border-color 0.15s'}}
+        onMouseEnter={e=>e.currentTarget.style.borderColor='var(--ink-22)'}
+        onMouseLeave={e=>e.currentTarget.style.borderColor='var(--ink-10)'}>
+        <I.search /><span style={{flex:1,marginLeft:6}}>Search skills, conversations...</span>
+      </div>
+      <div style={{flex:1}} />
+      <button style={{width:32,height:32,background:'none',border:'none',cursor:'pointer',color:'var(--ink-70)',borderRadius:8,display:'grid',placeItems:'center',transition:'background 0.15s'}}
+        onMouseEnter={e=>e.currentTarget.style.background='var(--ink-05)'}
+        onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+        <I.bell />
+      </button>
+    </div>
+  );
+}
+
+/* ─── SVG Connections ─── */
+const Connections = memo(function Connections({ nodes, edges, selId }) {
+  const nMap = {};
+  nodes.forEach(nd => { nMap[nd.id] = nd; });
+  return (
+    <svg style={{position:'absolute',top:0,left:0,width:1200,height:960,pointerEvents:'none',overflow:'visible',zIndex:2}}>
+      {edges.map(e => {
+        const s = nMap[e.from], d = nMap[e.to];
+        if (!s || !d) return null;
+        /* Horizontal flow: right edge of source → left edge of dest */
+        const x1 = s.x + NW + 4;
+        const y1 = s.y + NH / 2;
+        const x2 = d.x - 4;
+        const y2 = d.y + NH / 2;
+        const isSel = selId === e.from || selId === e.to;
+        const isW = e.warn;
+        const col = isW ? 'rgba(196,56,56,.52)' : isSel ? 'rgba(53,98,200,.65)' : 'rgba(10,10,10,.22)';
+        const aw = 4, ah = 7;
+        const arrowTipX = x2 + 1;
+        const arrowBaseX = arrowTipX - ah;
+        return (
+          <g key={e.id}>
+            <line x1={x1} y1={y1} x2={arrowBaseX - 1} y2={y2} stroke={col} strokeWidth="1.5" strokeDasharray={isW ? '5,4' : '4,3'} />
+            <polygon points={`${arrowBaseX},${y2-aw} ${arrowBaseX},${y2+aw} ${arrowTipX},${y2}`} fill={col} />
+            {isW && (
+              <text x={(x1+x2)/2} y={y1 - 8} fontSize="9" fill="rgba(196,56,56,.75)" fontFamily="'Hanken Grotesk',sans-serif" fontWeight="700" textAnchor="middle">no match</text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+});
+
+/* ─── Ghost edge from n10 to ghost node ─── */
+function GhostEdge() {
+  /* Horizontal ghost: right of n10 → left of ghost node */
+  const x1 = NX + H_STEP + NW + 4;  /* right edge of n10 + offset */
+  const x2 = NX + 2*H_STEP - 4;     /* left edge of ghost node */
+  const y  = NY[2] + NH / 2;
+  return (
+    <line x1={x1} y1={y} x2={x2} y2={y} stroke="rgba(10,10,10,.1)" strokeWidth="1.5" strokeDasharray="4,3" style={{pointerEvents:'none'}} />
+  );
+}
+
+/* ─── Workflow Node ─── */
+const WorkflowNode = memo(function WorkflowNode({ node, isSelected, onSelect, onContextMenu }) {
+  const nt = NT[node.type];
+  const conf = NCONF[node.id];
+  const [hov, setHov] = useState(false);
+  const Icon = node.type === 'trigger' ? I.zap : node.type === 'error' ? I.warning : I.arrow;
+
+  const port = {
+    position:'absolute', width:10, height:10, borderRadius:'50%',
+    top:'50%', transform:'translateY(-50%)', zIndex:4,
+    transition:'background 0.12s,border-color 0.12s',
+    background: isSelected ? nt.color : 'var(--white)',
+    border:`1.5px solid ${isSelected ? nt.color : hov ? 'rgba(10,10,10,.28)' : 'rgba(10,10,10,.18)'}`
+  };
+
+  const isTrigger = node.type === 'trigger';
+  const fields      = conf?.fields || [];
+  const policyField = fields.find(f => f.l === 'Policy');
+  const outputs     = conf?.out || [];
+  const apiCount    = conf?.apis ?? 0;
+  const triggerFields = isTrigger
+    ? fields.filter(f => f.l !== 'Policy').slice(0, 3)
+    : fields.filter(f => f.l !== 'Policy').slice(0, 2);
+  const monoLabels = ['Function','Event','Condition','Catch','Trigger Type'];
+
+  /* Per-value chip colors */
+  const CHIP_COLORS = {
+    'User Request':   '#3562C8',
+    'Platform Event': '#7C51D8',
+    'Time':           '#B8840E',
+    'Calm guide':     '#3C9B6A',
+    'Empathetic':     '#C43870',
+    'Command Mode':   '#1A6FA8',
+    'Concierge':      '#A05C1A',
+    'Direct':         '#5C6BC0',
+  };
+  const chipColor = (val) => CHIP_COLORS[val] || nt.color;
+
+  return (
+    <div
+      onClick={e => { e.stopPropagation(); onSelect(node.id); }}
+      onContextMenu={e => { e.preventDefault(); e.stopPropagation(); onContextMenu(e, node); }}
+      onMouseDown={e => e.stopPropagation()}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        position:'absolute', left:node.x, top:node.y, width:NW, height:NH,
+        background: isSelected ? nt.bg : '#fff',
+        border:`1px solid ${isSelected ? nt.color + '55' : 'rgba(10,10,10,.11)'}`,
+        borderTop:`3px solid ${nt.color}`,
+        borderRadius:10,
+        padding:'10px 11px 10px',
+        cursor:'pointer',
+        boxShadow: isSelected
+          ? `0 0 0 3px ${nt.color}18, 0 4px 18px rgba(0,0,0,.10)`
+          : hov ? '0 2px 14px rgba(0,0,0,.09)' : '0 1px 4px rgba(0,0,0,.06)',
+        zIndex:3, transition:'box-shadow 0.15s,border-color 0.15s,background 0.12s',
+        userSelect:'none', display:'flex', flexDirection:'column', gap:0,
+        overflow:'hidden',
+      }}>
+
+      {/* Header: type badge + label */}
+      <div style={{display:'flex',alignItems:'center',gap:5,marginBottom:3,flexShrink:0}}>
+        <span style={{display:'flex',color:nt.color,opacity:.85,flexShrink:0}}><Icon /></span>
+        <span style={{fontSize:9,fontWeight:800,letterSpacing:'0.13em',color:nt.color,textTransform:'uppercase'}}>{nt.label}</span>
+        <div style={{flex:1}} />
+        {apiCount > 0 && (
+          <span style={{display:'inline-flex',alignItems:'center',gap:3,fontSize:8,fontWeight:700,color:'rgba(10,10,10,.4)',background:'rgba(10,10,10,.05)',border:'1px solid rgba(10,10,10,.08)',borderRadius:5,padding:'1px 5px',flexShrink:0}}>
+            <svg width="8" height="8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            {apiCount} API{apiCount !== 1 ? 's' : ''}
+          </span>
+        )}
+      </div>
+      <div style={{fontSize:12.5,fontWeight:700,letterSpacing:'-0.018em',color:'#0A0A0A',lineHeight:1.2,marginBottom:2,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',flexShrink:0}}>{node.label}</div>
+      <div style={{fontSize:9,color:'rgba(10,10,10,.38)',fontFamily:"'SF Mono','Fira Code',monospace",overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',marginBottom:7,flexShrink:0}}>{node.sub}</div>
+
+      {/* Divider */}
+      <div style={{borderTop:'1px solid rgba(10,10,10,.07)',marginBottom:7,flexShrink:0}} />
+
+      {/* Config fields */}
+      <div style={{flex:1,display:'flex',flexDirection:'column',gap:5,overflow:'hidden'}}>
+        {triggerFields.map((f, i) => {
+          const isChip = f.l === 'Trigger Type' || f.l === 'Personality';
+          return (
+            <div key={i} style={{flexShrink:0}}>
+              <div style={{fontSize:8,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(10,10,10,.32)',marginBottom:3}}>
+                {f.l}{f.m && <span style={{display:'inline-block',width:4,height:4,borderRadius:'50%',background:nt.color,opacity:.7,marginLeft:4,verticalAlign:'middle'}}/>}
+              </div>
+              {isChip ? (
+                <span style={{
+                  display:'inline-flex',alignItems:'center',
+                  fontSize:10,fontWeight:600,
+                  padding:'3px 10px',borderRadius:20,
+                  background: isSelected ? chipColor(f.v) : chipColor(f.v)+'18',
+                  color: isSelected ? '#fff' : chipColor(f.v),
+                  border:`1px solid ${isSelected ? chipColor(f.v) : chipColor(f.v)+'32'}`,
+                  whiteSpace:'nowrap',maxWidth:'100%',overflow:'hidden',textOverflow:'ellipsis',
+                  transition:'background 0.15s,color 0.15s',
+                }}>{f.v}</span>
+              ) : (
+                <div style={{
+                  fontSize:9.5,
+                  fontFamily: monoLabels.includes(f.l) ? "'SF Mono','Fira Code',monospace" : 'inherit',
+                  color:'rgba(10,10,10,.65)',
+                  background:'rgba(10,10,10,.035)',
+                  border:'1px solid rgba(10,10,10,.07)',
+                  borderRadius:5,
+                  padding:'3px 7px',
+                  overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
+                  lineHeight:1.4,
+                }}>{f.v}</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Outputs — action/error nodes only */}
+      {!isTrigger && outputs.length > 0 && (
+        <div style={{flexShrink:0,marginTop:6}}>
+          <div style={{fontSize:8,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(10,10,10,.28)',marginBottom:3}}>Outputs</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:3}}>
+            {outputs.slice(0,3).map((o,i) => (
+              <span key={i} style={{fontSize:8,fontWeight:500,padding:'2px 5px',borderRadius:4,background:'rgba(10,10,10,.04)',border:'1px solid rgba(10,10,10,.09)',color:'rgba(10,10,10,.5)',fontFamily:"'SF Mono','Fira Code',monospace",whiteSpace:'nowrap'}}>{o}</span>
+            ))}
+            {outputs.length > 3 && <span style={{fontSize:8,color:'rgba(10,10,10,.3)',padding:'2px 3px'}}>+{outputs.length-3}</span>}
+          </div>
+        </div>
+      )}
+
+      {/* Policy pills */}
+      {policyField && (
+        <div style={{flexShrink:0,marginTop:5}}>
+          <div style={{fontSize:8,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(10,10,10,.28)',marginBottom:3}}>Policies</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:3}}>
+            {policyField.v.split(/[·,]/).map(p => p.trim()).filter(Boolean).map((p, i) => (
+              <span key={i} style={{fontSize:8,fontWeight:700,letterSpacing:'0.04em',padding:'2px 6px',borderRadius:10,background:nt.color+'12',color:nt.color,border:`1px solid ${nt.color}22`}}>{p}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      <div style={{...port, left:-5}} />
+      {/* Right port (output) */}
+      <div style={{...port, right:-5, left:'auto'}} />
+    </div>
+  );
+});
+
+/* ─── Ghost Node ─── */
+function GhostNode({ x, y, label }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+      style={{position:'absolute',left:x,top:y,width:NW,height:NH,border:`1.5px dashed rgba(10,10,10,${hov?.22:.13})`,borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',gap:6,color:`rgba(10,10,10,${hov?.38:.22})`,fontSize:12,fontWeight:500,cursor:'pointer',userSelect:'none',zIndex:3,transition:'border-color 0.15s,color 0.15s',background: hov ? 'rgba(10,10,10,.02)' : 'transparent'}}>
+      <I.plus />{label}
+    </div>
+  );
+}
+
+/* ─── Skill Box ─── */
+function SkillBox({ skill, nodes, hoveredSkill, onHover }) {
+  const isHov = hoveredSkill === skill.id;
+  const sk = nodes.filter(n => n.skill === skill.id);
+  if (!sk.length) return null;
+  const minX = Math.min(...sk.map(n=>n.x)) - 20;
+  const maxX = Math.max(...sk.map(n=>n.x+NW)) + (skill.id==='s3' ? 80 : 20); /* extra right space for ghost */
+  const minY = Math.min(...sk.map(n=>n.y)) - 44;
+  const maxY = Math.max(...sk.map(n=>n.y+NH)) + 22;
+
+  return (
+    <div onMouseEnter={()=>onHover(skill.id)} onMouseLeave={()=>onHover(null)}
+      style={{position:'absolute',left:minX,top:minY,width:maxX-minX,height:maxY-minY,background:isHov?skill.c.bg.replace('.055',',.08)'):skill.c.bg,border:`1px solid ${skill.c.bdr}`,borderRadius:14,zIndex:1,transition:'background 0.2s',userSelect:'none'}}>
+      <div style={{display:'flex',alignItems:'center',gap:7,padding:'10px 14px 0'}}>
+        <span style={{fontSize:11,fontWeight:700,letterSpacing:'0.07em',color:skill.c.txt,textTransform:'uppercase'}}>{skill.label}</span>
+        <span style={{fontSize:9.5,fontWeight:600,color:'rgba(10,10,10,.35)',background:'rgba(10,10,10,.055)',borderRadius:4,padding:'1px 6px',textTransform:'uppercase',letterSpacing:'0.05em'}}>{skill.status}</span>
+        {isHov && (
+          <div style={{marginLeft:'auto',display:'flex',gap:4}}>
+            {['Rename','Disable'].map(a=>(
+              <button key={a} onClick={e=>e.stopPropagation()} style={{fontSize:10,fontWeight:600,padding:'2px 8px',borderRadius:5,background:'rgba(255,255,255,.9)',border:'1px solid rgba(10,10,10,.12)',cursor:'pointer',fontFamily:'inherit',color:'rgba(10,10,10,.55)',transition:'background 0.1s'}}
+                onMouseEnter={e=>e.currentTarget.style.background='#fff'}
+                onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,.9)'}>{a}</button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Canvas Topbar ─── */
+function CanvasTopbar({ onPublish, onSimulate, showDiff, setShowDiff, selSkill }) {
+  const allSkills = LIFECYCLE_STATES.flatMap(s => s.skills.map(sk => ({...sk, stateName: s.label})));
+  const currentSkill = allSkills.find(sk => sk.id === selSkill);
+  const currentState = LIFECYCLE_STATES.find(s => s.skills.some(sk => sk.id === selSkill));
+  const skillLabel = currentSkill ? currentSkill.label : 'Setup guide';
+  const stateLabel = currentState ? currentState.label.charAt(0) + currentState.label.slice(1).toLowerCase() : '';
+  return (
+    <div style={{height:50,borderBottom:'1px solid var(--ink-10)',display:'flex',alignItems:'center',padding:'0 16px',gap:12,flexShrink:0,background:'var(--white)',zIndex:6}}>
+      <div style={{display:'flex',alignItems:'center',gap:8}}>
+        <span style={{width:8,height:8,borderRadius:'50%',background:'var(--green)',flexShrink:0}}/>
+        <span style={{fontSize:14,fontWeight:700,letterSpacing:'-0.015em'}}>{stateLabel || 'Onboarding'}</span>
+        <span style={{fontSize:12,color:'var(--ink-45)'}}>· 10 nodes · 7 edges</span>
+        <span style={{fontSize:10.5,fontWeight:700,letterSpacing:'0.04em',color:'var(--ink-45)',background:'var(--ink-05)',borderRadius:5,padding:'2px 7px',border:'1px solid var(--ink-10)'}}>v0.4 → v0.5</span>
+      </div>
+      <div style={{flex:1}}/>
+      <button onClick={()=>setShowDiff(d=>!d)} style={{display:'flex',alignItems:'center',gap:5,padding:'5px 10px',background: showDiff?'var(--ink-05)':'none',border:'1px solid var(--ink-10)',borderRadius:7,fontFamily:'inherit',fontSize:12,fontWeight:500,color:'var(--ink-70)',cursor:'pointer',transition:'background 0.15s,color 0.15s'}}
+        onMouseEnter={e=>{if(!showDiff){e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink)';}}}
+        onMouseLeave={e=>{if(!showDiff){e.currentTarget.style.background='none';e.currentTarget.style.color='var(--ink-70)';}}}><I.diff />Diff</button>
+      <button onClick={onSimulate} style={{display:'flex',alignItems:'center',gap:5,padding:'5px 10px',background:'none',border:'1px solid var(--ink-10)',borderRadius:7,fontFamily:'inherit',fontSize:12,fontWeight:500,color:'var(--ink-70)',cursor:'pointer',transition:'background 0.15s,color 0.15s'}}
+        onMouseEnter={e=>{e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink)';}}
+        onMouseLeave={e=>{e.currentTarget.style.background='none';e.currentTarget.style.color='var(--ink-70)';}}>
+        <I.play />Test
+      </button>
+      <button onClick={onPublish} style={{display:'flex',alignItems:'center',gap:5,padding:'5px 12px',background:'var(--ink)',border:'none',borderRadius:7,fontFamily:'inherit',fontSize:12,fontWeight:600,color:'var(--white)',cursor:'pointer',transition:'opacity 0.15s'}}
+        onMouseEnter={e=>e.currentTarget.style.opacity='.86'}
+        onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+        <I.upload />Publish
+      </button>
+    </div>
+  );
+}
+
+/* ─── Zoom Controls ─── */
+function ZoomControls({ zoom, onZoomIn, onZoomOut, onReset }) {
+  const btn = (label, onClick) => (
+    <button onClick={onClick} style={{width:32,height:32,background:'none',border:'none',borderTop:'1px solid var(--ink-10)',cursor:'pointer',fontSize:label==='⊙'?13:18,color:'var(--ink-70)',display:'grid',placeItems:'center',fontFamily:'inherit',transition:'background 0.15s,color 0.15s'}}
+      onMouseEnter={e=>{e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink)';}}
+      onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='var(--ink-70)';}}>
+      {label}
+    </button>
+  );
+  return (
+    <div style={{position:'absolute',bottom:82,left:16,background:'var(--white)',border:'1px solid var(--ink-22)',borderRadius:9,overflow:'hidden',boxShadow:'0 2px 10px rgba(0,0,0,.07)',zIndex:5,display:'flex',flexDirection:'column'}}>
+      <div style={{padding:'5px 8px',fontSize:9.5,fontWeight:700,letterSpacing:'0.05em',color:'var(--ink-45)',textAlign:'center',borderBottom:'1px solid var(--ink-10)'}}>{Math.round(zoom*100)}%</div>
+      {btn('+', onZoomIn)}
+      {btn('−', onZoomOut)}
+      {btn('⊙', onReset)}
+    </div>
+  );
+}
+
+/* ─── Minimap ─── */
+function Minimap({ transform }) {
+  const W = 118, H = 88, CW = 1120, CH = 860;
+  const S = W / CW;
+  const sc = SKILLS_DEF;
+  /* Skill boxes now stacked vertically, spanning nodes horizontally */
+  const skillBoxes = [
+    { x:32*S,  y:20*S,  w:1000*S, h:320*S, c:sc[0].c },
+    { x:32*S,  y:340*S, w:1000*S, h:320*S, c:sc[1].c },
+    { x:32*S,  y:660*S, w:540*S,  h:320*S, c:sc[2].c },
+  ];
+
+  // Viewport rect in minimap coords
+  const vpW = Math.min(W, (window.innerWidth * 0.7 / transform.scale) * S);
+  const vpH = Math.min(H, (window.innerHeight * 0.75 / transform.scale) * S);
+  const vpX = Math.max(0, (-transform.x / transform.scale) * S);
+  const vpY = Math.max(0, (-transform.y / transform.scale) * S);
+
+  return (
+    <div style={{position:'absolute',bottom:82,right:16,width:W,height:H,background:'var(--white)',border:'1px solid var(--ink-22)',borderRadius:9,boxShadow:'0 2px 10px rgba(0,0,0,.07)',zIndex:5,overflow:'hidden'}}>
+      <div style={{position:'relative',width:'100%',height:'100%'}}>
+        {/* Skill boxes */}
+        {skillBoxes.map((b,i)=>(
+          <div key={i} style={{position:'absolute',left:b.x,top:b.y,width:b.w,height:b.h,background:b.c.bg,border:`1px solid ${b.c.bdr}`,borderRadius:3}}/>
+        ))}
+        {/* Nodes */}
+        {NODES_DEF.map(nd=>{
+          const nt = NT[nd.type];
+          return <div key={nd.id} style={{position:'absolute',left:nd.x*S,top:nd.y*S,width:NW*S,height:4,background:nt.color,borderRadius:1,opacity:.6}}/>;
+        })}
+        {/* Viewport */}
+        <div style={{position:'absolute',left:vpX,top:vpY,width:vpW,height:vpH,border:'1.5px solid rgba(53,98,200,.5)',borderRadius:2,background:'rgba(53,98,200,.05)',pointerEvents:'none'}}/>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Palette Bar ─── */
+function PaletteBar() {
+  const items = [
+    { type:'trigger', label:'+ TRIGGER', color:'#B8840E', bg:'rgba(184,132,14,.09)', bdr:'rgba(184,132,14,.28)', Icon:I.zap },
+    { type:'action',  label:'+ ACTION',  color:'#3562C8', bg:'rgba(53,98,200,.09)',  bdr:'rgba(53,98,200,.28)',  Icon:I.arrow },
+    { type:'error',   label:'+ FALLBACK',color:'#C43838', bg:'rgba(196,56,56,.09)',  bdr:'rgba(196,56,56,.28)',  Icon:I.warning },
+  ];
+  return (
+    <div style={{position:'absolute',bottom:0,left:0,right:0,background:'var(--white)',borderTop:'1px solid var(--ink-10)',padding:'8px 16px 12px',zIndex:5}}>
+      <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:8}}>Palette · Drag onto canvas</div>
+      <div style={{display:'flex',gap:8}}>
+        {items.map(p=>(
+          <div key={p.type} style={{display:'flex',alignItems:'center',gap:7,padding:'7px 14px 7px 10px',borderRadius:8,background:p.bg,color:p.color,border:`1.5px solid ${p.bdr}`,fontSize:11.5,fontWeight:700,letterSpacing:'0.04em',cursor:'grab',userSelect:'none',flex:1,maxWidth:150,transition:'transform 0.15s,box-shadow 0.15s'}}
+            onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 4px 14px rgba(0,0,0,.09)';}}
+            onMouseLeave={e=>{e.currentTarget.style.transform='';e.currentTarget.style.boxShadow='';}}>
+            <p.Icon />{p.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Context Menu ─── */
+function ContextMenu({ x, y, node, onClose, onDelete }) {
+  const nt = NT[node.type];
+  const items = [
+    { label:'Duplicate node', Icon:I.copy,    action:()=>onClose() },
+    { label:'Rename',         Icon:I.rename,  action:()=>onClose() },
+    { label:'Detach from skill', Icon:I.detach, action:()=>onClose() },
+    { label:'Delete node',    Icon:I.trash,   action:()=>{onDelete(node.id);onClose();}, danger:true },
+  ];
+  return (
+    <div style={{position:'fixed',left:x,top:y,zIndex:200,background:'var(--white)',border:'1px solid var(--ink-10)',borderRadius:10,boxShadow:'0 4px 24px rgba(0,0,0,.12)',padding:'4px',minWidth:176}}>
+      <div style={{padding:'6px 10px 5px',marginBottom:2}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:nt.color}}>{nt.label}</div>
+        <div style={{fontSize:12.5,fontWeight:600,color:'var(--ink)'}}>{node.label}</div>
+      </div>
+      <div style={{borderTop:'1px solid var(--ink-10)',margin:'2px 0'}}/>
+      {items.map(item=>(
+        <div key={item.label} onClick={item.action}
+          style={{display:'flex',alignItems:'center',gap:8,padding:'6px 10px',borderRadius:7,cursor:'pointer',fontSize:13,fontWeight:400,color:item.danger?'var(--red)':'var(--ink-70)',transition:'background 0.1s,color 0.1s'}}
+          onMouseEnter={e=>{e.currentTarget.style.background=item.danger?'var(--red-bg)':'var(--ink-05)';if(!item.danger)e.currentTarget.style.color='var(--ink)';}}
+          onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color=item.danger?'var(--red)':'var(--ink-70)';}}>
+          <span style={{display:'flex',opacity:.7}}><item.Icon /></span>{item.label}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Diff Overlay ─── */
+function DiffOverlay() {
+  const changes = [
+    { type:'add',   label:'n3 → Route by intent', detail:'dispatch: skill_router added' },
+    { type:'mod',   label:'n2 → Classify intent',  detail:'temperature changed 0.3 → 0.2' },
+    { type:'add',   label:'Edge e3: warn=true',     detail:'no match edge added' },
+  ];
+  const col = { add:'#3C9B6A', mod:'#B8840E', del:'#C43838' };
+  return (
+    <div style={{position:'absolute',top:0,left:0,right:0,bottom:0,background:'rgba(10,10,10,.45)',zIndex:50,display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <div style={{background:'var(--white)',borderRadius:14,width:440,boxShadow:'0 12px 48px rgba(0,0,0,.2)',overflow:'hidden'}}>
+        <div style={{padding:'16px 20px 14px',borderBottom:'1px solid var(--ink-10)',display:'flex',alignItems:'center',gap:8}}>
+          <I.diff /><span style={{fontSize:14,fontWeight:700,flex:1}}>Diff · v0.4 → v0.5</span>
+          <span style={{fontSize:11,fontWeight:600,color:'var(--ink-45)',background:'var(--ink-05)',borderRadius:5,padding:'2px 7px'}}>3 changes</span>
+        </div>
+        <div style={{padding:'12px 20px 20px'}}>
+          {changes.map((c,i)=>(
+            <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,padding:'9px 0',borderBottom:i<changes.length-1?'1px solid var(--ink-05)':'none'}}>
+              <span style={{width:28,fontSize:9.5,fontWeight:700,letterSpacing:'0.07em',color:col[c.type],background:col[c.type]+'14',borderRadius:4,padding:'1px 5px',textTransform:'uppercase',flexShrink:0,marginTop:1}}>{c.type}</span>
+              <div><div style={{fontSize:13,fontWeight:500,color:'var(--ink)'}}>{c.label}</div><div style={{fontSize:11.5,color:'var(--ink-45)',marginTop:1}}>{c.detail}</div></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Workflow Canvas ─── */
+function WorkflowCanvas({ selNode, setSelNode, onTest, selSkill }) {
+  const [transform, setTransform] = useState({ x:14, y:18, scale:0.60 });
+  const [hovSkill, setHovSkill] = useState(null);
+  const [ctxMenu, setCtxMenu] = useState(null);
+  const [nodes, setNodes] = useState(NODES_DEF);
+  const [showDiff, setShowDiff] = useState(false);
+  const containerRef = useRef();
+  const isDragging = useRef(false);
+  const didMove = useRef(false);
+  const dragStart = useRef({ x:0, y:0, tx:0, ty:0 });
+
+  const handleWheel = useCallback(e => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.1 : 0.91;
+    const rect = containerRef.current.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    setTransform(t => {
+      const ns = Math.min(2.8, Math.max(0.25, t.scale * factor));
+      const sf = ns / t.scale;
+      return { x: mx - sf*(mx-t.x), y: my - sf*(my-t.y), scale:ns };
+    });
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.addEventListener('wheel', handleWheel, { passive:false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [handleWheel]);
+
+  const onMouseDown = e => {
+    if (e.button !== 0) return;
+    const isCanvas = e.target === e.currentTarget || e.target === containerRef.current;
+    if (!isCanvas) return;
+    isDragging.current = true;
+    didMove.current = false;
+    dragStart.current = { x:e.clientX, y:e.clientY, tx:transform.x, ty:transform.y };
+  };
+
+  const onMouseMove = e => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - dragStart.current.x, dy = e.clientY - dragStart.current.y;
+    if (Math.abs(dx)+Math.abs(dy) > 3) didMove.current = true;
+    setTransform(t => ({ ...t, x:dragStart.current.tx+dx, y:dragStart.current.ty+dy }));
+  };
+
+  const onMouseUp = e => {
+    if (isDragging.current && !didMove.current) { setSelNode(null); setCtxMenu(null); }
+    isDragging.current = false;
+  };
+
+  const handleCtxMenu = useCallback((e, node) => {
+    setCtxMenu({ x:e.clientX, y:e.clientY, node });
+  }, []);
+
+  const handleSelect = useCallback(id => setSelNode(id), [setSelNode]);
+  const deleteNode = useCallback(id => { setNodes(ns => ns.filter(n=>n.id!==id)); if(selNode===id) setSelNode(null); }, [selNode,setSelNode]);
+
+  const resetZoom = () => setTransform({ x:14, y:18, scale:0.60 });
+
+  return (
+    <div style={{flex:1,display:'flex',flexDirection:'column',background:'var(--white)',overflow:'hidden',position:'relative'}}>
+      <CanvasTopbar onPublish={()=>{}} onSimulate={onTest} showDiff={showDiff} setShowDiff={setShowDiff} selSkill={selSkill} />
+
+      {/* Canvas body */}
+      <div ref={containerRef}
+        onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
+        style={{flex:1,position:'relative',overflow:'hidden',background:'var(--bg)',backgroundImage:'radial-gradient(circle, rgba(10,10,10,.12) 1px, transparent 1px)',backgroundSize:'24px 24px',cursor:isDragging.current?'grabbing':'grab'}}>
+
+        {/* Transformed content */}
+        <div style={{position:'absolute',top:0,left:0,transform:`translate(${transform.x}px,${transform.y}px) scale(${transform.scale})`,transformOrigin:'0 0',width:1120,height:860}}>
+          {/* Skill bounding boxes */}
+          {SKILLS_DEF.map(sk => (
+            <SkillBox key={sk.id} skill={sk} nodes={nodes} hoveredSkill={hovSkill} onHover={setHovSkill} />
+          ))}
+          {/* SVG connections */}
+          <Connections nodes={nodes} edges={EDGES_DEF} selId={selNode} />
+          {/* Ghost edge s3 */}
+          <svg style={{position:'absolute',top:0,left:0,width:1200,height:960,pointerEvents:'none',overflow:'visible',zIndex:2}}>
+            <GhostEdge />
+          </svg>
+          {/* Nodes */}
+          {nodes.map(nd => (
+            <WorkflowNode key={nd.id} node={nd} isSelected={selNode===nd.id} onSelect={handleSelect} onContextMenu={handleCtxMenu} />
+          ))}
+          {/* Ghost node in s3 — 3rd horizontal slot */}
+          <GhostNode x={NX+2*H_STEP} y={NY[2]} label="Add an action" />
+        </div>
+
+        {/* Canvas overlays */}
+        <ZoomControls zoom={transform.scale}
+          onZoomIn={()=>setTransform(t=>({...t,scale:Math.min(2.8,t.scale*1.15)}))}
+          onZoomOut={()=>setTransform(t=>({...t,scale:Math.max(0.25,t.scale/1.15)}))}
+          onReset={resetZoom} />
+        <Minimap transform={transform} />
+        <PaletteBar />
+        {showDiff && <DiffOverlay />}
+      </div>
+
+      {/* Context menu */}
+      {ctxMenu && (
+        <>
+          <div style={{position:'fixed',inset:0,zIndex:199}} onClick={()=>setCtxMenu(null)} />
+          <ContextMenu {...ctxMenu} onClose={()=>setCtxMenu(null)} onDelete={deleteNode} />
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ─── Data: Personalities, Policies ─── */
+const PERSONALITIES = [
+  { id:'calm-guide', name:'Calm Guide',         desc:'Patient, clear and supportive',      color:'#3C9B6A', bg:'rgba(60,155,106,.09)'  },
+  { id:'urgent',     name:'Urgent Responder',   desc:'Fast, direct and action-oriented',   color:'#C4612A', bg:'rgba(196,97,42,.09)'   },
+  { id:'command',    name:'Command Mode',       desc:'Precise, technical and minimal',     color:'#3562C8', bg:'rgba(53,98,200,.09)'   },
+  { id:'concierge',  name:'Friendly Concierge', desc:'Warm, conversational and empathetic',color:'#7C51D8', bg:'rgba(124,81,216,.09)'  },
+];
+
+const POLICIES_LIST = [
+  { id:'confirm',  label:'Confirm before action' },
+  { id:'escalate', label:'Escalate on error'     },
+  { id:'retry',    label:'Silent retry'          },
+  { id:'otp',      label:'Require OTP'           },
+  { id:'log',      label:'Log all events'        },
+];
+
+const PERSONA_BUBBLE = {
+  'calm-guide': { bg:'rgba(60,155,106,.10)',  border:'rgba(60,155,106,.22)',  color:'#1c5c3a' },
+  'urgent':     { bg:'rgba(196,97,42,.10)',   border:'rgba(196,97,42,.22)',   color:'#7a3010' },
+  'command':    { bg:'rgba(53,98,200,.10)',   border:'rgba(53,98,200,.22)',   color:'#1a3080' },
+  'concierge':  { bg:'rgba(124,81,216,.10)', border:'rgba(124,81,216,.22)', color:'#44189a' },
+};
+
+const PERSONA_REPLY = {
+  'calm-guide': (msg, label) =>
+    'I understand — let me take care of that for you.\n\nFor the "' + label + '" step, here is what happens next. I will walk you through each part so nothing is unclear.',
+  'urgent': (msg, label) =>
+    'Got it.\n\n→ ' + label + ' triggered\n→ Processing now\n→ You will receive confirmation shortly.',
+  'command': (msg, label) =>
+    'INPUT RECEIVED\nNODE: ' + label + '\nSTATUS: executing\nCONFIDENCE: 0.94\nOUTPUT: pending',
+  'concierge': (msg, label) =>
+    'Of course! I would be happy to help with that 😊\n\nI have started "' + label + '" for you. You are in great hands — I will keep you updated every step of the way!',
+};
+
+/* ─── Agent Test Panel ─── */
+function AgentTestPanel({ onClose }) {
+  const [msgs, setMsgs] = useState([
+    { id:0, role:'agent', text:"Hi! I'm your AI assistant. How can I help you today?", nodes:null, color:null }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [liveTrace, setLiveTrace] = useState(null);
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  }, [msgs, isTyping]);
+
+  const routeMsg = (msg) => {
+    const l = msg.toLowerCase();
+    if (/refund|money|charge|billing|payment|paid/.test(l))
+      return { skill:'Refund Handler', color:'#3562C8',
+        nodes:['Intent: refund','Verify eligibility','Process refund','Send confirmation'],
+        reply:'I can help with that refund.\n\nI\'ve verified your order history — you\'re eligible. Your refund has been processed and will appear within 3–5 business days.\n\nA confirmation has been sent to your registered email.' };
+    if (/human|agent|speak|person|talk|escalat|representative/.test(l))
+      return { skill:'Escalation', color:'#7C51D8',
+        nodes:['Escalation triggered','Queue for agent'],
+        reply:'Understood — I\'ll connect you with a human agent.\n\nYou\'ve been added to the support queue. Estimated wait: ~4 minutes. A team member will be with you shortly.' };
+    if (/refund|cancel|help|issue|problem|error|fail|wrong/.test(l))
+      return { skill:'Intent Router', color:'#B8840E',
+        nodes:['Message received','Classify intent','Route by intent'],
+        reply:'I\'ve classified your request and routed it to the right handler. Could you give me a bit more detail so I can assist you further?' };
+    return { skill:'Intent Router', color:'#C43838',
+      nodes:['Message received','Classify intent','Unknown intent'],
+      reply:'I\'m not quite sure I understood that. Could you rephrase? I can help with refunds, billing, account questions, or connect you to a human agent.' };
+  };
+
+  const send = () => {
+    if (!input.trim() || isTyping) return;
+    const msg = input.trim();
+    setInput('');
+    setMsgs(p => [...p, { id:Date.now(), role:'user', text:msg }]);
+    const route = routeMsg(msg);
+    setIsTyping(true);
+    setLiveTrace(route);
+    setTimeout(() => {
+      setMsgs(p => [...p, { id:Date.now()+1, role:'agent', text:route.reply, nodes:route.nodes, color:route.color, skill:route.skill }]);
+      setIsTyping(false);
+      setLiveTrace(null);
+    }, 900 + Math.random()*500);
+  };
+
+  const QUICK = ['I want a refund','Talk to a human agent','What can you help with?'];
+
+  return (
+    <div style={{width:308,flexShrink:0,background:'var(--white)',borderLeft:'1px solid var(--ink-10)',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      {/* Header */}
+      <div style={{padding:'13px 14px 11px',borderBottom:'1px solid var(--ink-10)',flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:3}}>
+          <span style={{display:'flex',color:'var(--green)',flexShrink:0}}><I.play /></span>
+          <span style={{fontSize:14,fontWeight:700,letterSpacing:'-0.015em',flex:1}}>Agent Test</span>
+          <button onClick={onClose}
+            style={{width:26,height:26,background:'none',border:'none',cursor:'pointer',color:'var(--ink-22)',borderRadius:6,display:'grid',placeItems:'center',transition:'background 0.15s,color 0.15s'}}
+            onMouseEnter={e=>{e.currentTarget.style.background='var(--ink-05)';e.currentTarget.style.color='var(--ink-70)';}}
+            onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='var(--ink-22)';}}>
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div style={{fontSize:11,color:'var(--ink-45)'}}>Setup guide &nbsp;·&nbsp; 3 skills &nbsp;·&nbsp; 10 nodes</div>
+      </div>
+
+      {/* Chat */}
+      <div ref={chatRef} style={{flex:1,overflowY:'auto',padding:'12px 14px',display:'flex',flexDirection:'column',gap:10}}>
+        {msgs.map(msg => (
+          <div key={msg.id} style={{display:'flex',flexDirection:'column',alignItems:msg.role==='user'?'flex-end':'flex-start',gap:3}}>
+            {msg.role==='agent' && msg.nodes && (
+              <div style={{display:'flex',alignItems:'center',flexWrap:'wrap',gap:3,marginBottom:2}}>
+                {msg.nodes.map((n,i) => (
+                  <React.Fragment key={i}>
+                    <span style={{fontSize:8.5,fontWeight:600,color:msg.color,background:msg.color+'12',border:`1px solid ${msg.color}22`,borderRadius:4,padding:'1px 5px',whiteSpace:'nowrap'}}>{n}</span>
+                    {i < msg.nodes.length-1 && <span style={{color:'var(--ink-22)',fontSize:9}}>›</span>}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+            <div style={{maxWidth:'93%',padding:'9px 12px',fontSize:12.5,lineHeight:1.6,whiteSpace:'pre-wrap',wordBreak:'break-word',
+              borderRadius:msg.role==='user'?'10px 10px 3px 10px':'10px 10px 10px 3px',
+              background:msg.role==='user'?'var(--ink)':'var(--bg)',
+              color:msg.role==='user'?'var(--white)':'var(--ink)',
+              border:msg.role==='user'?'none':'1px solid var(--ink-10)',
+            }}>{msg.text}</div>
+          </div>
+        ))}
+        {isTyping && (
+          <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:4}}>
+            {liveTrace && (
+              <div style={{display:'flex',alignItems:'center',gap:5}}>
+                <span style={{fontSize:8.5,fontWeight:600,color:liveTrace.color,background:liveTrace.color+'12',border:`1px solid ${liveTrace.color}22`,borderRadius:4,padding:'1px 6px'}}>{liveTrace.skill}</span>
+                <span style={{fontSize:9,color:'var(--ink-22)'}}>routing…</span>
+              </div>
+            )}
+            <div style={{padding:'10px 14px',borderRadius:'10px 10px 10px 3px',background:'var(--bg)',border:'1px solid var(--ink-10)',display:'flex',gap:4,alignItems:'center'}}>
+              {[0,1,2].map(i=>(<span key={i} style={{width:5,height:5,borderRadius:'50%',background:'var(--ink-22)',display:'inline-block',animation:'pulse 1.2s '+(i*0.22)+'s infinite'}}/>))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Quick prompts */}
+      <div style={{padding:'0 14px 8px',flexShrink:0}}>
+        <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
+          {QUICK.map(q => (
+            <div key={q} onClick={()=>{if(!isTyping) setInput(q);}}
+              style={{fontSize:10.5,fontWeight:500,padding:'4px 9px',borderRadius:20,border:'1px solid var(--ink-10)',background:'var(--bg)',color:'var(--ink-70)',cursor:'pointer',transition:'all 0.12s',userSelect:'none'}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--ink-22)';e.currentTarget.style.background='var(--white)';e.currentTarget.style.color='var(--ink)';}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--ink-10)';e.currentTarget.style.background='var(--bg)';e.currentTarget.style.color='var(--ink-70)';}}>{q}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* Input */}
+      <div style={{padding:'8px 14px 14px',borderTop:'1px solid var(--ink-05)',flexShrink:0}}>
+        <div style={{display:'flex',gap:6}}>
+          <input value={input} onChange={e=>setInput(e.target.value)}
+            onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey)send();}}
+            placeholder="Type as end user…"
+            style={{flex:1,padding:'8px 10px',fontSize:12.5,border:'1px solid var(--ink-10)',borderRadius:8,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',transition:'border-color 0.15s'}}
+            onFocus={e=>e.target.style.borderColor='var(--ink-45)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+          <button onClick={send}
+            style={{width:34,height:34,background:input.trim()&&!isTyping?'var(--ink)':'var(--ink-10)',border:'none',borderRadius:8,cursor:input.trim()&&!isTyping?'pointer':'default',display:'grid',placeItems:'center',flexShrink:0,transition:'background 0.15s',color:input.trim()&&!isTyping?'var(--white)':'var(--ink-22)'}}>
+            <I.arrow/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Node Config Panel ─── */
+function NodeConfigPanel({ selId, configTab, setConfigTab }) {
+  const node = NODES_DEF.find(n=>n.id===selId);
+  const conf = selId ? NCONF[selId] : null;
+  const tab = configTab;
+  const setTab = setConfigTab;
+  const [personality, setPersonality] = useState('calm-guide');
+  const [policies, setPolicies] = useState(['confirm','escalate']);
+  const [triggerType, setTriggerType] = useState('user_request');
+  const [condition, setCondition] = useState('');
+  const [apiRows, setApiRows] = useState([{id:1,method:'POST',url:''}]);
+  const [promptText, setPromptText] = useState('');
+  const [aiInstruction, setAiInstruction] = useState('');
+  const [chatMsgs, setChatMsgs] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const chatBoxRef = useRef(null);
+
+  useEffect(()=>{
+    if (!selId) return;
+    const c = NCONF[selId];
+    const nd = NODES_DEF.find(n=>n.id===selId);
+    setChatMsgs([]); setAiInstruction(''); setChatInput('');
+    setPromptText(c?.prompt
+      ? c.prompt.join('\n')
+      : '# ' + (nd?.label||'Node') + '\n\nYou are a helpful AI assistant.\n\n## Instructions\n\nWhen triggered, you should:\n1. Acknowledge user intent\n2. Take the appropriate action\n3. Confirm the outcome clearly'
+    );
+  }, [selId]);
+
+  useEffect(()=>{
+    if (chatBoxRef.current) chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+  }, [chatMsgs, isTyping]);
+
+  const togglePolicy = id => setPolicies(p=>p.includes(id)?p.filter(x=>x!==id):[...p,id]);
+  const addApiRow    = () => setApiRows(p=>[...p,{id:Date.now(),method:'GET',url:''}]);
+  const removeApiRow = id => setApiRows(p=>p.filter(r=>r.id!==id));
+  const updApiRow    = (id,f,v) => setApiRows(p=>p.map(r=>r.id===id?{...r,[f]:v}:r));
+
+  const sendChat = () => {
+    if (!chatInput.trim() || isTyping) return;
+    const msg = chatInput.trim();
+    setChatMsgs(p=>[...p,{id:Date.now(),role:'user',text:msg}]);
+    setChatInput(''); setIsTyping(true);
+    setTimeout(()=>{
+      const reply = (PERSONA_REPLY[personality]||PERSONA_REPLY['calm-guide'])(msg, node?.label||'node');
+      setChatMsgs(p=>[...p,{id:Date.now()+1,role:'agent',text:reply}]);
+      setIsTyping(false);
+    }, 900 + Math.random()*500);
+  };
+
+  /* Empty */
+  if (!node || !conf) return (
+    <div style={{width:280,flexShrink:0,background:'var(--white)',borderLeft:'1px solid var(--ink-10)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'0 24px',gap:10}}>
+      <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="rgba(10,10,10,.18)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="13" y2="12"/></svg>
+      <div style={{textAlign:'center'}}>
+        <div style={{fontSize:13.5,fontWeight:600,color:'var(--ink-45)',marginBottom:4}}>Select a node</div>
+        <div style={{fontSize:12,color:'var(--ink-22)',lineHeight:1.5}}>Click any node on the canvas to configure it here</div>
+      </div>
+    </div>
+  );
+
+  const nt = NT[node.type];
+  const isTrigger = node.type === 'trigger';
+  const pb = PERSONA_BUBBLE[personality];
+  const skill = SKILLS_DEF.find(s=>s.id===node.skill);
+
+  /* ── BUILD TAB ── */
+  const BuildTab = () => (
+    <div style={{flex:1,overflowY:'auto',padding:'14px 14px 24px'}}>
+      {/* Header */}
+      <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:16}}>
+        <span style={{display:'flex',color:nt.color}}>{node.type==='trigger'?<I.zap/>:node.type==='error'?<I.warning/>:<I.arrow/>}</span>
+        <span style={{fontSize:10.5,fontWeight:800,letterSpacing:'0.12em',textTransform:'uppercase',color:nt.color,flex:1}}>{nt.label}</span>
+        <button style={{width:26,height:26,background:'none',border:'none',cursor:'pointer',color:'var(--ink-22)',borderRadius:6,display:'grid',placeItems:'center',transition:'background 0.15s,color 0.15s'}}
+          onMouseEnter={e=>{e.currentTarget.style.background='var(--red-bg)';e.currentTarget.style.color='var(--red)';}}
+          onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color='var(--ink-22)';}}>
+          <I.trash/>
+        </button>
+      </div>
+
+      {isTrigger ? (<>
+        {/* Trigger type */}
+        <div style={{marginBottom:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:7}}>Trigger Type</div>
+          <div style={{display:'flex',gap:3,padding:'3px',background:'var(--ink-05)',borderRadius:8}}>
+            {[
+                {id:'time',label:'Time',Icon:()=><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>},
+                {id:'user_request',label:'User Request',Icon:()=><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+                {id:'platform_event',label:'Platform',Icon:()=><svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>}
+              ].map(tt=>(
+              <div key={tt.id} onClick={()=>setTriggerType(tt.id)}
+                style={{flex:1,padding:'6px 4px',borderRadius:6,textAlign:'center',fontSize:10.5,fontWeight:triggerType===tt.id?600:400,cursor:'pointer',background:triggerType===tt.id?'var(--white)':'transparent',color:triggerType===tt.id?'var(--ink)':'var(--ink-45)',boxShadow:triggerType===tt.id?'0 1px 4px rgba(0,0,0,.09)':'none',transition:'all 0.12s',userSelect:'none',display:'flex',alignItems:'center',justifyContent:'center',gap:4,whiteSpace:'nowrap'}}>
+                <span style={{display:'flex'}}><tt.Icon /></span>{tt.label}
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Condition */}
+        <div style={{marginBottom:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:7}}>Condition</div>
+          <textarea value={condition} onChange={e=>setCondition(e.target.value)} placeholder="Describe when this trigger should fire…"
+            style={{width:'100%',minHeight:70,padding:'9px 11px',fontSize:12.5,border:'1px solid var(--ink-10)',borderRadius:8,background:'var(--bg)',color:'var(--ink)',outline:'none',fontFamily:'inherit',resize:'vertical',lineHeight:1.55,transition:'border-color 0.15s'}}
+            onFocus={e=>e.target.style.borderColor='var(--ink-45)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+        </div>
+        {/* Webhook */}
+        <div style={{marginBottom:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:7}}>API / Webhook <span style={{fontWeight:400,textTransform:'none',letterSpacing:0,color:'var(--ink-22)'}}>optional</span></div>
+          <input placeholder="https://api.example.com/webhook"
+            style={{width:'100%',padding:'8px 10px',fontSize:11,border:'1px solid var(--ink-10)',borderRadius:8,background:'var(--bg)',color:'var(--ink-70)',outline:'none',fontFamily:"'SF Mono','Fira Code',monospace",transition:'border-color 0.15s'}}
+            onFocus={e=>e.target.style.borderColor='var(--ink-45)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+        </div>
+      </>) : (
+        /* Action: API sequence */
+        <div style={{marginBottom:16}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:7}}>
+            <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)'}}>API Sequence</div>
+            <div onClick={addApiRow} style={{display:'flex',alignItems:'center',gap:3,fontSize:11,fontWeight:600,color:'var(--blue)',cursor:'pointer',transition:'opacity 0.12s'}}
+              onMouseEnter={e=>e.currentTarget.style.opacity='.7'} onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+              <I.plus/>Add
+            </div>
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:5}}>
+            {apiRows.map((row)=>(
+              <div key={row.id} style={{display:'flex',alignItems:'center',gap:6,padding:'7px 9px',background:'var(--bg)',border:'1px solid var(--ink-10)',borderRadius:8}}>
+                <span style={{color:'var(--ink-22)',cursor:'grab',flexShrink:0,opacity:.5,display:'flex'}}><I.grip/></span>
+                <select value={row.method} onChange={e=>updApiRow(row.id,'method',e.target.value)}
+                  style={{fontSize:10,fontWeight:700,border:'none',background:'transparent',cursor:'pointer',color:row.method==='GET'?'var(--green)':row.method==='POST'?'var(--blue)':'var(--orange)',outline:'none',fontFamily:'inherit',flexShrink:0}}>
+                  <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
+                </select>
+                <input value={row.url} onChange={e=>updApiRow(row.id,'url',e.target.value)} placeholder="api.example.com/path"
+                  style={{flex:1,border:'none',background:'transparent',fontSize:11,color:'var(--ink-70)',outline:'none',fontFamily:"'SF Mono','Fira Code',monospace",minWidth:0}} />
+                {apiRows.length>1&&(
+                  <span onClick={()=>removeApiRow(row.id)} style={{display:'flex',color:'var(--ink-22)',cursor:'pointer',flexShrink:0,transition:'color 0.12s'}}
+                    onMouseEnter={e=>e.currentTarget.style.color='var(--red)'} onMouseLeave={e=>e.currentTarget.style.color='var(--ink-22)'}>
+                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Personality */}
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:7}}>Personality</div>
+        <div style={{display:'flex',flexDirection:'column',gap:4}}>
+          {PERSONALITIES.map(p=>{
+            const sel=personality===p.id;
+            return(
+              <div key={p.id} onClick={()=>setPersonality(p.id)}
+                style={{display:'flex',alignItems:'center',gap:9,padding:'8px 10px',borderRadius:8,border:'1.5px solid '+(sel?p.color+'55':'var(--ink-10)'),background:sel?p.bg:'transparent',cursor:'pointer',transition:'all 0.12s',userSelect:'none'}}
+                onMouseEnter={e=>{if(!sel){e.currentTarget.style.borderColor='var(--ink-22)';e.currentTarget.style.background='var(--ink-05)';}}}
+                onMouseLeave={e=>{if(!sel){e.currentTarget.style.borderColor='var(--ink-10)';e.currentTarget.style.background='transparent';}}}>
+                <span style={{width:9,height:9,borderRadius:'50%',background:p.color,flexShrink:0,opacity:sel?1:.5}}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:12.5,fontWeight:sel?600:400,color:sel?'var(--ink)':'var(--ink-70)'}}>{p.name}</div>
+                  <div style={{fontSize:10.5,color:'var(--ink-45)',lineHeight:1.3}}>{p.desc}</div>
+                </div>
+                {sel&&<span style={{display:'flex',color:p.color,flexShrink:0}}><I.check/></span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Policies */}
+      <div style={{marginBottom:20}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-45)',marginBottom:8}}>Policies</div>
+        <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
+          {POLICIES_LIST.map(pl=>{
+            const on=policies.includes(pl.id);
+            return(
+              <div key={pl.id} onClick={()=>togglePolicy(pl.id)}
+                style={{padding:'4px 10px',borderRadius:20,fontSize:11.5,fontWeight:on?600:400,cursor:'pointer',userSelect:'none',background:on?'var(--ink)':'var(--ink-05)',color:on?'var(--white)':'var(--ink-70)',border:'1px solid '+(on?'var(--ink)':'var(--ink-10)'),transition:'all 0.12s'}}>
+                {pl.label}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Metadata */}
+      <div style={{borderTop:'1px solid var(--ink-05)',paddingTop:14}}>
+        <div style={{fontSize:10,fontWeight:700,letterSpacing:'0.09em',textTransform:'uppercase',color:'var(--ink-22)',marginBottom:8}}>Metadata</div>
+        {[
+          {l:isTrigger?'Trigger code':'Action code', v:node.id},
+          {l:'Skill',  v:skill?.label||node.skill},
+          {l:'State',  v:'Onboarding'},
+        ].map(m=>(
+          <div key={m.l} style={{display:'flex',alignItems:'baseline',gap:6,marginBottom:5}}>
+            <span style={{fontSize:10.5,color:'var(--ink-22)',flex:'0 0 72px'}}>{m.l}</span>
+            <span style={{fontSize:10.5,fontFamily:"'SF Mono','Fira Code',monospace",color:'var(--ink-45)',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  /* ── PROMPT TAB ── */
+  const PromptTab = () => (
+    <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      {/* Header */}
+      <div style={{padding:'12px 14px 10px',borderBottom:'1px solid var(--ink-05)',flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:3}}>
+          <span style={{display:'flex',color:nt.color}}>{node.type==='trigger'?<I.zap/>:node.type==='error'?<I.warning/>:<I.arrow/>}</span>
+          <span style={{fontSize:14,fontWeight:700,letterSpacing:'-0.015em',flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{node.label}</span>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:6,paddingLeft:20}}>
+          <span style={{fontSize:10.5,color:'var(--ink-45)'}}>System prompt</span>
+          <span style={{width:3,height:3,borderRadius:'50%',background:'var(--ink-22)'}}/>
+          <span style={{fontSize:10.5,fontFamily:"'SF Mono','Fira Code',monospace",color:'var(--ink-45)'}}>{node.id}</span>
+        </div>
+      </div>
+      <div style={{flex:1,overflowY:'auto',padding:'12px 14px 0'}}>
+        <textarea value={promptText} onChange={e=>setPromptText(e.target.value)}
+          style={{width:'100%',height:'100%',minHeight:260,padding:'11px 12px',fontSize:11.5,fontFamily:"'SF Mono','Fira Code','Consolas',monospace",border:'1px solid var(--ink-10)',borderRadius:9,background:'var(--black)',color:'rgba(255,255,255,.88)',outline:'none',resize:'none',lineHeight:1.8,transition:'border-color 0.15s',caretColor:'white'}}
+          onFocus={e=>e.target.style.borderColor='rgba(255,255,255,.2)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+      </div>
+      <div style={{padding:'10px 14px 14px',borderTop:'1px solid var(--ink-05)',flexShrink:0}}>
+        <div style={{fontSize:10,fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--ink-22)',marginBottom:6,display:'flex',alignItems:'center',gap:5}}>
+          <I.sparkle/>Format prompt with AI
+        </div>
+        <div style={{display:'flex',gap:6}}>
+          <input value={aiInstruction} onChange={e=>setAiInstruction(e.target.value)} placeholder="e.g. Make it more empathetic…"
+            onKeyDown={e=>{if(e.key==='Enter'&&aiInstruction.trim()){setPromptText(p=>p+'\n\n// AI instruction: '+aiInstruction);setAiInstruction('');}}}
+            style={{flex:1,padding:'7px 10px',fontSize:12.5,border:'1px solid var(--ink-10)',borderRadius:7,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',transition:'border-color 0.15s'}}
+            onFocus={e=>e.target.style.borderColor='var(--ink-45)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+          <button onClick={()=>{if(aiInstruction.trim()){setPromptText(p=>p+'\n\n// AI: '+aiInstruction);setAiInstruction('');}}}
+            style={{width:34,height:34,background:'var(--ink)',border:'none',borderRadius:7,cursor:'pointer',flexShrink:0,transition:'opacity 0.15s',display:'grid',placeItems:'center',color:'var(--white)'}}
+            onMouseEnter={e=>e.currentTarget.style.opacity='.8'} onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ── TEST TAB ── */
+  const TestTab = () => (
+    <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      <div style={{padding:'8px 14px',borderBottom:'1px solid var(--ink-05)',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{fontSize:10,fontWeight:500,color:'var(--ink-45)',lineHeight:1.4}}>
+          Simulating as: <span style={{fontWeight:700,color:'var(--ink)'}}>Onboarding</span>
+          <span style={{color:'var(--ink-22)'}}> · </span>
+          <span style={{fontWeight:600,color:'var(--ink)'}}>{skill?.label||node.skill}</span>
+        </div>
+        <div onClick={()=>setChatMsgs([])} style={{fontSize:10.5,fontWeight:600,color:'var(--ink-22)',cursor:'pointer',userSelect:'none',transition:'color 0.12s'}}
+          onMouseEnter={e=>e.currentTarget.style.color='var(--ink-70)'}
+          onMouseLeave={e=>e.currentTarget.style.color='var(--ink-22)'}>
+          Reset
+        </div>
+      </div>
+      <div ref={chatBoxRef} style={{flex:1,overflowY:'auto',padding:'12px 14px',display:'flex',flexDirection:'column',gap:10}}>
+        {chatMsgs.length===0 && (
+          <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:7,opacity:.4,paddingTop:40}}>
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            <div style={{fontSize:12,fontWeight:500,color:'var(--ink-45)',textAlign:'center',lineHeight:1.5}}>Type a message to simulate<br/>the agent's response</div>
+          </div>
+        )}
+        {chatMsgs.map(msg=>(
+          <div key={msg.id} style={{display:'flex',flexDirection:'column',alignItems:msg.role==='user'?'flex-end':'flex-start',gap:3}}>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--ink-22)'}}>
+              {msg.role==='user'?'You':'Agent · '+PERSONALITIES.find(p=>p.id===personality)?.name}
+            </div>
+            <div style={{maxWidth:'92%',padding:'8px 11px',fontSize:12.5,lineHeight:1.55,whiteSpace:'pre-wrap',wordBreak:'break-word',
+              borderRadius:msg.role==='user'?'10px 10px 3px 10px':'10px 10px 10px 3px',
+              background:msg.role==='user'?'var(--ink)':pb.bg,
+              color:msg.role==='user'?'var(--white)':pb.color,
+              border:msg.role==='user'?'none':'1px solid '+pb.border,
+            }}>
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        {isTyping && (
+          <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:3}}>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--ink-22)'}}>
+              Agent · {PERSONALITIES.find(p=>p.id===personality)?.name}
+            </div>
+            <div style={{padding:'10px 14px',borderRadius:'10px 10px 10px 3px',background:pb.bg,border:'1px solid '+pb.border,display:'flex',gap:4,alignItems:'center'}}>
+              {[0,1,2].map(i=>(
+                <span key={i} style={{width:5,height:5,borderRadius:'50%',background:pb.color,display:'inline-block',animation:'pulse 1.2s '+(i*0.22)+'s infinite'}}/>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div style={{padding:'10px 14px 14px',borderTop:'1px solid var(--ink-05)',flexShrink:0}}>
+        <div style={{display:'flex',gap:6}}>
+          <input value={chatInput} onChange={e=>setChatInput(e.target.value)}
+            onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey)sendChat();}}
+            placeholder="Type as the end user…"
+            style={{flex:1,padding:'8px 10px',fontSize:12.5,border:'1px solid var(--ink-10)',borderRadius:8,background:'var(--white)',color:'var(--ink)',outline:'none',fontFamily:'inherit',transition:'border-color 0.15s'}}
+            onFocus={e=>e.target.style.borderColor='var(--ink-45)'} onBlur={e=>e.target.style.borderColor='var(--ink-10)'} />
+          <button onClick={sendChat}
+            style={{width:34,height:34,background:chatInput.trim()&&!isTyping?'var(--ink)':'var(--ink-10)',border:'none',borderRadius:8,cursor:chatInput.trim()&&!isTyping?'pointer':'default',display:'grid',placeItems:'center',flexShrink:0,transition:'background 0.15s',color:chatInput.trim()&&!isTyping?'var(--white)':'var(--ink-22)'}}>
+            <I.arrow/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{width:280,flexShrink:0,background:'var(--white)',borderLeft:'1px solid var(--ink-10)',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      {/* Tab bar */}
+      <div style={{height:44,borderBottom:'1px solid var(--ink-10)',display:'flex',alignItems:'stretch',flexShrink:0}}>
+        {[{id:'build',label:'Build',Icon:I.gear},{id:'prompt',label:'Prompt',Icon:I.terminal},{id:'test',label:'Test',Icon:I.play}].map(t=>(
+          <div key={t.id} onClick={()=>setTab(t.id)}
+            style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:5,fontSize:12.5,fontWeight:tab===t.id?700:400,color:tab===t.id?'var(--ink)':'var(--ink-45)',cursor:'pointer',borderBottom:tab===t.id?'2.5px solid var(--ink)':'2.5px solid transparent',transition:'color 0.15s,border-color 0.15s',userSelect:'none',marginBottom:-1}}>
+            <span style={{display:'flex',opacity:tab===t.id?1:0.6}}><t.Icon /></span>{t.label}
+          </div>
+        ))}
+      </div>
+      {tab==='build'  && <BuildTab/>}
+      {tab==='prompt' && <PromptTab/>}
+      {tab==='test'   && <TestTab/>}
+    </div>
+  );
+}
+
+/* ─── App ─── */
+const TWEAK_DEFAULTS = { density:'regular', accent:'#3C9B6A' };
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [activeNav, setActiveNav] = useState('playbooks');
+  const [selSkill, setSelSkill] = useState('ob-guide');
+  const [selNode, setSelNode] = useState('n2');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [configTab, setConfigTab] = useState('build');
+  const [agentTestOpen, setAgentTestOpen] = useState(false);
+
+  const handleTest = () => { setAgentTestOpen(true); };
+
+  const handleSelectNode = (id) => {
+    setSelNode(id);
+    if (agentTestOpen) setAgentTestOpen(false);
+  };
+
+  return (
+    <div style={{display:'flex',width:'100%',height:'100%',overflow:'hidden',fontFamily:"'Hanken Grotesk',system-ui,sans-serif"}}>
+      <Sidebar active={activeNav} setActive={setActiveNav} open={sidebarOpen} />
+      <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+        <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} selSkill={selSkill} />
+        <div style={{flex:1,display:'flex',overflow:'hidden'}}>
+          <PlaybookPanel sel={selSkill} setSel={setSelSkill} />
+          <WorkflowCanvas selNode={selNode} setSelNode={handleSelectNode} onTest={handleTest} selSkill={selSkill} />
+          {agentTestOpen
+            ? <AgentTestPanel onClose={()=>setAgentTestOpen(false)} />
+            : <NodeConfigPanel selId={selNode} configTab={configTab} setConfigTab={setConfigTab} />}
+        </div>
+      </div>
+      <TweaksPanel>
+        <TweakSection label="Appearance" />
+        <TweakRadio label="Density" value={t.density} options={['compact','regular']} onChange={v=>setTweak('density',v)} />
+        <TweakColor label="Accent" value={t.accent} options={['#3C9B6A','#3562C8','#7C51D8','#C05FA0']} onChange={v=>setTweak('accent',v)} />
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+
+</body></html>

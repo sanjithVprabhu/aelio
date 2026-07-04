@@ -1,158 +1,115 @@
-// Server-side API client for the Aelio admin dashboard.
-// All fetches are no-store so pages render live data. Failures are caught and
-// surfaced as a typed result so server components can render an offline state
-// rather than crashing the render/build.
+'use client';
 
 export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') || 'http://localhost:3000';
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+export const TENANT = 'acme';
+const TOKEN_KEY = 'aelio_token';
 
-export const TENANT_SLUG = 'acme';
+export function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(TOKEN_KEY);
+}
 
-export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string };
+export function setToken(token: string) {
+  if (typeof window !== 'undefined') window.localStorage.setItem(TOKEN_KEY, token);
+}
 
-export async function apiGet<T>(path: string): Promise<ApiResult<T>> {
-  const url = `${API_BASE}${path}`;
-  try {
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) {
-      return { ok: false, error: `API responded ${res.status} for ${path}` };
-    }
-    const data = (await res.json()) as T;
-    return { ok: true, data };
-  } catch (err) {
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : 'Unknown network error',
-    };
+export function clearToken() {
+  if (typeof window !== 'undefined') window.localStorage.removeItem(TOKEN_KEY);
+}
+
+export class ApiError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
   }
 }
 
-export function tenantPath(suffix: string): string {
-  return `/api/v1/t/${TENANT_SLUG}${suffix}`;
+type Opts = { method?: string; body?: unknown; auth?: boolean; raw?: boolean };
+
+/** Low-level fetch against the API base. `path` is appended to API_BASE. */
+export async function apiRaw<T = any>(path: string, opts: Opts = {}): Promise<T> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (opts.auth !== false) {
+    const t = getToken();
+    if (t) headers['Authorization'] = `Bearer ${t}`;
+  }
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      method: opts.method || 'GET',
+      headers,
+      body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+    });
+  } catch (e: any) {
+    throw new ApiError(
+      `Cannot reach the API at ${API_BASE}. Is it running?`,
+      0
+    );
+  }
+  const text = await res.text();
+  let data: any = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = text;
+  }
+  if (!res.ok) {
+    const msg =
+      (data && (data.message || data.error)) ||
+      `Request failed (${res.status})`;
+    throw new ApiError(Array.isArray(msg) ? msg.join(', ') : String(msg), res.status);
+  }
+  return data as T;
 }
 
-// ---------- Domain types ----------
+/** Tenant-scoped admin call: prefixes /api/v1/t/acme. */
+export function api<T = any>(path: string, opts: Opts = {}): Promise<T> {
+  return apiRaw<T>(`/api/v1/t/${TENANT}${path}`, opts);
+}
 
-export type Tenant = {
-  id: string;
-  name: string;
-  slug: string;
-  plan: string;
-  status: string;
-  region: string;
+/* ── Auth ── */
+export function login(email: string, password: string) {
+  return apiRaw<{ token: string; user: any }>('/api/v1/auth/login', {
+    method: 'POST',
+    body: { email, password },
+    auth: false,
+  });
+}
+export function signup(email: string, password: string, name: string) {
+  return apiRaw<{ token: string; user: any }>('/api/v1/auth/signup', {
+    method: 'POST',
+    body: { email, password, name },
+    auth: false,
+  });
+}
+export function me() {
+  return apiRaw<any>('/api/v1/auth/me');
+}
+
+/* ── Live chat ── */
+export type ChatReply = {
+  kind: 'text' | 'magic_link' | 'step_up' | 'handoff';
+  text: string;
+  url?: string;
 };
-
-export type Overview = {
-  conversations: number;
-  escalations: number;
-  actionsExposed: number;
-  states: { state: string; count: number }[];
-  resolutionRate: number;
-};
-
-export type ActionPolicy = {
-  id: string;
-  key: string;
-  label: string;
-  method: string;
-  path: string;
-  tier: string | number;
-  exposed: boolean;
-  stepUpRequired: boolean;
-  rateLimitPerUserPerHour: number;
-  description: string;
-};
-
-export type Playbook = {
-  id: string;
-  version: string | number;
-  status: string;
-  defaultState: string;
-  states: {
-    key: string;
-    label: string;
-    description: string;
-    openingBehavior: string;
-    allowedActions: string[];
-    requireConfirmationForTier: string | number;
-  }[];
-  triggers: { id: string; label: string; enabled: boolean }[];
-  fallbackLadder: { order: number; strategy: string; config: unknown }[];
-};
-
-export type ConversationSummary = {
-  id: string;
-  status: string;
-  channel: string;
+export type ChatResponse = {
+  replies: ChatReply[];
   state: string;
-  displayName: string;
-  lastActivityAt: string;
-  turns: number;
+  stateChanged?: boolean;
+  confidence?: number;
+  actions?: string[];
+  needsVerification?: boolean;
+  escalated?: boolean;
 };
-
-export type ConversationDetail = {
-  id: string;
-  state: string;
-  status: string;
-  turns: { role: string; text: string; meta?: unknown; at: string }[];
-  invocations: {
-    id?: string;
-    actionKey?: string;
-    key?: string;
-    status?: string;
-    tier?: string | number;
-    at?: string;
-    [k: string]: unknown;
-  }[];
-};
-
-export type InboxItem = {
-  id: string;
-  conversationId: string;
-  displayName: string;
-  reason: string;
-  priority: string;
-  status: string;
-  createdAt: string;
-};
-
-export type Analytics = {
-  totalConversations: number;
-  escalations: number;
-  escalationRate: number;
-  actionInvocations: number;
-  topActions: { key: string; count: number; successRate: number }[];
-  stateDistribution: { state: string; count: number }[];
-};
-
-export type AuditEvent = {
-  id: string;
-  eventType: string;
-  conversationId: string | null;
-  payload: unknown;
-  at: string;
-};
-
-export type Channel = {
-  id: string;
-  type: string;
-  status: string;
-  inboundEnabled: boolean;
-  outboundEnabled: boolean;
-  config: Record<string, unknown>;
-};
-
-export type EndUser = {
-  id: string;
-  externalUserId: string;
-  displayName: string;
-  verificationStatus: string;
-  currentUserState: string;
-  plan: string;
-};
-
-export type Settings = {
-  llm: { mode: string; provider: string; model: string };
-  compliance: { region: string; retention: string; piiRedaction: boolean };
-  plan: string;
-};
+export function chatMessage(sessionId: string, text: string) {
+  return apiRaw<ChatResponse>(`/api/v1/chat/${TENANT}/message`, {
+    method: 'POST',
+    body: { sessionId, text },
+    auth: false,
+  });
+}
+export function devFollow(url: string) {
+  return apiRaw<any>('/api/v1/dev/follow', { method: 'POST', body: { url }, auth: false });
+}

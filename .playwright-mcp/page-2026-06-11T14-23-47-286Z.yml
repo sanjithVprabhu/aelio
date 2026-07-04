@@ -1,0 +1,114 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e40] [cursor=pointer]:
+    - img [ref=e41]
+  - alert [ref=e46]
+  - generic [ref=e47]:
+    - complementary [ref=e48]:
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e51]: A.
+          - generic [ref=e52]:
+            - generic [ref=e53]: Aelio.
+            - generic [ref=e54]: Control Plane
+        - generic [ref=e55]:
+          - generic [ref=e56]: AC
+          - generic [ref=e57]: acme-corp
+      - navigation [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: OBSERVE
+          - link "Dashboard" [ref=e61] [cursor=pointer]:
+            - /url: /
+            - img [ref=e63]
+            - text: Dashboard
+          - link "Conversations" [ref=e66] [cursor=pointer]:
+            - /url: /conversations
+            - img [ref=e68]
+            - text: Conversations
+          - link "Users" [ref=e70] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e72]
+            - text: Users
+          - link "Audit log" [ref=e77] [cursor=pointer]:
+            - /url: /audit
+            - img [ref=e79]
+            - text: Audit log
+        - generic [ref=e80]:
+          - generic [ref=e81]: BUILD
+          - link "Playbooks" [ref=e82] [cursor=pointer]:
+            - /url: /playbooks
+            - img [ref=e84]
+            - text: Playbooks
+          - link "Inbox" [ref=e88] [cursor=pointer]:
+            - /url: /inbox
+            - img [ref=e90]
+            - text: Inbox
+          - link "Knowledge" [ref=e93] [cursor=pointer]:
+            - /url: /knowledge
+            - img [ref=e95]
+            - text: Knowledge
+        - generic [ref=e98]:
+          - generic [ref=e99]: CONNECT
+          - link "Channels" [ref=e100] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e102]
+            - text: Channels
+          - link "Specs" [ref=e104] [cursor=pointer]:
+            - /url: /specs
+            - img [ref=e106]
+            - text: Specs
+        - generic [ref=e109]:
+          - generic [ref=e110]: DEVELOP
+          - link "Settings" [ref=e111] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e113]
+            - text: Settings
+      - button "AM Acme Admin Sign out" [ref=e117] [cursor=pointer]:
+        - generic [ref=e118]: AM
+        - generic [ref=e120]:
+          - generic [ref=e121]: Acme Admin
+          - generic [ref=e122]: Sign out
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - button [ref=e125] [cursor=pointer]:
+          - img [ref=e126]
+        - generic [ref=e128]: Dashboard
+      - generic [ref=e130]:
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - generic [ref=e134]: Tenant
+            - heading "acme-corp" [level=1] [ref=e135]
+            - paragraph [ref=e136]: Welcome to the Aelio control plane. Manage playbooks, monitor conversations, and configure your agents.
+            - link "Manage Playbooks" [ref=e137] [cursor=pointer]:
+              - /url: /playbooks
+              - img [ref=e138]
+              - text: Manage Playbooks
+          - generic [ref=e142]: AC
+        - generic [ref=e143]:
+          - link "Conversations View recent conversations and chat history" [ref=e144] [cursor=pointer]:
+            - /url: /conversations
+            - generic [ref=e145]:
+              - img [ref=e147]
+              - generic [ref=e149]:
+                - generic [ref=e150]: Conversations
+                - generic [ref=e151]: View recent conversations and chat history
+          - link "Specs Manage API specs and actions" [ref=e152] [cursor=pointer]:
+            - /url: /specs
+            - generic [ref=e153]:
+              - img [ref=e155]
+              - generic [ref=e158]:
+                - generic [ref=e159]: Specs
+                - generic [ref=e160]: Manage API specs and actions
+          - link "Inbox Review flagged messages and alerts" [ref=e161] [cursor=pointer]:
+            - /url: /inbox
+            - generic [ref=e162]:
+              - img [ref=e164]
+              - generic [ref=e167]:
+                - generic [ref=e168]: Inbox
+                - generic [ref=e169]: Review flagged messages and alerts
+          - link "Settings Tenant and team configuration" [ref=e170] [cursor=pointer]:
+            - /url: /settings
+            - generic [ref=e171]:
+              - img [ref=e173]
+              - generic [ref=e176]:
+                - generic [ref=e177]: Settings
+                - generic [ref=e178]: Tenant and team configuration

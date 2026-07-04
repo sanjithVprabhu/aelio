@@ -1,0 +1,22 @@
+{
+  "name": "@aelio/memory-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@aelio/db": "workspace:*",
+    "@aelio/embedder": "workspace:*",
+    "@aelio/logger": "workspace:*",
+    "@aelio/sunjet-client": "workspace:*"
+  }
+}

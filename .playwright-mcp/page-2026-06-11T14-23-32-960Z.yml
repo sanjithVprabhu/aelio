@@ -1,0 +1,28 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]: Aelio.
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - heading "Welcome back" [level=1] [ref=e7]
+      - button "Sign in with Google" [ref=e8] [cursor=pointer]:
+        - img [ref=e9]
+        - text: Sign in with Google
+      - emphasis [ref=e16]: or
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: Email
+          - textbox [ref=e21]: admin@acme.com
+        - generic [ref=e22]:
+          - generic [ref=e23]: Password
+          - generic [ref=e24]:
+            - textbox [ref=e25]: password
+            - button [ref=e26] [cursor=pointer]:
+              - img [ref=e27]
+        - button "Sign in →" [ref=e30] [cursor=pointer]:
+          - text: Sign in
+          - generic [ref=e31]: →
+      - generic [ref=e32]:
+        - text: New to Aelio?
+        - link "Create account" [ref=e33] [cursor=pointer]:
+          - /url: /signup
+  - contentinfo [ref=e34]: By continuing, you agree to our Terms of Service and Privacy Policy.

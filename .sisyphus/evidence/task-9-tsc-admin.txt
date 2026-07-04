@@ -1,0 +1,1 @@
+tsc --noEmit: PASS (exit 0, zero errors)

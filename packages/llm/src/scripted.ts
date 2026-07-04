@@ -42,7 +42,17 @@ const INTENT_RULES: IntentRule[] = [
   },
   {
     toolHints: ['get_account_status', 'account_status', 'status', 'get_account', 'me'],
-    phrases: ["what's my plan", 'my plan', 'account status', 'my account', 'how many', 'usage'],
+    phrases: [
+      "what's my plan",
+      'my plan',
+      'account status',
+      'give me account',
+      'get account',
+      'show account',
+      'my account',
+      'how many',
+      'usage',
+    ],
   },
   {
     toolHints: ['schedule_report', 'schedule', 'recurring'],
@@ -57,12 +67,33 @@ const INTENT_RULES: IntentRule[] = [
     phrases: ['invoice', 'latest bill', 'receipt', 'billing'],
   },
   {
+    toolHints: ['list_team_members', 'team_members', 'list_members'],
+    phrases: [
+      'list team',
+      'team members',
+      'list the team',
+      'who is on my team',
+      "who's on my team",
+      'show team',
+      'my team',
+    ],
+  },
+  {
     toolHints: ['create', 'add', 'new'],
     phrases: ['create', 'make a', 'add a', 'set up'],
   },
 ];
 
 const ESCALATION_PHRASES = ['speak to a human', 'talk to someone', 'agent please', 'representative'];
+
+const GREETING_PHRASES = ['hi', 'hello', 'hey', 'hiya', 'good morning', 'good afternoon', 'good evening'];
+
+const IDENTITY_PHRASES = ['what are you', 'who are you', 'what is aelio', 'what do you do'];
+
+function isGreeting(text: string): boolean {
+  const t = text.trim();
+  return GREETING_PHRASES.some((p) => t === p || t.startsWith(`${p} `) || t.startsWith(`${p},`));
+}
 
 function lastUserText(req: LLMRequest): string {
   for (let i = req.messages.length - 1; i >= 0; i--) {
@@ -99,6 +130,12 @@ function summarizeResult(content: unknown): string {
   if (content && typeof content === 'object') {
     const obj = content as Record<string, unknown>;
     if ('error' in obj) return `I hit a problem: ${String(obj.error)}.`;
+    if (Array.isArray(obj.members)) {
+      const members = obj.members.map(String);
+      return members.length
+        ? `your team includes ${members.join(', ')}`
+        : 'no team members are on file yet';
+    }
     const bits: string[] = [];
     for (const [k, v] of Object.entries(obj).slice(0, 4)) {
       if (v !== null && typeof v !== 'object') bits.push(`${k.replace(/_/g, ' ')}: ${String(v)}`);
@@ -131,6 +168,20 @@ export class ScriptedClient implements LLMClient {
       );
     }
 
+    if (isGreeting(text)) {
+      return this.text(
+        request,
+        "Hi! I'm your Acme Analytics assistant. I can check your account, change your plan, schedule reports, and more — what would you like to do?",
+      );
+    }
+
+    if (IDENTITY_PHRASES.some((p) => text.includes(p))) {
+      return this.text(
+        request,
+        "I'm Aelio — the assistant for Acme Analytics. I can look up your account and make approved changes on your behalf. Try asking about your plan or account status.",
+      );
+    }
+
     // Find an intent whose phrases match and whose tool is available.
     for (const rule of INTENT_RULES) {
       if (!rule.phrases.some((p) => text.includes(p))) continue;
@@ -157,7 +208,7 @@ export class ScriptedClient implements LLMClient {
         .join(', ');
       return this.text(
         request,
-        `I can help with that. I can: ${offer}. What would you like to do?`,
+        `I can help with things like ${offer}. What would you like to do?`,
       );
     }
     return this.text(request, "I'm here to help — could you tell me a bit more about what you need?");

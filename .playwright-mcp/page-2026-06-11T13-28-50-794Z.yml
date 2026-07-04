@@ -1,0 +1,265 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e119] [cursor=pointer]:
+    - img [ref=e120]
+  - alert [ref=e125]
+  - generic [ref=e126]:
+    - complementary [ref=e127]:
+      - generic [ref=e130]: A.
+      - navigation [ref=e131]:
+        - generic [ref=e132]:
+          - link "Dashboard" [ref=e134] [cursor=pointer]:
+            - /url: /
+            - img [ref=e136]
+          - link "Conversations" [ref=e139] [cursor=pointer]:
+            - /url: /conversations
+            - img [ref=e141]
+          - link "Users" [ref=e143] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e145]
+          - link "Audit log" [ref=e150] [cursor=pointer]:
+            - /url: /audit
+            - img [ref=e152]
+        - generic [ref=e153]:
+          - link "Playbooks" [ref=e155] [cursor=pointer]:
+            - /url: /playbooks
+            - img [ref=e157]
+          - link "Inbox" [ref=e161] [cursor=pointer]:
+            - /url: /inbox
+            - img [ref=e163]
+          - link "Knowledge" [ref=e166] [cursor=pointer]:
+            - /url: /knowledge
+            - img [ref=e168]
+        - generic [ref=e171]:
+          - link "Channels" [ref=e173] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e175]
+          - link "Specs" [ref=e177] [cursor=pointer]:
+            - /url: /specs
+            - img [ref=e179]
+        - link "Settings" [ref=e184] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e186]
+      - button "AM" [ref=e190] [cursor=pointer]:
+        - generic [ref=e191]: AM
+    - generic [ref=e193]:
+      - generic [ref=e194]:
+        - button [ref=e195] [cursor=pointer]:
+          - img [ref=e196]
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - img [ref=e199]
+            - text: Playbooks
+          - generic [ref=e203]: ›
+          - generic [ref=e204]: Unverified
+          - generic [ref=e205]: v1.0.0 · active
+        - generic [ref=e206]: Unsaved
+        - button "Save" [ref=e207] [cursor=pointer]
+        - button "Test" [ref=e208] [cursor=pointer]:
+          - img [ref=e209]
+          - text: Test
+        - button "Publish" [ref=e211] [cursor=pointer]:
+          - img [ref=e212]
+          - text: Publish
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - generic [ref=e217]:
+            - img [ref=e219]
+            - generic [ref=e223]: State Management
+          - generic [ref=e224]:
+            - generic [ref=e227] [cursor=pointer]:
+              - generic [ref=e228]: Unverified
+              - generic [ref=e229]: User has not yet verified their identity.
+            - generic [ref=e232] [cursor=pointer]:
+              - generic [ref=e233]: Onboarding
+              - generic [ref=e234]: New, recently verified user finding their feet.
+            - generic [ref=e237] [cursor=pointer]:
+              - generic [ref=e238]: Active
+              - generic [ref=e239]: Engaged user doing routine work.
+            - generic [ref=e242] [cursor=pointer]:
+              - generic [ref=e243]: Power user
+              - generic [ref=e244]: Advanced, high-frequency user.
+            - generic [ref=e247] [cursor=pointer]:
+              - generic [ref=e248]: At risk
+              - generic [ref=e249]: User showing churn or cancellation signals.
+          - button "Add state" [ref=e250] [cursor=pointer]:
+            - img [ref=e251]
+            - text: Add state
+        - generic [ref=e252]:
+          - generic [ref=e253]:
+            - generic [ref=e254]:
+              - img [ref=e255]
+              - text: Workflows
+            - generic [ref=e259] [cursor=pointer]:
+              - generic [ref=e260]: Default workflow
+              - generic [ref=e261]: "2"
+            - generic [ref=e262] [cursor=pointer]:
+              - generic [ref=e263]: "Migrated: Cancellation intent → move to retention"
+              - generic [ref=e264]: "2"
+            - generic [ref=e265] [cursor=pointer]:
+              - generic [ref=e266]: "Migrated: Explicit human request → escalate"
+              - generic [ref=e267]: "2"
+            - button "New" [ref=e268] [cursor=pointer]:
+              - img [ref=e269]
+              - text: New
+          - generic [ref=e270]:
+            - button "trigger" [ref=e271] [cursor=pointer]:
+              - img [ref=e272]
+              - text: trigger
+            - button "action" [ref=e273] [cursor=pointer]:
+              - img [ref=e274]
+              - text: action
+            - button "fallback" [ref=e275] [cursor=pointer]:
+              - img [ref=e276]
+              - text: fallback
+            - button "New Workflow" [ref=e278] [cursor=pointer]:
+              - img [ref=e279]
+              - text: New Workflow
+            - generic [ref=e280]: drag a node's right dot to a left dot to connect
+          - application [ref=e281]:
+            - generic [ref=e283]:
+              - generic:
+                - generic:
+                  - img
+                  - img:
+                    - group "Edge from trigger_entry to fallback_1"
+                  - img:
+                    - group "Edge from trigger_8628bac5-9430-4a87-bb1d-6eec9ba6c2dc to action_8628bac5-9430-4a87-bb1d-6eec9ba6c2dc" [ref=e284] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_80be7aa5-995d-4123-817a-cfb43c183a0a to action_80be7aa5-995d-4123-817a-cfb43c183a0a" [ref=e287] [cursor=pointer]
+                - generic:
+                  - group [ref=e290]:
+                    - generic [ref=e291]:
+                      - generic [ref=e294]:
+                        - img [ref=e296]
+                        - generic [ref=e298]: TRIGGER
+                      - generic [ref=e299]: User message
+                      - generic [ref=e300]: message_received
+                      - generic [ref=e302]:
+                        - generic [ref=e303]: When
+                        - generic [ref=e304]: always
+                  - group [ref=e305]:
+                    - generic [ref=e306]:
+                      - generic [ref=e309]:
+                        - img [ref=e311]
+                        - generic [ref=e313]: FALLBACK
+                      - generic [ref=e314]: rephrase
+                      - generic [ref=e315]: "attempts: 1"
+                      - generic [ref=e317]:
+                        - generic [ref=e318]: Message
+                        - generic [ref=e319]: Sorry — I didn't quite catch that. Could
+                  - group [ref=e320]:
+                    - generic [ref=e321]:
+                      - generic [ref=e324]:
+                        - img [ref=e326]
+                        - generic [ref=e328]: TRIGGER
+                      - generic [ref=e329]: Cancellation intent → move to retention
+                      - generic [ref=e330]: message_received
+                      - generic [ref=e332]:
+                        - generic [ref=e333]: When
+                        - generic [ref=e334]: cancel, downgrade, refund, leave
+                  - group [ref=e335]:
+                    - generic [ref=e336]:
+                      - generic [ref=e339]:
+                        - img [ref=e341]
+                        - generic [ref=e343]: ACTION
+                      - generic [ref=e344]: Transition → at_risk
+                      - generic [ref=e346]:
+                        - generic [ref=e347]: Tool
+                        - generic [ref=e348]: —
+                      - generic [ref=e349]:
+                        - generic [ref=e350]: Tier
+                        - generic [ref=e351]: Tier 0
+                  - group [ref=e352]:
+                    - generic [ref=e353]:
+                      - generic [ref=e356]:
+                        - img [ref=e358]
+                        - generic [ref=e360]: TRIGGER
+                      - generic [ref=e361]: Explicit human request → escalate
+                      - generic [ref=e362]: message_received
+                      - generic [ref=e364]:
+                        - generic [ref=e365]: When
+                        - generic [ref=e366]: speak to a human, talk to someone, representative, agent please
+                  - group [ref=e367]:
+                    - generic [ref=e368]:
+                      - generic [ref=e371]:
+                        - img [ref=e373]
+                        - generic [ref=e375]: ACTION
+                      - generic [ref=e376]: "Escalate: User asked for a human"
+                      - generic [ref=e378]:
+                        - generic [ref=e379]: Tool
+                        - generic [ref=e380]: —
+                      - generic [ref=e381]:
+                        - generic [ref=e382]: Tier
+                        - generic [ref=e383]: Tier 0
+            - img
+            - generic "Control Panel" [ref=e384]:
+              - button "Zoom In" [ref=e385] [cursor=pointer]:
+                - img [ref=e386]
+              - button "Zoom Out" [ref=e388] [cursor=pointer]:
+                - img [ref=e389]
+              - button "Fit View" [ref=e391] [cursor=pointer]:
+                - img [ref=e392]
+            - img "Mini Map" [ref=e395]
+        - generic [ref=e403]:
+          - generic [ref=e404]:
+            - generic [ref=e405] [cursor=pointer]:
+              - img [ref=e406]
+              - text: Build
+            - generic [ref=e409] [cursor=pointer]:
+              - img [ref=e410]
+              - text: Prompt
+            - generic [ref=e413] [cursor=pointer]:
+              - img [ref=e414]
+              - text: Test
+          - generic [ref=e416]:
+            - generic [ref=e418]: STATE · unverified
+            - generic [ref=e419]: Click a node to edit it, or use the palette to add Trigger / Action / Fallback nodes and wire them.
+            - generic [ref=e420]:
+              - generic [ref=e421]: Label
+              - textbox [ref=e422]: Unverified
+            - generic [ref=e423]:
+              - generic [ref=e424]: Description
+              - textbox [ref=e425]: User has not yet verified their identity.
+            - generic [ref=e426]:
+              - generic [ref=e427]: Persona
+              - textbox [ref=e428]: You are the assistant for Acme Analytics. The user is not verified yet — be welcoming and explain you can help once they confirm their identity via the secure link.
+            - generic [ref=e429]:
+              - generic [ref=e430]: Tone (one per line)
+              - textbox [ref=e431]: Be warm and concise Confirm before changing anything
+            - generic [ref=e432]:
+              - generic [ref=e433]:
+                - generic [ref=e434]: Opening
+                - combobox [ref=e435]:
+                  - option "full intro" [selected]
+                  - option "brief greeting"
+                  - option "skip to intent"
+                  - option "retention mode"
+              - generic [ref=e436]:
+                - generic [ref=e437]: Confirm ≥ tier
+                - combobox [ref=e438]:
+                  - option "0"
+                  - option "1" [selected]
+                  - option "2"
+                  - option "3"
+            - generic [ref=e439]:
+              - generic [ref=e440]: "Confidence floor: 0.60"
+              - slider [ref=e441]: "0.6"
+            - generic [ref=e442]: 2 action nodes wired — these become this state's tools on Save.
+            - generic [ref=e444]:
+              - generic [ref=e445]:
+                - generic [ref=e446]:
+                  - img [ref=e448]
+                  - text: Workflows (3)
+                - button "New" [ref=e452] [cursor=pointer]:
+                  - img [ref=e453]
+                  - text: New
+              - generic [ref=e454]:
+                - generic [ref=e455] [cursor=pointer]:
+                  - generic [ref=e458]: Default workflow
+                  - generic [ref=e459]: 1 trigger · 1 fallback
+                - generic [ref=e460] [cursor=pointer]:
+                  - generic [ref=e463]: "Migrated: Cancellation intent → move to retention"
+                  - generic [ref=e464]: 1 trigger · 1 action
+                - generic [ref=e465] [cursor=pointer]:
+                  - generic [ref=e468]: "Migrated: Explicit human request → escalate"
+                  - generic [ref=e469]: 1 trigger · 1 action

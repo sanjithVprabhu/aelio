@@ -27,7 +27,7 @@ interface OAResponse {
   }>;
 }
 
-function toOpenAIMessages(messages: LLMMessage[]): Array<Record<string, unknown>> {
+export function toOpenAIMessages(messages: LLMMessage[]): Array<Record<string, unknown>> {
   const out: Array<Record<string, unknown>> = [];
   for (const m of messages) {
     if (m.role === 'tool') {
@@ -39,6 +39,18 @@ function toOpenAIMessages(messages: LLMMessage[]): Array<Record<string, unknown>
           content: typeof r.content === 'string' ? r.content : JSON.stringify(r.content),
         });
       }
+      continue;
+    }
+    if (m.role === 'assistant' && m.toolCalls?.length) {
+      out.push({
+        role: 'assistant',
+        content: typeof m.content === 'string' && m.content.length > 0 ? m.content : null,
+        tool_calls: m.toolCalls.map((tc) => ({
+          id: tc.id,
+          type: 'function',
+          function: { name: tc.name, arguments: JSON.stringify(tc.args) },
+        })),
+      });
       continue;
     }
     out.push({ role: m.role, content: m.content });

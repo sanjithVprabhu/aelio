@@ -1,0 +1,48 @@
+=== /login ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /playbooks ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /playbooks/abc-test-id ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== / ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /specs ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /inbox ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /knowledge ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /channels ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /users ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /audit ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /settings ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+=== /conversations ===
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/media/313510e2713fb214-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"

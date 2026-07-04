@@ -1,0 +1,249 @@
+- generic [ref=e1]:
+  - generic [ref=e118] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e119]:
+      - img [ref=e120]
+    - generic [ref=e482]:
+      - button "Open issues overlay" [ref=e483]:
+        - generic [ref=e508]:
+          - generic [ref=e509]: "3"
+          - generic [ref=e510]: "4"
+        - generic [ref=e487]:
+          - text: Issue
+          - generic [ref=e488]: s
+      - button "Collapse issues badge" [ref=e489]:
+        - img [ref=e490]
+  - alert [ref=e125]
+  - generic [ref=e733]:
+    - complementary [ref=e734]:
+      - generic [ref=e737]: A.
+      - navigation [ref=e738]:
+        - generic [ref=e739]:
+          - link "Dashboard" [ref=e741] [cursor=pointer]:
+            - /url: /
+            - img [ref=e743]
+          - link "Conversations" [ref=e746] [cursor=pointer]:
+            - /url: /conversations
+            - img [ref=e748]
+          - link "Users" [ref=e750] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e752]
+          - link "Audit log" [ref=e757] [cursor=pointer]:
+            - /url: /audit
+            - img [ref=e759]
+        - generic [ref=e760]:
+          - link "Playbooks" [ref=e762] [cursor=pointer]:
+            - /url: /playbooks
+            - img [ref=e764]
+          - link "Inbox" [ref=e768] [cursor=pointer]:
+            - /url: /inbox
+            - img [ref=e770]
+          - link "Knowledge" [ref=e773] [cursor=pointer]:
+            - /url: /knowledge
+            - img [ref=e775]
+        - generic [ref=e778]:
+          - link "Channels" [ref=e780] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e782]
+          - link "Specs" [ref=e784] [cursor=pointer]:
+            - /url: /specs
+            - img [ref=e786]
+        - link "Settings" [ref=e791] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e793]
+      - button "AM" [ref=e797] [cursor=pointer]:
+        - generic [ref=e798]: AM
+    - generic [ref=e800]:
+      - generic [ref=e801]:
+        - button [ref=e802] [cursor=pointer]:
+          - img [ref=e803]
+        - generic [ref=e804]:
+          - generic [ref=e805]:
+            - img [ref=e806]
+            - text: Playbooks
+          - generic [ref=e810]: ›
+          - generic [ref=e811]: At risk
+          - generic [ref=e812]: v1.0.0 · active
+        - button "Save" [disabled] [ref=e814]
+        - button "Test" [ref=e815] [cursor=pointer]:
+          - img [ref=e816]
+          - text: Test
+        - button "Publish" [ref=e818] [cursor=pointer]:
+          - img [ref=e819]
+          - text: Publish
+      - generic [ref=e822]:
+        - generic [ref=e823]:
+          - generic [ref=e824]:
+            - img [ref=e826]
+            - generic [ref=e830]: State Management
+          - generic [ref=e831]:
+            - generic [ref=e834] [cursor=pointer]:
+              - generic [ref=e835]: Unverified
+              - generic [ref=e836]: User has not yet verified their identity.
+            - generic [ref=e839] [cursor=pointer]:
+              - generic [ref=e840]: Onboarding
+              - generic [ref=e841]: New, recently verified user finding their feet.
+            - generic [ref=e844] [cursor=pointer]:
+              - generic [ref=e845]: Active
+              - generic [ref=e846]: Engaged user doing routine work.
+            - generic [ref=e849] [cursor=pointer]:
+              - generic [ref=e850]: Power user
+              - generic [ref=e851]: Advanced, high-frequency user.
+            - generic [ref=e854] [cursor=pointer]:
+              - generic [ref=e855]: At risk
+              - generic [ref=e856]: User showing churn or cancellation signals.
+            - generic [ref=e862] [cursor=pointer]:
+              - generic [ref=e863]: New State
+              - generic [ref=e864]: Describe this stage
+          - button "Add state" [ref=e865] [cursor=pointer]:
+            - img [ref=e866]
+            - text: Add state
+        - generic [ref=e867]:
+          - generic [ref=e868]:
+            - generic [ref=e869]:
+              - img [ref=e870]
+              - text: Workflows
+            - generic [ref=e874] [cursor=pointer]:
+              - generic [ref=e875]: Default workflow
+              - generic [ref=e876]: "6"
+            - button "New" [ref=e877] [cursor=pointer]:
+              - img [ref=e878]
+              - text: New
+          - generic [ref=e879]:
+            - button "trigger" [ref=e880] [cursor=pointer]:
+              - img [ref=e881]
+              - text: trigger
+            - button "action" [ref=e882] [cursor=pointer]:
+              - img [ref=e883]
+              - text: action
+            - button "fallback" [ref=e884] [cursor=pointer]:
+              - img [ref=e885]
+              - text: fallback
+            - button "New Workflow" [ref=e887] [cursor=pointer]:
+              - img [ref=e888]
+              - text: New Workflow
+            - generic [ref=e889]: drag a node's right dot to a left dot to connect
+          - application [ref=e890]:
+            - generic [ref=e892]:
+              - generic:
+                - generic:
+                  - img
+                  - img:
+                    - group "Edge from trigger_entry to action_get_account_status" [ref=e893] [cursor=pointer]
+                  - img:
+                    - group "Edge from action_get_account_status to action_update_plan"
+                  - img:
+                    - group "Edge from action_update_plan to action_cancel_subscription"
+                  - img:
+                    - group "Edge from action_cancel_subscription to action_schedule_report"
+                  - img:
+                    - group "Edge from action_schedule_report to fallback_1" [ref=e896] [cursor=pointer]
+                - generic:
+                  - group [ref=e899]:
+                    - generic [ref=e900]:
+                      - generic [ref=e903]:
+                        - img [ref=e905]
+                        - generic [ref=e907]: TRIGGER
+                      - generic [ref=e908]: User message
+                      - generic [ref=e909]: message_received
+                      - generic [ref=e911]:
+                        - generic [ref=e912]: When
+                        - generic [ref=e913]: always
+                  - group [ref=e914]:
+                    - generic [ref=e915]:
+                      - generic [ref=e918]:
+                        - img [ref=e920]
+                        - generic [ref=e922]: ACTION
+                      - generic [ref=e923]: Get Account Status
+                      - generic [ref=e924]: GET /account/status
+                      - generic [ref=e926]:
+                        - generic [ref=e927]: Tool
+                        - generic [ref=e928]: get_account_status
+                      - generic [ref=e929]:
+                        - generic [ref=e930]: Tier
+                        - generic [ref=e931]: Tier 0
+                  - group [ref=e932]:
+                    - generic [ref=e933]:
+                      - generic [ref=e936]:
+                        - img [ref=e938]
+                        - generic [ref=e940]: ACTION
+                      - generic [ref=e941]: Update Plan
+                      - generic [ref=e942]: PUT /account/plan
+                      - generic [ref=e944]:
+                        - generic [ref=e945]: Tool
+                        - generic [ref=e946]: update_plan
+                      - generic [ref=e947]:
+                        - generic [ref=e948]: Tier
+                        - generic [ref=e949]: Tier 2
+                  - group [ref=e950]:
+                    - generic [ref=e951]:
+                      - generic [ref=e954]:
+                        - img [ref=e956]
+                        - generic [ref=e958]: ACTION
+                      - generic [ref=e959]: Cancel Subscription
+                      - generic [ref=e960]: DELETE /account/subscription
+                      - generic [ref=e962]:
+                        - generic [ref=e963]: Tool
+                        - generic [ref=e964]: cancel_subscription
+                      - generic [ref=e965]:
+                        - generic [ref=e966]: Tier
+                        - generic [ref=e967]: Tier 3
+                  - group [ref=e968]:
+                    - generic [ref=e969]:
+                      - generic [ref=e972]:
+                        - img [ref=e974]
+                        - generic [ref=e976]: ACTION
+                      - generic [ref=e977]: Schedule Report
+                      - generic [ref=e978]: POST /reports/schedule
+                      - generic [ref=e980]:
+                        - generic [ref=e981]: Tool
+                        - generic [ref=e982]: schedule_report
+                      - generic [ref=e983]:
+                        - generic [ref=e984]: Tier
+                        - generic [ref=e985]: Tier 1
+                  - group [ref=e986]:
+                    - generic [ref=e987]:
+                      - generic [ref=e990]:
+                        - img [ref=e992]
+                        - generic [ref=e994]: FALLBACK
+                      - generic [ref=e995]: escalate
+                      - generic [ref=e996]: "attempts: 1"
+                      - generic [ref=e998]:
+                        - generic [ref=e999]: Message
+                        - generic [ref=e1000]: I'm unable to access that right now. Let
+            - img
+            - generic "Control Panel" [ref=e1001]:
+              - button "Zoom In" [ref=e1002] [cursor=pointer]:
+                - img [ref=e1003]
+              - button "Zoom Out" [ref=e1005] [cursor=pointer]:
+                - img [ref=e1006]
+              - button "Fit View" [ref=e1008] [cursor=pointer]:
+                - img [ref=e1009]
+            - img "Mini Map" [ref=e1012]
+        - generic [ref=e1020]:
+          - generic [ref=e1021]:
+            - generic [ref=e1022] [cursor=pointer]:
+              - img [ref=e1023]
+              - text: Build
+            - generic [ref=e1026] [cursor=pointer]:
+              - img [ref=e1027]
+              - text: Prompt
+            - generic [ref=e1030] [cursor=pointer]:
+              - img [ref=e1031]
+              - text: Test
+          - generic [ref=e1101]:
+            - generic [ref=e1102]:
+              - generic [ref=e1103]: "State: At risk"
+              - generic [ref=e1104] [cursor=pointer]: Reset
+            - generic [ref=e1106]:
+              - img [ref=e1107]
+              - generic [ref=e1109]:
+                - text: Type a message to talk to
+                - text: the live agent
+            - generic [ref=e1110]:
+              - generic [ref=e1111] [cursor=pointer]: What can you help with?
+              - generic [ref=e1112] [cursor=pointer]: Get my account status
+              - generic [ref=e1113] [cursor=pointer]: I want to cancel
+            - generic [ref=e1115]:
+              - textbox "Type as the end user…" [active] [ref=e1116]: What is my account status?
+              - button [ref=e1117] [cursor=pointer]:
+                - img [ref=e1118]

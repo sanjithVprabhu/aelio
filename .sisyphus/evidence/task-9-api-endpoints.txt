@@ -1,0 +1,11 @@
+=== /healthz ===
+{"status":"ok","uptime":29.920227287}
+HTTP 200
+=== /readyz ===
+{"status":"ready","tenants":1,"llm":"scripted"}
+HTTP 200
+=== GET /api/v1/t/acme/playbooks (PLURAL) ===
+[{"id":"f02f1607-6234-4395-b629-946a48e49a74","version":"1.0.0","status":"active","deploymentMode":"immediate","states":5,"publishedAt":"2026-06-11T13:24:09.019Z"}]
+HTTP 200
+=== GET /api/v1/t/acme/actions ===
+[{"id":"022aae53-9186-40b6-9dfb-1d6e24dd7dd0","key":"get_account_status","label":"Get Account Status","method":"GET","path":"/account/status","tier":0,"exposed":true,"stepUpRequired":false,"rateLimitPerUserPerHour":0,"description":"Get the current account status, plan, seats and renewal date"},{"id":"8523ca02-bdf0-4d40-9078-40f77218a3a1","key":"update_plan","label":"Update Plan","method":"PUT","path":"/account/plan","tier":2,"exposed":true,"stepUpRequired":false,"rateLimitPerUserPerHour":0,"description":"Change the account plan"},{"id":"5dfb1abe-0441-4ca9-a85e-44215d6dd661","key":"cancel_subscription","label":"Cancel Subscription","method":"DELETE","path":"/account/subscription","tier":3,"exposed":true,"stepUpRequired":true,"rateLimitPerUserPerHour":3,"description":"Cancel the subscription at the end of the current period"},{"id":"c25615e1-0ca0-4b85-afa0-45228d1e7841","key":"schedule_report","label":"Schedule Report","method":"POST","path":"/reports/schedule","tier":1,"exposed":true,"stepUpRequired":false,"rateLimitPerUserPerHour":0,"description":"Schedule a recurring report to a recipient"},{"id":"b8539ae9-bf9b-4f5f-8d28-de6dfca620ca","key":"share_resource","label":"Share Resource","method":"POST","path":"/resources/share","tier":1,"exposed":true,"stepUpRequired":false,"rateLimitPerUserPerHour":0,"description":"Share a resource with a team member"},{"id":"7d199bd1-edbc-470a-88c7-e33a184228cb","key":"get_invoice","label":"Get Invoice","method":"GET","path":"/invoices/latest",

@@ -1,0 +1,19 @@
+=== State keys ===
+  unverified  : flow=6 nodes, 3 edges
+  onboarding  : flow=6 nodes, 5 edges
+  active      : flow=6 nodes, 5 edges
+  power_user  : flow=6 nodes, 5 edges
+  at_risk     : flow=6 nodes, 5 edges
+  new_state   : flow=1 nodes, 0 edges
+
+=== Triggers count: 8
+
+=== Triggers labels ===
+  - trig_c9w3c1is: User message
+  - trig_9cone73j: Cancellation intent → move to retention
+  - trig_4icy61je: Explicit human request → escalate
+  - trig_3iqkjwz2: User message
+  - trig_dzxwp387: User message
+  - trig_wki1suhv: User message
+  - trig_5vhoh7z0: User message
+  - trig_56ssmtql: User message

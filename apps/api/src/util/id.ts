@@ -1,7 +1,26 @@
-import { randomUUID, randomBytes } from 'node:crypto';
+import { createHash, randomUUID, randomBytes } from 'node:crypto';
 
 export function uuid(): string {
   return randomUUID();
+}
+
+/**
+ * Deterministic UUID derived from an arbitrary string.
+ * Useful when external catalog keys need a stable Postgres-safe primary key.
+ */
+export function stableUuid(input: string): string {
+  const hex = createHash('sha256').update(input).digest('hex').slice(0, 32);
+  const chars = hex.split('');
+  chars[12] = '4';
+  const variant = parseInt(chars[16]!, 16);
+  chars[16] = ((variant & 0x3) | 0x8).toString(16);
+  return [
+    chars.slice(0, 8).join(''),
+    chars.slice(8, 12).join(''),
+    chars.slice(12, 16).join(''),
+    chars.slice(16, 20).join(''),
+    chars.slice(20, 32).join(''),
+  ].join('-');
 }
 
 const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';

@@ -1,12 +1,4 @@
-import type {
-  ActionDefinition,
-  BehaviorBundle,
-  LLMMessage,
-  LLMTool,
-  RetrievedChunk,
-  Turn,
-  UserContext,
-} from '@aelio/types';
+import type { ActionDefinition, LLMMessage, LLMTool, Turn, UserContext } from '@aelio/types';
 import { actionToTool } from '../policy/util.js';
 
 const MAX_HISTORY_TURNS = 12;
@@ -17,35 +9,23 @@ export interface AgentContext {
   tools: LLMTool[];
 }
 
-function buildSystemPrompt(
-  behavior: BehaviorBundle,
-  tenantName: string,
-  userContext?: UserContext,
-): string {
+function buildSystemPrompt(tenantName: string, userContext?: UserContext): string {
   const name = userContext?.displayName || 'the user';
   const plan = userContext?.plan ?? 'unknown';
-  const confirmLine =
-    behavior.requireConfirmationForTier <= 1
-      ? 'Before taking any action that modifies data, confirm with the user first.'
-      : 'You may take read actions immediately. For write actions, confirm first.';
 
   return [
     `You are an AI assistant for ${tenantName}.`,
-    behavior.persona,
-    '',
-    'Tone guidelines:',
-    ...behavior.toneGuidelines.map((g) => `- ${g}`),
-    '',
     `The user's name is ${name}. Their plan is ${plan}.`,
     '',
     'You may only perform the actions described in the tools provided. You must not',
-    'discuss, suggest, or imply actions outside of what is explicitly available. If asked',
-    'to do something you cannot do, say so clearly and offer what you can do instead.',
+    'discuss, suggest, or imply actions outside of what is explicitly available.',
     '',
-    confirmLine,
-    behavior.maxResponseLength
-      ? `Keep responses under ${behavior.maxResponseLength} characters.`
-      : 'Keep responses concise and focused.',
+    'When the user asks for information or an action that matches a tool, CALL THAT TOOL',
+    'immediately. Never reply by only listing tool names or asking what they want — execute',
+    'the matching tool first, then summarize the result.',
+    '',
+    'Before taking any action that modifies data, confirm with the user first when required.',
+    'Keep responses concise and focused.',
   ].join('\n');
 }
 
@@ -56,37 +36,30 @@ function turnToMessage(turn: Turn): LLMMessage | null {
   return null;
 }
 
-/** Resolve the tools an action set exposes for a behavior bundle. */
-export function toolsForBehavior(
-  behavior: BehaviorBundle,
-  exposedActions: ActionDefinition[],
-): LLMTool[] {
-  if (behavior.allowedActionKeys.length === 0) return [];
-  const allowAll = behavior.allowedActionKeys[0] === '*';
-  const allowed = allowAll
-    ? exposedActions
-    : exposedActions.filter((a) => behavior.allowedActionKeys.includes(a.key));
-  return allowed.map(actionToTool);
-}
-
-function buildRagBlock(chunks: RetrievedChunk[]): string {
-  const body = chunks
-    .map((c, i) => `[${i + 1}] (${c.sourceTitle})\n${c.content}`)
-    .join('\n\n');
-  return `--- Reference material from the knowledge base. Use it to answer; cite naturally. ---\n${body}\n--- end reference material ---`;
+/** All exposed Convox-backed tools available to the agent for this turn. */
+export function toolsFromActions(exposedActions: ActionDefinition[]): LLMTool[] {
+  return exposedActions.map(actionToTool);
 }
 
 export function buildAgentContext(input: {
-  behavior: BehaviorBundle;
   tenantName: string;
   userContext?: UserContext;
   history: Turn[];
   currentMessage: string;
   tools: LLMTool[];
-  kbChunks?: RetrievedChunk[];
   facts?: Array<{ key: string; value: unknown }>;
+  /** Convox phase guidance + objective checklist appended to the system prompt. */
+  stateGuidanceBlock?: string;
+  /** Single active conversational intent (slot-filling boundary). */
+  intentGuidanceBlock?: string;
 }): AgentContext {
-  const systemPrompt = buildSystemPrompt(input.behavior, input.tenantName, input.userContext);
+  let systemPrompt = buildSystemPrompt(input.tenantName, input.userContext);
+  if (input.stateGuidanceBlock?.trim()) {
+    systemPrompt += input.stateGuidanceBlock;
+  }
+  if (input.intentGuidanceBlock?.trim()) {
+    systemPrompt += input.intentGuidanceBlock;
+  }
   const history = input.history
     .slice(-MAX_HISTORY_TURNS)
     .map(turnToMessage)
@@ -100,9 +73,6 @@ export function buildAgentContext(input: {
         'Known facts about this user: ' +
         input.facts.map((f) => `${f.key}=${String(f.value)}`).join('; '),
     });
-  }
-  if (input.kbChunks && input.kbChunks.length > 0) {
-    messages.push({ role: 'user', content: buildRagBlock(input.kbChunks) });
   }
   messages.push({ role: 'user', content: input.currentMessage });
 

@@ -76,6 +76,10 @@ export class DrizzlePersistence implements Persistence {
 
   private constructor(private readonly conn: DbConnection) {}
 
+  get sql() {
+    return this.conn.sql;
+  }
+
   static async connect(url: string): Promise<DrizzlePersistence> {
     const conn = createDb(url);
     const applied = await runMigrations(conn);
@@ -119,6 +123,7 @@ export class DrizzlePersistence implements Persistence {
   eraseIdentity(_tenantId: string, identityId: string): void {
     this.enqueue(async () => {
       const s = this.conn.sql;
+      await s`DELETE FROM turn_embeddings WHERE identity_id = ${identityId}`;
       await s`DELETE FROM turns WHERE conversation_id IN (SELECT id FROM conversations WHERE identity_id = ${identityId})`;
       await s`DELETE FROM conversations WHERE identity_id = ${identityId}`;
       await s`DELETE FROM identity_channels WHERE identity_id = ${identityId}`;

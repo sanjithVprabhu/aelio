@@ -1,156 +1,269 @@
-import { apiGet, tenantPath, Playbook } from '../lib/api';
-import { OfflineState, StatusBadge, TierBadge, Toggle } from '../components/ui';
-import PlaybooksClient from './PlaybooksClient';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { AppShell } from '../components/Rail';
+import {
+  useApi,
+  PageBody,
+  PageHead,
+  Loading,
+  ErrorState,
+  Empty,
+  TableWrap,
+  th,
+  td,
+} from '../components/data';
+import { api } from '../lib/api';
 
-export default async function PlaybooksPage() {
-  const res = await apiGet<Playbook>(tenantPath('/playbook'));
+/* Local type — matches the shape returned by GET /api/v1/t/:slug/playbooks.
+   Defined inline because T1 (workflow types) runs in parallel and this page
+   only consumes the list response. */
+type PlaybookListItem = {
+  id: string;
+  version: string;
+  status: 'draft' | 'shadow' | 'gradual' | 'active' | 'archived';
+  deploymentMode?: 'immediate' | 'shadow' | 'gradual';
+  states: number;
+  publishedAt?: string | Date | null;
+};
 
-  return (
-    <>
-      <div className="page-head">
-        <h2>Playbooks</h2>
-        <p>The conversation policy: lifecycle states, triggers, and the fallback ladder.</p>
-      </div>
+const STATUS_META: Record<
+  PlaybookListItem['status'],
+  { label: string; bg: string }
+> = {
+  draft: { label: 'Draft', bg: 'var(--ink-45)' },
+  active: { label: 'Active', bg: 'var(--green)' },
+  shadow: { label: 'Shadow', bg: 'var(--blue)' },
+  gradual: { label: 'Gradual', bg: 'var(--amber)' },
+  archived: { label: 'Archived', bg: 'var(--red)' },
+};
 
-      <div className="section" style={{ marginTop: 0 }}>
-        <h3>Versions</h3>
-        <PlaybooksClient />
-      </div>
-
-      {!res.ok ? (
-        <div className="section">
-          <OfflineState error={res.error} />
-        </div>
-      ) : (
-        <PlaybookView pb={res.data} />
-      )}
-    </>
-  );
+function formatMode(mode?: PlaybookListItem['deploymentMode']): string {
+  if (!mode) return '—';
+  return mode === 'immediate' ? 'immediate' : mode;
 }
 
-function PlaybookView({ pb }: { pb: Playbook }) {
-  const states = pb.states ?? [];
-  const triggers = pb.triggers ?? [];
-  const ladder = (pb.fallbackLadder ?? []).slice().sort((a, b) => a.order - b.order);
+function formatDate(d?: string | Date | null): string {
+  if (!d) return '—';
+  const dt = typeof d === 'string' ? new Date(d) : d;
+  if (Number.isNaN(dt.getTime())) return '—';
+  return dt.toLocaleDateString();
+}
+
+export default function PlaybooksPage() {
+  const router = useRouter();
+  const { data, loading, error, reload } = useApi<PlaybookListItem[]>(
+    '/playbooks'
+  );
+  const [creating, setCreating] = useState(false);
+  const [flash, setFlash] = useState<string | null>(null);
+  const [hoverId, setHoverId] = useState<string | null>(null);
+
+  async function createDraft() {
+    setCreating(true);
+    setFlash(null);
+    try {
+      const r = await api<{ id: string; version: string; status: string }>(
+        '/playbooks',
+        { method: 'POST', body: {} }
+      );
+      setFlash(`✓ Created ${r.version}`);
+      reload();
+      // Auto-clear the flash after a few seconds.
+      setTimeout(() => setFlash((f) => (f?.startsWith('✓ Created') ? null : f)), 3500);
+    } catch (e: any) {
+      setFlash(`Error: ${e?.message || 'failed to create draft'}`);
+    } finally {
+      setCreating(false);
+    }
+  }
 
   return (
-    <>
-      <div className="section">
-        <h3>Active playbook</h3>
-        <div style={{ display: 'flex', gap: 10, marginBottom: 6, alignItems: 'center' }}>
-          <span className="chip">v{pb.version}</span>
-          <StatusBadge status={pb.status} />
-          <span className="muted" style={{ fontSize: 12.5 }}>
-            default state · <span className="mono">{pb.defaultState}</span>
-          </span>
+    <AppShell title="Playbooks" breadcrumb="Build">
+      <PageBody>
+        <div style={headRow}>
+          <PageHead
+            title="Playbooks"
+            sub="Every published version. Draft a new one to iterate without touching the live behaviour."
+          />
+          <div style={headActions}>
+            {flash && (
+              <span
+                style={{
+                  ...flashStyle,
+                  color: flash.startsWith('Error')
+                    ? 'var(--red)'
+                    : 'var(--green)',
+                }}
+              >
+                {flash}
+              </span>
+            )}
+            <button
+              onClick={createDraft}
+              disabled={creating}
+              style={{
+                ...primaryBtn,
+                opacity: creating ? 0.6 : 1,
+              }}
+            >
+              {creating ? 'Creating…' : '+ New Draft'}
+            </button>
+          </div>
         </div>
 
-        <div className="cards-grid" style={{ marginTop: 14 }}>
-          {states.map((s) => (
-            <div className="card state-card" key={s.key}>
-              <h4>{s.label}</h4>
-              <div className="key">{s.key}</div>
-              <p>{s.description}</p>
-              <dl className="kv">
-                <dt>Opening</dt>
-                <dd>{s.openingBehavior || '—'}</dd>
-                <dt>Confirm tier</dt>
-                <dd>
-                  {s.requireConfirmationForTier != null ? (
-                    <TierBadge tier={s.requireConfirmationForTier} />
-                  ) : (
-                    '—'
-                  )}
-                </dd>
-                <dt>Allowed actions</dt>
-                <dd>
-                  <span className="chips">
-                    {(s.allowedActions ?? []).length === 0 ? (
-                      <span className="muted">none</span>
-                    ) : (
-                      (s.allowedActions ?? []).map((a) => (
-                        <span className="badge badge-outline mono" key={a}>
-                          {a}
-                        </span>
-                      ))
-                    )}
-                  </span>
-                </dd>
-              </dl>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="section">
-        <h3>Triggers</h3>
-        <div className="table-wrap">
-          <table>
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <ErrorState message={error} onRetry={reload} />
+        ) : !data || data.length === 0 ? (
+          <Empty
+            title="No playbooks yet"
+            hint={
+              <>
+                Click <strong>+ New Draft</strong> above to create your first
+                playbook draft.
+              </>
+            }
+          />
+        ) : (
+          <TableWrap>
             <thead>
               <tr>
-                <th>Trigger</th>
-                <th>Enabled</th>
+                <th style={th}>Version</th>
+                <th style={th}>Status</th>
+                <th style={{ ...th, textAlign: 'right' }}>States</th>
+                <th style={th}>Deployment</th>
+                <th style={th}>Published</th>
+                <th style={{ ...th, width: 1 }} />
               </tr>
             </thead>
             <tbody>
-              {triggers.length === 0 ? (
-                <tr>
-                  <td colSpan={2} className="muted">
-                    No triggers defined.
-                  </td>
-                </tr>
-              ) : (
-                triggers.map((t) => (
-                  <tr key={t.id}>
-                    <td>{t.label}</td>
-                    <td>
-                      <Toggle on={t.enabled} />
+              {data.map((p) => {
+                const meta = STATUS_META[p.status] ?? STATUS_META.draft;
+                const isHover = hoverId === p.id;
+                return (
+                  <tr
+                    key={p.id}
+                    onClick={() => router.push('/playbooks/' + p.id)}
+                    onMouseEnter={() => setHoverId(p.id)}
+                    onMouseLeave={() =>
+                      setHoverId((cur) => (cur === p.id ? null : cur))
+                    }
+                    style={{
+                      cursor: 'pointer',
+                      background: isHover ? 'var(--ink-05)' : 'transparent',
+                      transition: 'background 0.12s',
+                    }}
+                  >
+                    <td
+                      style={{
+                        ...td,
+                        fontWeight: 700,
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      v{p.version}
+                    </td>
+                    <td style={td}>
+                      <span
+                        style={{
+                          fontSize: 10.5,
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                          padding: '2px 8px',
+                          borderRadius: 999,
+                          color: '#fff',
+                          background: meta.bg,
+                        }}
+                      >
+                        {meta.label}
+                      </span>
+                    </td>
+                    <td
+                      style={{
+                        ...td,
+                        textAlign: 'right',
+                        fontVariantNumeric: 'tabular-nums',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {p.states}
+                    </td>
+                    <td
+                      style={{
+                        ...td,
+                        color: 'var(--ink-70)',
+                        fontFamily: 'ui-monospace, monospace',
+                        fontSize: 12,
+                      }}
+                    >
+                      {formatMode(p.deploymentMode)}
+                    </td>
+                    <td
+                      style={{
+                        ...td,
+                        color: 'var(--ink-45)',
+                        fontVariantNumeric: 'tabular-nums',
+                      }}
+                    >
+                      {formatDate(p.publishedAt)}
+                    </td>
+                    <td
+                      style={{
+                        ...td,
+                        textAlign: 'right',
+                        color: 'var(--ink-22)',
+                        fontSize: 16,
+                        width: 1,
+                      }}
+                    >
+                      ›
                     </td>
                   </tr>
-                ))
-              )}
+                );
+              })}
             </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="section">
-        <h3>Fallback ladder</h3>
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th className="num" style={{ width: 60 }}>
-                  #
-                </th>
-                <th>Strategy</th>
-                <th>Config</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ladder.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="muted">
-                    No fallback steps.
-                  </td>
-                </tr>
-              ) : (
-                ladder.map((f) => (
-                  <tr key={f.order}>
-                    <td className="num">{f.order}</td>
-                    <td>
-                      <span className="badge badge-soft">{f.strategy}</span>
-                    </td>
-                    <td className="mono muted">{f.config ? JSON.stringify(f.config) : '—'}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
+          </TableWrap>
+        )}
+      </PageBody>
+    </AppShell>
   );
 }
+
+const headRow: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: 24,
+  marginBottom: 24,
+  flexWrap: 'wrap',
+};
+
+const headActions: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  paddingTop: 4,
+};
+
+const flashStyle: React.CSSProperties = {
+  fontSize: 12.5,
+  fontWeight: 600,
+  letterSpacing: '-0.005em',
+};
+
+const primaryBtn: React.CSSProperties = {
+  padding: '9px 16px',
+  fontSize: 13,
+  fontWeight: 600,
+  background: 'var(--ink)',
+  color: '#fff',
+  border: 'none',
+  borderRadius: 8,
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  whiteSpace: 'nowrap',
+};

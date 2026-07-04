@@ -1,99 +1,97 @@
-import { apiGet, tenantPath, Overview, Analytics } from './lib/api';
-import { OfflineState, pct } from './components/ui';
+import Link from 'next/link';
+import { AppShell } from './components/Rail';
+import { Card } from './components/ui';
+import { I } from './lib/icons';
 
-export const dynamic = 'force-dynamic';
-
-export default async function DashboardPage() {
-  const overviewRes = await apiGet<Overview>(tenantPath('/overview'));
-  const analyticsRes = await apiGet<Analytics>(tenantPath('/analytics'));
-
+export default function DashboardPage() {
   return (
-    <>
-      <div className="page-head">
-        <h2>Dashboard</h2>
-        <p>Live operating picture for tenant acme.</p>
-      </div>
+    <AppShell title="Dashboard">
+      <div style={{ padding: '32px 36px', maxWidth: 900 }}>
+        {/* Welcome card */}
+        <Card pad={28} style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20 }}>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-45)', marginBottom: 4, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Tenant
+              </div>
+              <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-0.025em', margin: '0 0 4px' }}>
+                acme-corp
+              </h1>
+              <p style={{ margin: '0 0 18px', color: 'var(--ink-45)', fontSize: 14, lineHeight: 1.5 }}>
+                Welcome to the Aelio control plane. Manage playbooks, monitor conversations, and configure your agents.
+              </p>
+              <Link
+                href="/playbooks"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '10px 20px',
+                  borderRadius: 10,
+                  background: 'var(--ink)',
+                  color: 'var(--white)',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                <I.flow size={16} />
+                Manage Playbooks
+              </Link>
+            </div>
+            <div
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 16,
+                background: 'var(--cream)',
+                display: 'grid',
+                placeItems: 'center',
+                fontSize: 28,
+                fontWeight: 800,
+                color: 'var(--ink-70)',
+                flexShrink: 0,
+              }}
+            >
+              AC
+            </div>
+          </div>
+        </Card>
 
-      {!overviewRes.ok ? (
-        <OfflineState error={overviewRes.error} />
-      ) : (
-        <Dashboard overview={overviewRes.data} analytics={analyticsRes.ok ? analyticsRes.data : null} />
-      )}
-    </>
+        {/* Quick links */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <QuickLinkCard href="/conversations" icon="chat" label="Conversations" desc="View recent conversations and chat history" />
+          <QuickLinkCard href="/specs" icon="code" label="Specs" desc="Manage API specs and actions" />
+          <QuickLinkCard href="/inbox" icon="bell" label="Inbox" desc="Review flagged messages and alerts" />
+          <QuickLinkCard href="/settings" icon="gear" label="Settings" desc="Tenant and team configuration" />
+        </div>
+      </div>
+    </AppShell>
   );
 }
 
-function Dashboard({ overview, analytics }: { overview: Overview; analytics: Analytics | null }) {
-  const states = overview.states ?? [];
-  const maxState = Math.max(1, ...states.map((s) => s.count));
-  const topActions = analytics?.topActions ?? [];
-
+function QuickLinkCard({ href, icon, label, desc }: { href: string; icon: keyof typeof I; label: string; desc: string }) {
+  const Icon = I[icon];
   return (
-    <>
-      <div className="metrics">
-        <div className="metric">
-          <div className="label">Conversations</div>
-          <div className="value">{overview.conversations ?? 0}</div>
+    <Link href={href} style={{ textDecoration: 'none' }}>
+      <Card
+        pad={20}
+        style={{
+          cursor: 'pointer',
+          transition: 'box-shadow 0.15s, border-color 0.15s',
+          display: 'flex',
+          gap: 14,
+          alignItems: 'flex-start',
+        }}
+      >
+        <span style={{ color: 'var(--ink-45)', flexShrink: 0, marginTop: 1 }}>
+          <Icon size={18} />
+        </span>
+        <div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)', marginBottom: 2 }}>{label}</div>
+          <div style={{ fontSize: 13, color: 'var(--ink-45)', lineHeight: 1.4 }}>{desc}</div>
         </div>
-        <div className="metric">
-          <div className="label">Escalations</div>
-          <div className="value">{overview.escalations ?? 0}</div>
-          {analytics && <div className="sub">{pct(analytics.escalationRate)} escalation rate</div>}
-        </div>
-        <div className="metric">
-          <div className="label">Exposed actions</div>
-          <div className="value">{overview.actionsExposed ?? 0}</div>
-        </div>
-        <div className="metric">
-          <div className="label">Resolution rate</div>
-          <div className="value">{pct(overview.resolutionRate)}</div>
-        </div>
-      </div>
-
-      <div className="grid-2">
-        <div className="card">
-          <p className="card-title">State distribution</p>
-          {states.length === 0 ? (
-            <p className="muted">No state data.</p>
-          ) : (
-            states.map((s) => (
-              <div className="bar-row" key={s.state}>
-                <span className="bar-label">{s.state}</span>
-                <span className="bar-track">
-                  <span className="bar-fill" style={{ width: `${(s.count / maxState) * 100}%` }} />
-                </span>
-                <span className="bar-count">{s.count}</span>
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className="card">
-          <p className="card-title">Top actions</p>
-          {topActions.length === 0 ? (
-            <p className="muted">No action invocations yet.</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Action</th>
-                  <th className="num">Calls</th>
-                  <th className="num">Success</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topActions.map((a) => (
-                  <tr key={a.key}>
-                    <td className="mono">{a.key}</td>
-                    <td className="num">{a.count}</td>
-                    <td className="num">{pct(a.successRate)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-    </>
+      </Card>
+    </Link>
   );
 }

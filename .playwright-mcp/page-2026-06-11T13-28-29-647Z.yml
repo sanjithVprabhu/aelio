@@ -1,0 +1,78 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: A.
+        - generic [ref=e7]:
+          - generic [ref=e8]: Aelio.
+          - generic [ref=e9]: Control Plane
+      - generic [ref=e10]:
+        - generic [ref=e11]: AC
+        - generic [ref=e12]: acme-corp
+    - navigation [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: OBSERVE
+        - link "Dashboard" [ref=e16] [cursor=pointer]:
+          - /url: /
+          - img [ref=e18]
+          - text: Dashboard
+        - link "Conversations" [ref=e21] [cursor=pointer]:
+          - /url: /conversations
+          - img [ref=e23]
+          - text: Conversations
+        - link "Users" [ref=e25] [cursor=pointer]:
+          - /url: /users
+          - img [ref=e27]
+          - text: Users
+        - link "Audit log" [ref=e32] [cursor=pointer]:
+          - /url: /audit
+          - img [ref=e34]
+          - text: Audit log
+      - generic [ref=e35]:
+        - generic [ref=e36]: BUILD
+        - link "Playbooks" [ref=e37] [cursor=pointer]:
+          - /url: /playbooks
+          - img [ref=e39]
+          - text: Playbooks
+        - link "Inbox" [ref=e43] [cursor=pointer]:
+          - /url: /inbox
+          - img [ref=e45]
+          - text: Inbox
+        - link "Knowledge" [ref=e48] [cursor=pointer]:
+          - /url: /knowledge
+          - img [ref=e50]
+          - text: Knowledge
+      - generic [ref=e53]:
+        - generic [ref=e54]: CONNECT
+        - link "Channels" [ref=e55] [cursor=pointer]:
+          - /url: /channels
+          - img [ref=e57]
+          - text: Channels
+        - link "Specs" [ref=e59] [cursor=pointer]:
+          - /url: /specs
+          - img [ref=e61]
+          - text: Specs
+      - generic [ref=e64]:
+        - generic [ref=e65]: DEVELOP
+        - link "Settings" [ref=e66] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e68]
+          - text: Settings
+    - button "AM Acme Admin Sign out" [ref=e72] [cursor=pointer]:
+      - generic [ref=e73]: AM
+      - generic [ref=e75]:
+        - generic [ref=e76]: Acme Admin
+        - generic [ref=e77]: Sign out
+  - generic [ref=e78]:
+    - generic [ref=e79]:
+      - button [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+      - generic [ref=e82]:
+        - generic [ref=e83]: Playbooks
+        - generic [ref=e84]: ›
+        - generic [ref=e85]: Build
+    - generic [ref=e88]:
+      - generic [ref=e89]:
+        - heading "Playbooks" [level=2] [ref=e90]
+        - paragraph [ref=e91]: Every published version. Draft a new one to iterate without touching the live behaviour.
+      - button "+ New Draft" [ref=e93] [cursor=pointer]

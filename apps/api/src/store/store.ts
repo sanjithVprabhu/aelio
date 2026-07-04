@@ -78,6 +78,7 @@ export class Store {
   private evalRuns = new Map<string, EvalRun>();
   private longTerm: LongTermFact[] = [];
   private adminUsers = new Map<string, AdminUserRecord>();
+  private tenantApiKeys = new Map<string, string>();
 
   // Optional durable mirror (Postgres). Sync reads stay in-memory; writes are
   // mirrored through fire-and-forget. Suppressed during hydration.
@@ -286,6 +287,26 @@ export class Store {
   }
   listExposedActions(tenantId: string): ActionDefinition[] {
     return this.listActions(tenantId).filter((a) => a.exposed);
+  }
+  deleteAction(tenantId: string, id: string): void {
+    const a = this.actions.get(id);
+    if (a && a.tenantId === tenantId) {
+      this.actions.delete(id);
+      this.remove('actions', id);
+    }
+  }
+
+  putTenantApiKey(tenantId: string, apiKey: string): void {
+    this.tenantApiKeys.set(apiKey, tenantId);
+  }
+  findTenantIdByApiKey(apiKey: string): string | undefined {
+    return this.tenantApiKeys.get(apiKey);
+  }
+  getTenantApiKey(tenantId: string): string | undefined {
+    for (const [key, id] of this.tenantApiKeys.entries()) {
+      if (id === tenantId) return key;
+    }
+    return undefined;
   }
 
   // ---- Invocations (append-only) ----

@@ -24,6 +24,24 @@ export interface BehaviorBundle {
   maxResponseLength?: number;
   confidenceFloor: number; // default 0.6
   requireConfirmationForTier: number; // default 1
+  /** Per-state visual flow graph authored in the builder (nodes + edges). */
+  flow?: StateFlow;
+}
+
+export interface FlowNode {
+  id: string;
+  type: 'trigger' | 'action' | 'fallback';
+  position: { x: number; y: number };
+  data: Record<string, unknown>;
+}
+export interface FlowEdge {
+  id: string;
+  source: string;
+  target: string;
+}
+export interface StateFlow {
+  nodes: FlowNode[];
+  edges: FlowEdge[];
 }
 
 export interface PlaybookState {

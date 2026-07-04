@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aelio — Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<style>/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("8441033b-5adc-4e13-bd61-f459e210fa80") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("7cb6da45-93fb-42cd-ae3b-2367eb3c5bc8") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("a3419cf7-396e-44c4-9d1d-1074a73710ae") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("90b4a154-2d58-41dd-861a-34aa24872278") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+  :root {
+    --black: #0A0A0A;
+    --cream: #F5F0E8;
+    --white: #FFFFFF;
+    --bg: #FAFAFA;
+    --ink: #0A0A0A;
+    --ink-70: rgba(10,10,10,0.68);
+    --ink-45: rgba(10,10,10,0.45);
+    --ink-22: rgba(10,10,10,0.22);
+    --ink-10: rgba(10,10,10,0.10);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  ::selection { background: var(--black); color: var(--white); }
+  a { color: inherit; text-decoration: none; cursor: pointer; }
+
+  /* =====================================================
+     AUTH SHELL — centered, like ElevenLabs (screens 1–2)
+     ===================================================== */
+  .auth-shell {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .auth-shell.active { display: flex; }
+
+  .auth-topbar {
+    display: flex; justify-content: center; align-items: center;
+    padding: 1.5rem 2rem;
+  }
+  .wordmark {
+    font-weight: 700; font-size: 1.24rem; letter-spacing: -0.01em;
+    color: var(--black); cursor: pointer;
+  }
+
+  .auth-main {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem 1.5rem 3rem;
+  }
+  .auth-card { width: 100%; max-width: 420px; }
+
+  .auth-title {
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.025em;
+    text-align: center; margin-bottom: 1.8rem; line-height: 1.15;
+  }
+
+  /* Google btn */
+  .btn-google {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    font-family: inherit; font-size: 0.98rem; font-weight: 500; color: var(--ink);
+    background: var(--white); border: 1px solid var(--ink-22); border-radius: 8px;
+    padding: 0.82em 1em; cursor: pointer;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .btn-google:hover { border-color: var(--ink-45); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .g-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 0.85rem; margin: 1.2rem 0;
+  }
+  .divider span { flex: 1; height: 1px; background: var(--ink-22); }
+  .divider em { font-style: normal; font-size: 0.82rem; color: var(--ink-45); }
+
+  /* Auth fields */
+  .field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.9rem; }
+  .field label { font-size: 0.9rem; font-weight: 500; color: var(--ink-70); }
+  .field-wrap { position: relative; }
+  .field input {
+    font-family: inherit; font-size: 1rem; color: var(--ink);
+    background: var(--white); border: 1px solid var(--ink-22); border-radius: 8px;
+    padding: 0.76em 1em; width: 100%;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .field input.has-icon { padding-right: 2.8rem; }
+  .field input:focus { outline: none; border-color: var(--black); box-shadow: 0 0 0 3px rgba(10,10,10,0.07); }
+  .field input::placeholder { color: var(--ink-45); }
+  .eye-btn {
+    position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 0.25rem;
+    color: var(--ink-45); display: grid; place-items: center;
+    transition: color 0.2s;
+  }
+  .eye-btn:hover { color: var(--ink); }
+
+  /* Auth primary btn */
+  .btn-auth {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5em;
+    font-family: inherit; font-size: 1rem; font-weight: 600;
+    background: var(--black); color: var(--white);
+    border: none; border-radius: 8px; padding: 0.88em 1em;
+    cursor: pointer; margin-top: 0.3rem;
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+    line-height: 1;
+  }
+  .btn-auth:hover { background: #1c1c1c; transform: translateY(-1px); }
+  .btn-auth .arr { font-size: 1.1em; transition: transform 0.3s var(--ease); }
+  .btn-auth:hover .arr { transform: translateX(3px); }
+
+  .link-row {
+    text-align: center; margin-top: 1.1rem;
+    font-size: 0.93rem; color: var(--ink-70);
+  }
+  .link-row a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .link-row a:hover { opacity: 0.7; }
+
+  .forgot { text-align: right; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+  .forgot a { font-size: 0.88rem; color: var(--ink-70); text-decoration: underline; text-underline-offset: 2px; }
+  .forgot a:hover { color: var(--ink); }
+
+  .auth-footer {
+    padding: 1.5rem 2rem; text-align: center;
+    font-size: 0.82rem; color: var(--ink-45);
+    border-top: 1px solid var(--ink-10);
+  }
+  .auth-footer a { color: var(--ink-70); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* =====================================================
+     ONBOARDING SHELL — left-aligned, bottom dots (screens 3–6)
+     ===================================================== */
+  .ob-shell {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .ob-shell.active { display: flex; }
+
+  .ob-topbar {
+    display: flex; justify-content: center; align-items: center;
+    padding: 1.5rem 2rem;
+  }
+
+  /* Content region — vertically centered, horizontally offset left in a centered container */
+  .ob-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(3rem, 8vh, 6rem) clamp(1.5rem, 8vw, 5rem);
+  }
+
+  .ob-content {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .ob-title {
+    font-size: clamp(1.7rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    margin-bottom: 1.8rem;
+    text-align: left;
+  }
+
+  .ob-sub {
+    font-size: 1rem; color: var(--ink-70);
+    margin-top: -1.2rem; margin-bottom: 1.8rem;
+    max-width: 44ch;
+  }
+
+  /* Onboarding fields — same as auth but slightly larger label */
+  .ob-field { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.15rem; }
+  .ob-field label {
+    font-size: 0.97rem; font-weight: 500; color: var(--ink);
+    display: flex; align-items: baseline; gap: 0.45em;
+  }
+  .ob-field label .opt { font-size: 0.82rem; font-weight: 400; color: var(--ink-45); }
+  .ob-field input, .ob-field select, .ob-field textarea {
+    font-family: inherit; font-size: 1rem; color: var(--ink);
+    background: var(--white); border: 1px solid var(--ink-22); border-radius: 8px;
+    padding: 0.76em 1em; width: 100%;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    appearance: none; -webkit-appearance: none;
+  }
+  .ob-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.5rem;
+  }
+  .ob-field input:focus, .ob-field select:focus, .ob-field textarea:focus {
+    outline: none; border-color: var(--black); box-shadow: 0 0 0 3px rgba(10,10,10,0.07);
+  }
+  .ob-field input::placeholder, .ob-field textarea::placeholder { color: var(--ink-45); }
+
+  /* Compact "Next" button — not full width */
+  .btn-next {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    font-family: inherit; font-size: 1rem; font-weight: 600;
+    background: var(--black); color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 0.78em 1.6em;
+    cursor: pointer; margin-top: 0.5rem;
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+    line-height: 1;
+  }
+  .btn-next:hover { background: #1c1c1c; transform: translateY(-1px); }
+  .btn-next .arr { font-size: 1em; transition: transform 0.3s var(--ease); }
+  .btn-next:hover .arr { transform: translateX(3px); }
+
+  .ob-skip {
+    display: inline-block; margin-top: 0.85rem; margin-left: 1rem;
+    font-size: 0.9rem; color: var(--ink-45); cursor: pointer;
+    transition: color 0.2s; white-space: nowrap;
+  }
+  .ob-skip:hover { color: var(--ink); }
+
+  /* Checkbox row */
+  .check-row {
+    display: flex; gap: 0.8rem; align-items: flex-start;
+    margin-bottom: 1.4rem; cursor: pointer;
+  }
+  .check-row input[type="checkbox"] {
+    width: 20px; height: 20px; margin-top: 2px;
+    accent-color: var(--black); flex-shrink: 0; cursor: pointer;
+    border-radius: 4px;
+  }
+  .check-row span { font-size: 0.93rem; color: var(--ink-70); line-height: 1.5; }
+
+  /* Verify screen icon */
+  .ob-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: var(--cream); display: grid; place-items: center;
+    font-size: 1.4rem; margin-bottom: 1.5rem;
+  }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 1.5px dashed var(--ink-22); border-radius: 10px;
+    padding: 2rem 1.5rem; text-align: center; cursor: pointer;
+    transition: border-color 0.25s, background 0.25s; margin-bottom: 0.9rem;
+    background: var(--white);
+  }
+  .upload-zone:hover { border-color: var(--ink-45); background: var(--bg); }
+  .upload-zone.dragover { border-color: var(--black); background: rgba(10,10,10,0.03); }
+  .upload-icon { font-size: 1.4rem; margin-bottom: 0.5rem; opacity: 0.4; }
+  .upload-zone p { font-size: 0.92rem; color: var(--ink-70); }
+  .upload-zone .emph { font-weight: 600; color: var(--ink); }
+  .upload-zone small { font-size: 0.8rem; color: var(--ink-45); margin-top: 0.25rem; display: block; }
+  .or-text { text-align: left; font-size: 0.82rem; color: var(--ink-45); margin: 0.7rem 0; }
+
+  /* Channel cards */
+  .channels { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.2rem; }
+  .channel {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--white); border: 1.5px solid var(--ink-22);
+    border-radius: 10px; padding: 0.9rem 1.1rem;
+    cursor: pointer; transition: border-color 0.25s, box-shadow 0.25s; user-select: none;
+  }
+  .channel:hover { border-color: var(--ink-45); }
+  .channel.selected { border-color: var(--black); box-shadow: 0 0 0 3px rgba(10,10,10,0.07); }
+  .ch-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: grid; place-items: center; font-size: 1.1rem; flex-shrink: 0;
+  }
+  .ch-icon.wa { background: #E7F7EC; }
+  .ch-icon.sl { background: #F0EBFA; }
+  .ch-icon.em { background: var(--cream); }
+  .ch-info { flex: 1; }
+  .ch-name { font-size: 0.96rem; font-weight: 600; }
+  .ch-desc { font-size: 0.81rem; color: var(--ink-70); }
+  .ch-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--ink-22); display: grid; place-items: center;
+    transition: background 0.25s, border-color 0.25s; flex-shrink: 0;
+  }
+  .channel.selected .ch-check { background: var(--black); border-color: var(--black); }
+  .ch-tick { display: none; color: var(--white); font-size: 0.68rem; font-weight: 800; }
+  .channel.selected .ch-tick { display: block; }
+
+  /* Success */
+  .success-mark {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--black); color: var(--white);
+    display: grid; place-items: center; font-size: 1.3rem; margin-bottom: 1.5rem;
+  }
+  .spec-file {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: var(--white); border: 1px solid var(--ink-22);
+    border-radius: 8px; padding: 0.8rem 1rem;
+    font-size: 0.9rem; margin-bottom: 1.2rem;
+  }
+  .spec-file .file-icon { opacity: 0.45; }
+  .spec-file .file-name { font-weight: 500; flex: 1; }
+  .spec-file .file-ok { font-size: 0.78rem; color: #3a9c5a; font-weight: 600; }
+
+  /* ---- Progress dots — fixed bottom centre ---- */
+  .ob-dots {
+    display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+    padding: 1.6rem 2rem 2rem;
+    background: transparent;
+  }
+  .ob-dots .d {
+    height: 7px; border-radius: 100px;
+    background: var(--ink-22);
+    transition: width 0.35s var(--ease), background 0.35s var(--ease);
+    width: 7px;
+    /* Enlarged touch target without changing visual size */
+    cursor: pointer;
+    position: relative;
+  }
+  .ob-dots .d::after {
+    content: '';
+    position: absolute;
+    inset: -10px -8px;
+  }
+  .ob-dots .d.active { background: var(--black); width: 24px; }
+  .ob-dots .d.done { background: var(--ink-45); }
+
+  .ob-wordmark {
+    font-weight: 700; font-size: 1.24rem; letter-spacing: -0.01em;
+    color: var(--black); text-align: center; margin-bottom: 2.5rem;
+  }
+
+  /* ---- Email pill (verify screen) ---- */
+  .email-pill {
+    display: inline-flex; align-items: center; gap: 0.6em;
+    background: var(--white);
+    border: 1px solid var(--ink-22);
+    border-radius: 100px;
+    padding: 0.45em 1em 0.45em 0.75em;
+    font-size: 0.95rem; font-weight: 500;
+    margin-bottom: 0;
+    color: var(--ink);
+  }
+  .ep-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #3a9c5a; flex-shrink: 0;
+  }
+  .spam-note {
+    margin-top: 0.85rem;
+    font-size: 0.88rem;
+    color: var(--ink-45);
+  }
+
+  /* ---- Cooking / splash screen ---- */
+  .cooking-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 60vh;
+  }
+  .cooking-wordmark {
+    font-size: 1.8rem; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--black); margin-bottom: 3rem;
+  }
+  .cooking-wordmark span { color: var(--black); }
+  .cooking-line {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700; letter-spacing: -0.025em;
+    line-height: 1.2; color: var(--black);
+    margin-bottom: 2.5rem;
+    min-height: 3.2em;
+    display: flex; flex-direction: column; gap: 0.15em;
+  }
+  .cooking-static { color: var(--ink-45); font-weight: 500; font-size: 0.72em; letter-spacing: 0.01em; text-transform: uppercase; }
+  .cooking-cycle {
+    display: block;
+    font-size: 1em;
+    color: var(--black);
+    min-height: 1.3em;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .cooking-cycle.fade {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  .cooking-bar {
+    width: 100%; max-width: 280px;
+    height: 3px; background: var(--ink-10);
+    border-radius: 100px; overflow: hidden;
+    margin-bottom: 1.2rem;
+  }
+  .cooking-fill {
+    height: 100%; width: 0%;
+    background: var(--black);
+    border-radius: 100px;
+    transition: width 0.4s var(--ease);
+  }
+  .cooking-note {
+    font-size: 0.88rem; color: var(--ink-45);
+  }
+
+  /* =====================================================
+     ===================================================== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .ob-content, .auth-card { animation: fadeUp 0.45s var(--ease) forwards; }
+</style>
+
+
+</head>
+<body>
+
+<!-- ===================================================
+     AUTH SHELL — screens: signup, signin
+     =================================================== -->
+<div class="auth-shell active" id="shell-auth">
+  <header class="auth-topbar">
+    <div class="wordmark" onclick="goTo('signup')">Aelio.</div>
+  </header>
+
+  <main class="auth-main">
+    <!-- SCREEN 1: CREATE ACCOUNT -->
+    <div class="auth-card" id="screen-signup" data-screen-label="Create account">
+      <h1 class="auth-title">Create an account</h1>
+
+      <button class="btn-google" onclick="goTo('personalise')">
+        <svg class="g-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"></path>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"></path>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"></path>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"></path>
+        </svg>
+        Sign up with Google
+      </button>
+
+      <div class="divider"><span></span><em>or</em><span></span></div>
+
+      <div class="field">
+        <label for="su-email">Email</label>
+        <input id="su-email" type="email" placeholder="">
+      </div>
+      <div class="field">
+        <label for="su-pw">Password</label>
+        <div class="field-wrap">
+          <input id="su-pw" type="password" class="has-icon" placeholder="">
+          <button class="eye-btn" onclick="togglePw('su-pw',this)" tabindex="-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-auth" onclick="goTo('personalise')">Sign in <span class="arr">→</span></button>
+    </div>
+
+    <!-- SCREEN 2: SIGN IN -->
+    <div class="auth-card" id="screen-signin" data-screen-label="Sign in" style="display:none;">
+      <h1 class="auth-title">Welcome back</h1>
+
+      <button class="btn-google" onclick="goTo('connect')">
+        <svg class="g-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"></path>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"></path>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"></path>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"></path>
+        </svg>
+        Sign in with Google
+      </button>
+
+      <div class="divider"><span></span><em>or</em><span></span></div>
+
+      <div class="field">
+        <label for="si-email">Email</label>
+        <input id="si-email" type="email" placeholder="">
+      </div>
+      <div class="field">
+        <label for="si-pw">Password</label>
+        <div class="field-wrap">
+          <input id="si-pw" type="password" class="has-icon" placeholder="">
+          <button class="eye-btn" onclick="togglePw('si-pw',this)" tabindex="-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
+      <div class="forgot"><a>Forgot password?</a></div>
+
+      <button class="btn-auth" onclick="goTo('personalise')">Sign in <span class="arr">→</span></button>
+      <div class="link-row">New to Aelio? <a onclick="goTo('signup')">Create account</a></div>
+    </div>
+  </main>
+
+  <footer class="auth-footer">
+    By continuing, you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a>.
+  </footer>
+</div>
+
+
+<!-- ===================================================
+     ONBOARDING SHELL — screens: verify, connect, channels, live
+     =================================================== -->
+<div class="ob-shell" id="shell-ob">
+
+  <main class="ob-main">
+
+    <!-- SCREEN 3: PERSONALISE -->
+    <div class="ob-content" id="screen-personalise" data-screen-label="Personalise" style="display:none;">
+      <h1 class="ob-title">Help us personalise your experience</h1>
+
+      <div class="ob-field">
+        <label for="p-name">What's your name? <span class="opt">(optional)</span></label>
+        <input id="p-name" type="text" placeholder="First name">
+      </div>
+
+      <div class="ob-field">
+        <label for="p-lang">What's your preferred language?</label>
+        <select id="p-lang">
+          <option value="en">🇺🇸 English</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="pt">🇧🇷 Portuguese</option>
+          <option value="ja">🇯🇵 Japanese</option>
+        </select>
+      </div>
+
+      <div class="ob-field">
+        <label for="p-source">How did you hear about us? <span class="opt">(optional)</span></label>
+        <input id="p-source" type="text" placeholder="A podcast, colleague, LinkedIn...">
+      </div>
+
+      <label class="check-row">
+        <input type="checkbox" id="p-age">
+        <span>By checking this box, you confirm you are authorised to set up an AI interface on behalf of your platform.</span>
+      </label>
+
+      <div>
+        <button class="btn-next" onclick="goTo('connect')">Next <span class="arr">→</span></button>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: VERIFY EMAIL -->
+    <div class="ob-content" id="screen-verify" data-screen-label="Verify email" style="display:none;">
+      <div class="ob-wordmark">Aelio.</div>
+      <div class="ob-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+      </div>
+      <h1 class="ob-title">Check your inbox</h1>
+
+      <div class="email-pill">
+        <span class="ep-dot"></span>
+        <span>you@company.com</span>
+      </div>
+
+      <p class="ob-sub" style="margin-top:1.4rem; margin-bottom:1.4rem;">We sent a confirmation link to your email. Click it to activate your account and continue setting up Aelio.</p>
+
+      <div>
+        <button class="btn-next" onclick="goTo('personalise')">I've confirmed <span class="arr">→</span></button>
+        <a class="ob-skip" onclick="">Resend email</a>
+      </div>
+      <p class="spam-note">Didn't get it? Check your spam.</p>
+      <div class="link-row" style="text-align:left; margin-top:1.2rem;"><a onclick="goTo('signup')">Use a different email</a></div>
+    </div>
+
+    <!-- SCREEN 4: CONNECT PLATFORM -->
+    <div class="ob-content" id="screen-connect" data-screen-label="Connect platform" style="display:none;">
+      <h1 class="ob-title">Connect your platform</h1>
+      <p class="ob-sub">Drop in your OpenAPI spec. Aelio will learn your product in minutes — no code required.</p>
+
+      <div class="upload-zone" id="uploadZone" onclick="simulateUpload()">
+        <div class="upload-icon">↑</div>
+        <p><span class="emph">Click to upload</span> or drag and drop</p>
+        <small>openapi.yaml · openapi.json · max 10MB</small>
+      </div>
+
+      <p class="or-text">or paste a public URL</p>
+
+      <div class="ob-field" style="margin-bottom:1.4rem;">
+        <input id="spec-url" type="url" placeholder="https://api.yourapp.com/openapi.json">
+      </div>
+
+      <div>
+        <button class="btn-next" onclick="goTo('channels')">Continue <span class="arr">→</span></button>
+        <a class="ob-skip" onclick="goTo('channels')">Skip for now</a>
+      </div>
+    </div>
+
+    <!-- SCREEN 5: CHOOSE CHANNELS -->
+    <div class="ob-content" id="screen-channels" data-screen-label="Choose channels" style="display:none;">
+      <h1 class="ob-title">Where should Aelio live?</h1>
+      <p class="ob-sub">Pick the channels your users are already on. You can change this any time.</p>
+
+      <div class="channels">
+        <div class="channel selected" onclick="toggleChannel(this)">
+          <div class="ch-icon wa">💬</div>
+          <div class="ch-info">
+            <div class="ch-name">WhatsApp</div>
+            <div class="ch-desc">Meet users where they already message</div>
+          </div>
+          <div class="ch-check"><span class="ch-tick">✓</span></div>
+        </div>
+        <div class="channel" onclick="toggleChannel(this)">
+          <div class="ch-icon sl">⚡</div>
+          <div class="ch-info">
+            <div class="ch-name">Slack</div>
+            <div class="ch-desc">For teams that live in Slack</div>
+          </div>
+          <div class="ch-check"><span class="ch-tick">✓</span></div>
+        </div>
+        <div class="channel" onclick="toggleChannel(this)">
+          <div class="ch-icon em">⬡</div>
+          <div class="ch-info">
+            <div class="ch-name">Embedded chat</div>
+            <div class="ch-desc">Right inside your product interface</div>
+          </div>
+          <div class="ch-check"><span class="ch-tick">✓</span></div>
+        </div>
+      </div>
+
+      <div>
+        <button class="btn-next" onclick="goTo('cooking')">Continue <span class="arr">→</span></button>
+        <a class="ob-skip" onclick="goTo('cooking')">Skip for now</a>
+      </div>
+    </div>
+
+    <!-- SCREEN 6: COOKING / SETTING UP -->
+    <div class="ob-content cooking-screen" id="screen-cooking" data-screen-label="Setting up" style="display:none;">
+      <div class="cooking-wordmark">Aelio<span>.</span></div>
+      <div class="cooking-line">
+        <span class="cooking-static">Hold tight. Aelio is</span><span class="cooking-cycle" id="cookingCycle"></span>
+      </div>
+      <div class="cooking-bar"><div class="cooking-fill" id="cookingFill"></div></div>
+      <p class="cooking-note">This takes about 30 seconds.</p>
+    </div>
+
+    <!-- SCREEN 7: YOU'RE LIVE -->
+    <div class="ob-content" id="screen-live" data-screen-label="You're live" style="display:none;">
+      <div class="success-mark">✓</div>
+      <h1 class="ob-title">Aelio is ready.</h1>
+      <p class="ob-sub">Your conversational interface is live. Users can start talking to your platform right now.</p>
+
+      <div class="spec-file">
+        <span class="file-icon">📄</span>
+        <span class="file-name">openapi.yaml</span>
+        <span class="file-ok">Connected</span>
+      </div>
+
+      <div>
+        <button class="btn-next" onclick="alert('Taking you to your dashboard…')">Go to dashboard <span class="arr">→</span></button>
+        <a class="ob-skip" onclick="alert('Opening docs…')">View docs</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom progress dots -->
+  <div class="ob-dots" id="obDots">
+    <div class="d" id="dot0"></div>
+    <div class="d" id="dot1"></div>
+    <div class="d" id="dot2"></div>
+    <div class="d" id="dot3"></div>
+    <div class="d" id="dot4"></div>
+    <div class="d" id="dot5"></div>
+  </div>
+</div>
+
+
+<script>
+  // ---- Screen order ----
+  const OB_SCREENS = ['verify', 'personalise', 'connect', 'channels', 'cooking', 'live'];
+
+  // ---- Navigation ----
+  function goTo(id) {
+    const authIds = ['signup', 'signin'];
+    const authShell = document.getElementById('shell-auth');
+    const obShell   = document.getElementById('shell-ob');
+
+    if (authIds.includes(id)) {
+      authShell.classList.add('active');
+      obShell.classList.remove('active');
+      document.getElementById('screen-signup').style.display = id === 'signup' ? '' : 'none';
+      document.getElementById('screen-signin').style.display = id === 'signin' ? '' : 'none';
+      const card = document.getElementById('screen-' + id);
+      card.style.animation = 'none';
+      requestAnimationFrame(() => { card.style.animation = ''; });
+    } else {
+      authShell.classList.remove('active');
+      obShell.classList.add('active');
+      OB_SCREENS.forEach(sid => {
+        const el = document.getElementById('screen-' + sid);
+        if (el) el.style.display = 'none';
+      });
+      const target = document.getElementById('screen-' + id);
+      if (target) {
+        target.style.display = target.classList.contains('cooking-screen') ? 'flex' : 'block';
+        target.style.animation = 'none';
+        requestAnimationFrame(() => { target.style.animation = ''; });
+      }
+      updateDots(id);
+      if (id === 'cooking') startCooking();
+    }
+  }
+
+  // ---- Dots ----
+  function updateDots(activeId) {
+    const idx = OB_SCREENS.indexOf(activeId);
+    document.querySelectorAll('.ob-dots .d').forEach((d, i) => {
+      d.classList.remove('active', 'done');
+      if (i < idx) d.classList.add('done');
+      else if (i === idx) d.classList.add('active');
+    });
+  }
+
+  // Wire dots after DOM ready
+  OB_SCREENS.forEach((sid, i) => {
+    const dot = document.getElementById('dot' + i);
+    if (dot) {
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('aria-label', 'Go to step ' + (i + 1));
+      dot.setAttribute('tabindex', '0');
+      dot.addEventListener('click', () => goTo(sid));
+      dot.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(sid); }
+      });
+    }
+  });
+
+  // ---- Cooking animation ----
+  const COOKING_LINES = [
+    'reading your spec.',
+    'mapping every endpoint.',
+    'learning your workflows.',
+    'understanding your users.',
+    'wiring the interface.',
+    'connecting your channels.',
+    'ready.'
+  ];
+  let cookingTimer = null;
+
+  function startCooking() {
+    const cycle = document.getElementById('cookingCycle');
+    const fill  = document.getElementById('cookingFill');
+    if (!cycle || !fill) return;
+    if (cookingTimer) clearTimeout(cookingTimer);
+    const total  = COOKING_LINES.length;
+    const stepMs = 1800;
+
+    function showStep(i) {
+      if (i >= total) { setTimeout(() => goTo('live'), 600); return; }
+      cycle.classList.add('fade');
+      setTimeout(() => {
+        cycle.textContent = COOKING_LINES[i];
+        cycle.classList.remove('fade');
+        fill.style.width = Math.round(((i + 1) / total) * 100) + '%';
+        cookingTimer = setTimeout(() => showStep(i + 1), stepMs);
+      }, 360);
+    }
+    cycle.textContent = '';
+    fill.style.width = '0%';
+    setTimeout(() => showStep(0), 200);
+  }
+
+  // ---- Helpers ----
+  function togglePw(inputId, btn) {
+    const inp = document.getElementById(inputId);
+    if (!inp) return;
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.style.opacity = show ? '1' : '0.45';
+  }
+
+  // Safety: force final animation state in case CSS animations don't run
+  setTimeout(() => {
+    document.querySelectorAll('.auth-card, .ob-content').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  }, 500);
+
+  function toggleChannel(el) { el.classList.toggle('selected'); }
+
+  function simulateUpload() {
+    const zone = document.getElementById('uploadZone');
+    if (!zone) return;
+    zone.innerHTML = '<div class="upload-icon" style="opacity:1">📄</div><p><span class="emph">openapi.yaml</span> — ready</p><small style="color:#3a9c5a;font-weight:600;">✓ Spec loaded</small>';
+    zone.style.borderStyle = 'solid';
+    zone.style.borderColor = 'var(--black)';
+    zone.style.background = 'rgba(10,10,10,0.02)';
+    zone.onclick = null;
+  }
+
+  const zone = document.getElementById('uploadZone');
+  if (zone) {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); simulateUpload(); });
+  }
+</script>
+
+
+</body></html>

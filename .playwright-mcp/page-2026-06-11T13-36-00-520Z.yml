@@ -1,0 +1,504 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e4]:
+      - generic [ref=e7]: A.
+      - navigation [ref=e8]:
+        - generic [ref=e9]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: /
+            - img [ref=e13]
+          - link "Conversations" [ref=e16] [cursor=pointer]:
+            - /url: /conversations
+            - img [ref=e18]
+          - link "Users" [ref=e20] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e22]
+          - link "Audit log" [ref=e27] [cursor=pointer]:
+            - /url: /audit
+            - img [ref=e29]
+        - generic [ref=e30]:
+          - link "Playbooks" [ref=e32] [cursor=pointer]:
+            - /url: /playbooks
+            - img [ref=e34]
+          - link "Inbox" [ref=e38] [cursor=pointer]:
+            - /url: /inbox
+            - img [ref=e40]
+          - link "Knowledge" [ref=e43] [cursor=pointer]:
+            - /url: /knowledge
+            - img [ref=e45]
+        - generic [ref=e48]:
+          - link "Channels" [ref=e50] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e52]
+          - link "Specs" [ref=e54] [cursor=pointer]:
+            - /url: /specs
+            - img [ref=e56]
+        - link "Settings" [ref=e61] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e63]
+      - button "AM" [ref=e67] [cursor=pointer]:
+        - generic [ref=e68]: AM
+    - generic [ref=e70]:
+      - generic [ref=e71]:
+        - button [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - img [ref=e76]
+            - text: Playbooks
+          - generic [ref=e80]: ›
+          - generic [ref=e81]: Unverified
+          - generic [ref=e82]: v1.0.0 · active
+        - generic [ref=e83]: Unsaved
+        - button "Save" [ref=e84] [cursor=pointer]
+        - button "Test" [ref=e85] [cursor=pointer]:
+          - img [ref=e86]
+          - text: Test
+        - button "Publish" [ref=e88] [cursor=pointer]:
+          - img [ref=e89]
+          - text: Publish
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - img [ref=e96]
+            - generic [ref=e100]: State Management
+          - generic [ref=e101]:
+            - generic [ref=e104] [cursor=pointer]:
+              - generic [ref=e105]: Unverified
+              - generic [ref=e106]: User has not yet verified their identity.
+            - generic [ref=e109] [cursor=pointer]:
+              - generic [ref=e110]: Onboarding
+              - generic [ref=e111]: New, recently verified user finding their feet.
+            - generic [ref=e114] [cursor=pointer]:
+              - generic [ref=e115]: Active
+              - generic [ref=e116]: Engaged user doing routine work.
+            - generic [ref=e119] [cursor=pointer]:
+              - generic [ref=e120]: Power user
+              - generic [ref=e121]: Advanced, high-frequency user.
+            - generic [ref=e124] [cursor=pointer]:
+              - generic [ref=e125]: At risk
+              - generic [ref=e126]: User showing churn or cancellation signals.
+            - generic [ref=e129] [cursor=pointer]:
+              - generic [ref=e130]: New State
+              - generic [ref=e131]: Describe this stage
+          - button "Add state" [ref=e132] [cursor=pointer]:
+            - img [ref=e133]
+            - text: Add state
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - img [ref=e137]
+              - text: Workflows
+            - generic [ref=e141] [cursor=pointer]:
+              - generic [ref=e142]: Default workflow
+              - generic [ref=e143]: "6"
+            - generic [ref=e144] [cursor=pointer]:
+              - generic [ref=e145]: "Migrated: User message"
+              - generic [ref=e146]: "2"
+            - generic [ref=e147] [cursor=pointer]:
+              - generic [ref=e148]: "Migrated: Cancellation intent → move to retention"
+              - generic [ref=e149]: "2"
+            - generic [ref=e150] [cursor=pointer]:
+              - generic [ref=e151]: "Migrated: Explicit human request → escalate"
+              - generic [ref=e152]: "2"
+            - generic [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]: "Migrated: User message"
+              - generic [ref=e155]: "2"
+            - generic [ref=e156] [cursor=pointer]:
+              - generic [ref=e157]: "Migrated: User message"
+              - generic [ref=e158]: "2"
+            - generic [ref=e159] [cursor=pointer]:
+              - generic [ref=e160]: "Migrated: User message"
+              - generic [ref=e161]: "2"
+            - generic [ref=e162] [cursor=pointer]:
+              - generic [ref=e163]: "Migrated: User message"
+              - generic [ref=e164]: "2"
+            - generic [ref=e165] [cursor=pointer]:
+              - generic [ref=e166]: "Migrated: User message"
+              - generic [ref=e167]: "2"
+            - button "New" [ref=e168] [cursor=pointer]:
+              - img [ref=e169]
+              - text: New
+          - generic [ref=e170]:
+            - button "trigger" [ref=e171] [cursor=pointer]:
+              - img [ref=e172]
+              - text: trigger
+            - button "action" [ref=e173] [cursor=pointer]:
+              - img [ref=e174]
+              - text: action
+            - button "fallback" [ref=e175] [cursor=pointer]:
+              - img [ref=e176]
+              - text: fallback
+            - button "New Workflow" [ref=e178] [cursor=pointer]:
+              - img [ref=e179]
+              - text: New Workflow
+            - generic [ref=e180]: drag a node's right dot to a left dot to connect
+          - application [ref=e181]:
+            - generic [ref=e183]:
+              - generic:
+                - generic:
+                  - img
+                  - img:
+                    - group "Edge from trigger_entry to fallback_1"
+                  - img:
+                    - group "Edge from trigger_8628bac5-9430-4a87-bb1d-6eec9ba6c2dc to action_8628bac5-9430-4a87-bb1d-6eec9ba6c2dc" [ref=e184] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_80be7aa5-995d-4123-817a-cfb43c183a0a to action_80be7aa5-995d-4123-817a-cfb43c183a0a" [ref=e187] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_c9w3c1is to action_trig_c9w3c1is" [ref=e190] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_9cone73j to action_trig_9cone73j" [ref=e193] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_4icy61je to action_trig_4icy61je" [ref=e196] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_3iqkjwz2 to action_trig_3iqkjwz2" [ref=e199] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_dzxwp387 to action_trig_dzxwp387" [ref=e202] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_wki1suhv to action_trig_wki1suhv" [ref=e205] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_5vhoh7z0 to action_trig_5vhoh7z0" [ref=e208] [cursor=pointer]
+                  - img:
+                    - group "Edge from trigger_trig_56ssmtql to action_trig_56ssmtql" [ref=e211] [cursor=pointer]
+                - generic:
+                  - group [ref=e214]:
+                    - generic [ref=e215]:
+                      - generic [ref=e218]:
+                        - img [ref=e220]
+                        - generic [ref=e222]: TRIGGER
+                      - generic [ref=e223]: User message
+                      - generic [ref=e224]: message_received
+                      - generic [ref=e226]:
+                        - generic [ref=e227]: When
+                        - generic [ref=e228]: always
+                  - group [ref=e229]:
+                    - generic [ref=e230]:
+                      - generic [ref=e233]:
+                        - img [ref=e235]
+                        - generic [ref=e237]: FALLBACK
+                      - generic [ref=e238]: rephrase
+                      - generic [ref=e239]: "attempts: 1"
+                      - generic [ref=e241]:
+                        - generic [ref=e242]: Message
+                        - generic [ref=e243]: Sorry — I didn't quite catch that. Could
+                  - group [ref=e244]:
+                    - generic [ref=e245]:
+                      - generic [ref=e248]:
+                        - img [ref=e250]
+                        - generic [ref=e252]: TRIGGER
+                      - generic [ref=e253]: Cancellation intent → move to retention
+                      - generic [ref=e254]: message_received
+                      - generic [ref=e256]:
+                        - generic [ref=e257]: When
+                        - generic [ref=e258]: cancel, downgrade, refund, leave
+                  - group [ref=e259]:
+                    - generic [ref=e260]:
+                      - generic [ref=e263]:
+                        - img [ref=e265]
+                        - generic [ref=e267]: ACTION
+                      - generic [ref=e268]: Transition → at_risk
+                      - generic [ref=e270]:
+                        - generic [ref=e271]: Tool
+                        - generic [ref=e272]: —
+                      - generic [ref=e273]:
+                        - generic [ref=e274]: Tier
+                        - generic [ref=e275]: Tier 0
+                  - group [ref=e276]:
+                    - generic [ref=e277]:
+                      - generic [ref=e280]:
+                        - img [ref=e282]
+                        - generic [ref=e284]: TRIGGER
+                      - generic [ref=e285]: Explicit human request → escalate
+                      - generic [ref=e286]: message_received
+                      - generic [ref=e288]:
+                        - generic [ref=e289]: When
+                        - generic [ref=e290]: speak to a human, talk to someone, representative, agent please
+                  - group [ref=e291]:
+                    - generic [ref=e292]:
+                      - generic [ref=e295]:
+                        - img [ref=e297]
+                        - generic [ref=e299]: ACTION
+                      - generic [ref=e300]: "Escalate: User asked for a human"
+                      - generic [ref=e302]:
+                        - generic [ref=e303]: Tool
+                        - generic [ref=e304]: —
+                      - generic [ref=e305]:
+                        - generic [ref=e306]: Tier
+                        - generic [ref=e307]: Tier 0
+                  - group [ref=e308]:
+                    - generic [ref=e309]:
+                      - generic [ref=e312]:
+                        - img [ref=e314]
+                        - generic [ref=e316]: TRIGGER
+                      - generic [ref=e317]: User message
+                      - generic [ref=e318]: message_received
+                      - generic [ref=e320]:
+                        - generic [ref=e321]: When
+                        - generic [ref=e322]: always
+                  - group [ref=e323]:
+                    - generic [ref=e324]:
+                      - generic [ref=e327]:
+                        - img [ref=e329]
+                        - generic [ref=e331]: ACTION
+                      - generic [ref=e332]: Action
+                      - generic [ref=e334]:
+                        - generic [ref=e335]: Tool
+                        - generic [ref=e336]: —
+                      - generic [ref=e337]:
+                        - generic [ref=e338]: Tier
+                        - generic [ref=e339]: Tier 0
+                  - group [ref=e340]:
+                    - generic [ref=e341]:
+                      - generic [ref=e344]:
+                        - img [ref=e346]
+                        - generic [ref=e348]: TRIGGER
+                      - generic [ref=e349]: Cancellation intent → move to retention
+                      - generic [ref=e350]: message_received
+                      - generic [ref=e352]:
+                        - generic [ref=e353]: When
+                        - generic [ref=e354]: cancel, downgrade, refund, leave
+                  - group [ref=e355]:
+                    - generic [ref=e356]:
+                      - generic [ref=e359]:
+                        - img [ref=e361]
+                        - generic [ref=e363]: ACTION
+                      - generic [ref=e364]: Transition → at_risk
+                      - generic [ref=e366]:
+                        - generic [ref=e367]: Tool
+                        - generic [ref=e368]: —
+                      - generic [ref=e369]:
+                        - generic [ref=e370]: Tier
+                        - generic [ref=e371]: Tier 0
+                  - group [ref=e372]:
+                    - generic [ref=e373]:
+                      - generic [ref=e376]:
+                        - img [ref=e378]
+                        - generic [ref=e380]: TRIGGER
+                      - generic [ref=e381]: Explicit human request → escalate
+                      - generic [ref=e382]: message_received
+                      - generic [ref=e384]:
+                        - generic [ref=e385]: When
+                        - generic [ref=e386]: speak to a human, talk to someone, representative, agent please
+                  - group [ref=e387]:
+                    - generic [ref=e388]:
+                      - generic [ref=e391]:
+                        - img [ref=e393]
+                        - generic [ref=e395]: ACTION
+                      - generic [ref=e396]: "Escalate: User asked for a human"
+                      - generic [ref=e398]:
+                        - generic [ref=e399]: Tool
+                        - generic [ref=e400]: —
+                      - generic [ref=e401]:
+                        - generic [ref=e402]: Tier
+                        - generic [ref=e403]: Tier 0
+                  - group [ref=e404]:
+                    - generic [ref=e405]:
+                      - generic [ref=e408]:
+                        - img [ref=e410]
+                        - generic [ref=e412]: TRIGGER
+                      - generic [ref=e413]: User message
+                      - generic [ref=e414]: message_received
+                      - generic [ref=e416]:
+                        - generic [ref=e417]: When
+                        - generic [ref=e418]: always
+                  - group [ref=e419]:
+                    - generic [ref=e420]:
+                      - generic [ref=e423]:
+                        - img [ref=e425]
+                        - generic [ref=e427]: ACTION
+                      - generic [ref=e428]: Get Account Status
+                      - generic [ref=e429]: GET /account/status
+                      - generic [ref=e431]:
+                        - generic [ref=e432]: Tool
+                        - generic [ref=e433]: get_account_status
+                      - generic [ref=e434]:
+                        - generic [ref=e435]: Tier
+                        - generic [ref=e436]: Tier 0
+                  - group [ref=e437]:
+                    - generic [ref=e438]:
+                      - generic [ref=e441]:
+                        - img [ref=e443]
+                        - generic [ref=e445]: TRIGGER
+                      - generic [ref=e446]: User message
+                      - generic [ref=e447]: message_received
+                      - generic [ref=e449]:
+                        - generic [ref=e450]: When
+                        - generic [ref=e451]: always
+                  - group [ref=e452]:
+                    - generic [ref=e453]:
+                      - generic [ref=e456]:
+                        - img [ref=e458]
+                        - generic [ref=e460]: ACTION
+                      - generic [ref=e461]: Get Account Status
+                      - generic [ref=e462]: GET /account/status
+                      - generic [ref=e464]:
+                        - generic [ref=e465]: Tool
+                        - generic [ref=e466]: get_account_status
+                      - generic [ref=e467]:
+                        - generic [ref=e468]: Tier
+                        - generic [ref=e469]: Tier 0
+                  - group [ref=e470]:
+                    - generic [ref=e471]:
+                      - generic [ref=e474]:
+                        - img [ref=e476]
+                        - generic [ref=e478]: TRIGGER
+                      - generic [ref=e479]: User message
+                      - generic [ref=e480]: message_received
+                      - generic [ref=e482]:
+                        - generic [ref=e483]: When
+                        - generic [ref=e484]: always
+                  - group [ref=e485]:
+                    - generic [ref=e486]:
+                      - generic [ref=e489]:
+                        - img [ref=e491]
+                        - generic [ref=e493]: ACTION
+                      - generic [ref=e494]: Get Account Status
+                      - generic [ref=e495]: GET /account/status
+                      - generic [ref=e497]:
+                        - generic [ref=e498]: Tool
+                        - generic [ref=e499]: get_account_status
+                      - generic [ref=e500]:
+                        - generic [ref=e501]: Tier
+                        - generic [ref=e502]: Tier 0
+                  - group [ref=e503]:
+                    - generic [ref=e504]:
+                      - generic [ref=e507]:
+                        - img [ref=e509]
+                        - generic [ref=e511]: TRIGGER
+                      - generic [ref=e512]: User message
+                      - generic [ref=e513]: message_received
+                      - generic [ref=e515]:
+                        - generic [ref=e516]: When
+                        - generic [ref=e517]: always
+                  - group [ref=e518]:
+                    - generic [ref=e519]:
+                      - generic [ref=e522]:
+                        - img [ref=e524]
+                        - generic [ref=e526]: ACTION
+                      - generic [ref=e527]: Get Account Status
+                      - generic [ref=e528]: GET /account/status
+                      - generic [ref=e530]:
+                        - generic [ref=e531]: Tool
+                        - generic [ref=e532]: get_account_status
+                      - generic [ref=e533]:
+                        - generic [ref=e534]: Tier
+                        - generic [ref=e535]: Tier 0
+                  - group [ref=e536]:
+                    - generic [ref=e537]:
+                      - generic [ref=e540]:
+                        - img [ref=e542]
+                        - generic [ref=e544]: TRIGGER
+                      - generic [ref=e545]: User message
+                      - generic [ref=e546]: message_received
+                      - generic [ref=e548]:
+                        - generic [ref=e549]: When
+                        - generic [ref=e550]: always
+                  - group [ref=e551]:
+                    - generic [ref=e552]:
+                      - generic [ref=e555]:
+                        - img [ref=e557]
+                        - generic [ref=e559]: ACTION
+                      - generic [ref=e560]: Action
+                      - generic [ref=e562]:
+                        - generic [ref=e563]: Tool
+                        - generic [ref=e564]: —
+                      - generic [ref=e565]:
+                        - generic [ref=e566]: Tier
+                        - generic [ref=e567]: Tier 0
+            - img
+            - generic "Control Panel" [ref=e568]:
+              - button "Zoom In" [ref=e569] [cursor=pointer]:
+                - img [ref=e570]
+              - button "Zoom Out" [disabled]:
+                - img
+              - button "Fit View" [ref=e572] [cursor=pointer]:
+                - img [ref=e573]
+            - img "Mini Map" [ref=e576]
+        - generic [ref=e600]:
+          - generic [ref=e601]:
+            - generic [ref=e602] [cursor=pointer]:
+              - img [ref=e603]
+              - text: Build
+            - generic [ref=e606] [cursor=pointer]:
+              - img [ref=e607]
+              - text: Prompt
+            - generic [ref=e610] [cursor=pointer]:
+              - img [ref=e611]
+              - text: Test
+          - generic [ref=e613]:
+            - generic [ref=e615]: STATE · unverified
+            - generic [ref=e616]: Click a node to edit it, or use the palette to add Trigger / Action / Fallback nodes and wire them.
+            - generic [ref=e617]:
+              - generic [ref=e618]: Label
+              - textbox [ref=e619]: Unverified
+            - generic [ref=e620]:
+              - generic [ref=e621]: Description
+              - textbox [ref=e622]: User has not yet verified their identity.
+            - generic [ref=e623]:
+              - generic [ref=e624]: Persona
+              - textbox [ref=e625]: You are the assistant for Acme Analytics. The user is not verified yet — be welcoming and explain you can help once they confirm their identity via the secure link.
+            - generic [ref=e626]:
+              - generic [ref=e627]: Tone (one per line)
+              - textbox [ref=e628]: Be warm and concise Confirm before changing anything
+            - generic [ref=e629]:
+              - generic [ref=e630]:
+                - generic [ref=e631]: Opening
+                - combobox [ref=e632]:
+                  - option "full intro" [selected]
+                  - option "brief greeting"
+                  - option "skip to intent"
+                  - option "retention mode"
+              - generic [ref=e633]:
+                - generic [ref=e634]: Confirm ≥ tier
+                - combobox [ref=e635]:
+                  - option "0"
+                  - option "1" [selected]
+                  - option "2"
+                  - option "3"
+            - generic [ref=e636]:
+              - generic [ref=e637]: "Confidence floor: 0.60"
+              - slider [ref=e638]: "0.6"
+            - generic [ref=e639]: 10 action nodes wired — these become this state's tools on Save.
+            - generic [ref=e641]:
+              - generic [ref=e642]:
+                - generic [ref=e643]:
+                  - img [ref=e645]
+                  - text: Workflows (9)
+                - button "New" [ref=e649] [cursor=pointer]:
+                  - img [ref=e650]
+                  - text: New
+              - generic [ref=e651]:
+                - generic [ref=e652] [cursor=pointer]:
+                  - generic [ref=e655]: Default workflow
+                  - generic [ref=e656]: 3 triggers · 2 actions · 1 fallback
+                - generic [ref=e657] [cursor=pointer]:
+                  - generic [ref=e658]:
+                    - generic [ref=e660]: "Migrated: User message"
+                    - generic [ref=e661]:
+                      - button "✎" [ref=e662]
+                      - button "✕" [ref=e663]
+                  - generic [ref=e664]: 1 trigger · 1 action
+                - generic [ref=e665] [cursor=pointer]:
+                  - generic [ref=e668]: "Migrated: Cancellation intent → move to retention"
+                  - generic [ref=e669]: 1 trigger · 1 action
+                - generic [ref=e670] [cursor=pointer]:
+                  - generic [ref=e673]: "Migrated: Explicit human request → escalate"
+                  - generic [ref=e674]: 1 trigger · 1 action
+                - generic [ref=e675] [cursor=pointer]:
+                  - generic [ref=e678]: "Migrated: User message"
+                  - generic [ref=e679]: 1 trigger · 1 action
+                - generic [ref=e680] [cursor=pointer]:
+                  - generic [ref=e683]: "Migrated: User message"
+                  - generic [ref=e684]: 1 trigger · 1 action
+                - generic [ref=e685] [cursor=pointer]:
+                  - generic [ref=e688]: "Migrated: User message"
+                  - generic [ref=e689]: 1 trigger · 1 action
+                - generic [ref=e690] [cursor=pointer]:
+                  - generic [ref=e693]: "Migrated: User message"
+                  - generic [ref=e694]: 1 trigger · 1 action
+                - generic [ref=e695] [cursor=pointer]:
+                  - generic [ref=e698]: "Migrated: User message"
+                  - generic [ref=e699]: 1 trigger · 1 action
+  - button "Open Next.js Dev Tools" [ref=e705] [cursor=pointer]:
+    - img [ref=e706]
+  - alert [ref=e711]

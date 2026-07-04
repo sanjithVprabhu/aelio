@@ -54,9 +54,14 @@ describe('ScriptedClient', () => {
     expect(r.content.toLowerCase()).toContain('cancelled');
   });
 
-  it('offers available actions when no intent matches', async () => {
+  it('greets on hello', async () => {
     const r = await c.complete(req('hello there'));
     expect(r.toolCalls).toBeUndefined();
-    expect(r.content).toContain('account status');
+    expect(r.content.toLowerCase()).toContain('hi');
+  });
+
+  it('routes give me account status to get_account_status', async () => {
+    const r = await c.complete(req('give me account status'));
+    expect(r.toolCalls?.[0]?.name).toBe('get_account_status');
   });
 });

@@ -1,0 +1,34 @@
+{
+  "name": "@aelio/convox-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Customer-side Convox SDK — register tools and execute handlers over a persistent Aelio connection",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/mock-server.d.ts",
+      "import": "./dist/testing/mock-server.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "node ./scripts/build.mjs",
+    "lint": "echo 'no lint'",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13"
+  }
+}

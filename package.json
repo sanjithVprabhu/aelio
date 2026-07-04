@@ -14,6 +14,12 @@
     "lint": "turbo lint",
     "dev": "turbo dev",
     "api": "pnpm --filter @aelio/api dev",
+    "demo:backend": "pnpm --filter @aelio/demo-customer-backend dev",
+    "widget:build": "pnpm --filter @aelio/widget-sdk build",
+    "stack": "docker-compose up -d postgres sunjet sunjet-daemon && pnpm widget:build",
+    "demo:live": "pnpm widget:build && echo 'Run: pnpm api:live  (terminal 1)  &&  pnpm demo:backend:live  (terminal 2)'",
+    "api:live": "pnpm --filter @aelio/api start",
+    "demo:backend:live": "pnpm --filter @aelio/demo-customer-backend start",
     "demo": "pnpm --filter @aelio/api demo",
     "clean": "turbo clean && rm -rf node_modules"
   },

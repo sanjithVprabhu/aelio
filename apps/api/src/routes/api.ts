@@ -1,8 +1,18 @@
 import { maskSecret } from '@aelio/crypto';
 import { Errors } from '@aelio/errors';
+import { verifyIdentityToken } from '@aelio/convox-sdk';
+import { ChannelType } from '@aelio/types';
 import type { FastifyInstance } from 'fastify';
-import type { Container } from '../container.js';
+import { rebuildRuntime, type Container } from '../container.js';
 import { normalizeWebChat } from '../channel/normalize.js';
+import {
+  buildObjectiveStatus,
+  findStateManifest,
+  readConvoxPhase,
+} from '../convox/state-engine.js';
+import { randomUUID } from 'node:crypto';
+import { externalUserIdFromSession } from '@aelio/demo-saas';
+import { getDemoSaasStore } from '../demo-saas/singleton.js';
 
 /** All JSON API routes. Tenant is resolved by slug; every query is tenant-scoped. */
 export function registerApiRoutes(app: FastifyInstance, c: Container): void {
@@ -11,12 +21,16 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
     if (!t) throw Errors.tenantNotFound(slug);
     return t;
   };
+  const externalUserIdForSession = (sessionId: string) => `ext_${sessionId.replace(/[^a-zA-Z0-9]/g, '_')}`;
 
   app.get('/healthz', async () => ({ status: 'ok', uptime: process.uptime() }));
   app.get('/readyz', async () => ({
     status: 'ready',
     tenants: c.store.listTenants().length,
     llm: process.env.LLM_PROVIDER ?? 'scripted',
+    memoryEngine: process.env.MEMORY_ENGINE ?? (process.env.SUNJET_URL ? 'sunjet' : 'postgres'),
+    sunjet: c.sunjet ? await c.sunjet.health().catch(() => ({ status: 'down' })) : null,
+    sunjetDaemon: c.sunjet ? await c.sunjet.daemonHealth() : null,
   }));
 
   // ---- Tenants ----
@@ -31,12 +45,82 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
     })),
   );
 
+  const daemonKey = process.env.SUNJET_DAEMON_API_KEYS?.split(',')[0]?.trim();
+
+  // ---- Internal: memory rollup (called by sunjet-daemon) ----
+  app.post('/api/v1/internal/memory/rollup', async (req, reply) => {
+    const auth = req.headers.authorization ?? '';
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+    if (daemonKey && token !== daemonKey) {
+      reply.code(401);
+      return { ok: false, error: 'unauthorized' };
+    }
+    const result = await c.memory.rollupLayers();
+    return { ok: true, ...result };
+  });
+
+  // ---- Widget identity assertion (Convox SDK signIdentity) ----
+  app.post<{ Params: { slug: string }; Body: { identityToken: string } }>(
+    '/api/v1/chat/:slug/identify',
+    async (req) => {
+      const tenant = tenantBySlug(req.params.slug);
+      const token = req.body?.identityToken;
+      if (!token || typeof token !== 'string') {
+        throw Errors.validation({ identityToken: 'required' });
+      }
+      const apiKey = c.store.getTenantApiKey(tenant.id);
+      if (!apiKey) throw Errors.internal('Convox API key not configured for tenant.');
+      const assertion = verifyIdentityToken(token, apiKey);
+      if (assertion.tenantId !== tenant.slug) {
+        throw Errors.unauthorized('Identity token tenant mismatch.');
+      }
+      const { identity, session } = await c.identity.bindIdentityAssertion(
+        tenant.id,
+        ChannelType.WebChat,
+        assertion,
+      );
+      return {
+        ok: true,
+        identityId: identity.id,
+        sessionId: session.id,
+        verified: true,
+      };
+    },
+  );
+
+  // ---- Objective flows (admin CRUD) ----
+  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/flows', async (req) => {
+    const tenant = tenantBySlug(req.params.slug);
+    return c.flowStore.listAll(tenant.id);
+  });
+
+  app.put<{
+    Params: { slug: string };
+    Body: { objectiveKey: string; stateKey: string; steps: Array<{ order: number; toolKey?: string; prompt?: string }>; approved?: boolean; id?: string };
+  }>('/api/v1/t/:slug/flows', async (req) => {
+    const tenant = tenantBySlug(req.params.slug);
+    const { objectiveKey, stateKey, steps, approved, id } = req.body ?? {};
+    if (!objectiveKey || !stateKey || !Array.isArray(steps)) {
+      throw Errors.validation({ objectiveKey: 'required', stateKey: 'required', steps: 'required' });
+    }
+    const record = await c.flowStore.upsert(tenant.id, { id, objectiveKey, stateKey, steps, approved });
+    c.flows = await c.flowStore.listApproved(tenant.id);
+    rebuildRuntime(c, tenant);
+    return record;
+  });
+
   // ---- Live web chat (the runtime ingress) ----
   app.post<{ Params: { slug: string }; Body: { sessionId: string; text: string } }>(
     '/api/v1/chat/:slug/message',
     async (req) => {
       const tenant = tenantBySlug(req.params.slug);
-      const { sessionId, text } = req.body;
+      const { sessionId, text } = req.body ?? {};
+      if (!sessionId || typeof sessionId !== 'string') {
+        throw Errors.validation({ sessionId: 'required' });
+      }
+      if (!text || typeof text !== 'string') {
+        throw Errors.validation({ text: 'required' });
+      }
       const inbound = normalizeWebChat(tenant.id, sessionId, text);
       const result = await c.runtime.handleInbound(inbound);
       return result;
@@ -59,6 +143,174 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
     return { ok: false, error: 'Unrecognized link' };
   });
 
+  // ---- Dev helper: live Convox tool catalog for a tenant ----
+  app.get<{ Params: { slug: string } }>('/api/v1/dev/convox/:slug/tools', async (req) => {
+    const tenant = tenantBySlug(req.params.slug);
+    c.convoxBridge.syncFromRegistry(tenant.id);
+    const actions = c.store.listExposedActions(tenant.id);
+    return {
+      ok: true,
+      slug: req.params.slug,
+      liveTools: c.convox.listTools(tenant.id),
+      liveStates: c.convox.listStates(tenant.id),
+      liveFlows: c.convox.listFlows(tenant.id),
+      connections: c.convox.listConnections(tenant.id).length,
+      curatedActions: actions.map((a) => a.key),
+      policies: actions.map((a) => ({
+        key: a.key,
+        tier: a.tier,
+        exposed: a.exposed,
+        stepUpRequired: a.stepUpRequired,
+        rateLimitPerUserPerHour: a.rateLimitPerUserPerHour,
+      })),
+      approvedFlows: c.flows.map((f) => ({
+        stateKey: f.stateKey,
+        objectiveKey: f.objectiveKey,
+        steps: f.steps.length,
+      })),
+    };
+  });
+
+  // ---- Dev helper: guided phase + objectives for a widget session ----
+  app.get<{ Params: { slug: string; sessionId: string } }>(
+    '/api/v1/dev/convox/:slug/session/:sessionId/phase',
+    async (req) => {
+      const tenant = tenantBySlug(req.params.slug);
+      const ic = c.store.findIdentityChannel(
+        tenant.id,
+        ChannelType.WebChat,
+        req.params.sessionId,
+      );
+      if (!ic) {
+        return { ok: false, reason: 'no_session', sessionId: req.params.sessionId };
+      }
+      const conv = c.store.findActiveConversation(tenant.id, ic.identityId);
+      const states = c.convox.listStates(tenant.id);
+      const phase = conv ? readConvoxPhase(conv.metadata) : undefined;
+      const manifest = phase ? findStateManifest(states, phase.currentState) : undefined;
+      return {
+        ok: true,
+        sessionId: req.params.sessionId,
+        conversationId: conv?.id,
+        liveStates: states.map((s) => s.key),
+        convoxPhase: phase,
+        objectives: phase ? buildObjectiveStatus(manifest, phase) : [],
+        currentStateGuidance: manifest?.guidance,
+      };
+    },
+  );
+
+  // ---- Dev helper: read mock SaaS account via live Convox handler ----
+  app.post<{ Params: { slug: string }; Body: { sessionId: string } }>(
+    '/api/v1/dev/demo/:slug/account',
+    async (req) => {
+      const tenant = tenantBySlug(req.params.slug);
+      const sessionId = req.body?.sessionId;
+      if (!sessionId || typeof sessionId !== 'string') {
+        throw Errors.validation({ sessionId: 'required' });
+      }
+      const apiKey = c.store.getTenantApiKey(tenant.id);
+      if (!apiKey) throw Errors.internal('Convox API key not configured for tenant.');
+      const externalUserId = externalUserIdForSession(sessionId);
+      const data = await c.convox.execute(
+        tenant.id,
+        apiKey,
+        {
+          tool: 'get_account_status',
+          args: {},
+          context: {
+            invocationId: `dev_${randomUUID()}`,
+            tenantId: tenant.slug,
+            externalUserId,
+            verified: true,
+            stepUpValid: false,
+          },
+        },
+      );
+      return { ok: true, sessionId, externalUserId, account: data };
+    },
+  );
+
+  // ---- Dev helper: Postgres-backed SaaS snapshot (direct DB read) ----
+  app.get<{ Params: { slug: string }; Querystring: { sessionId?: string } }>(
+    '/api/v1/dev/demo/:slug/saas',
+    async (req, reply) => {
+      tenantBySlug(req.params.slug);
+      const sessionId = req.query.sessionId;
+      if (!sessionId || typeof sessionId !== 'string') {
+        throw Errors.validation({ sessionId: 'required query param' });
+      }
+      const store = await getDemoSaasStore();
+      if (!store) {
+        reply.code(503);
+        return { ok: false, error: 'DATABASE_URL not configured' };
+      }
+      const externalUserId = externalUserIdFromSession(sessionId);
+      const snapshot = await store.getSnapshot(externalUserId);
+      return { ok: true, sessionId, externalUserId, ...snapshot };
+    },
+  );
+
+  app.post<{ Params: { slug: string }; Body: { sessionId: string } }>(
+    '/api/v1/dev/demo/:slug/reset',
+    async (req, reply) => {
+      tenantBySlug(req.params.slug);
+      const sessionId = req.body?.sessionId;
+      if (!sessionId || typeof sessionId !== 'string') {
+        throw Errors.validation({ sessionId: 'required' });
+      }
+      const store = await getDemoSaasStore();
+      if (!store) {
+        reply.code(503);
+        return { ok: false, error: 'DATABASE_URL not configured' };
+      }
+      const externalUserId = externalUserIdFromSession(sessionId);
+      await store.resetAccount(externalUserId);
+      const snapshot = await store.getSnapshot(externalUserId);
+      return { ok: true, sessionId, externalUserId, ...snapshot };
+    },
+  );
+
+  app.delete<{
+    Params: { slug: string; reportId: string };
+    Querystring: { sessionId?: string };
+  }>('/api/v1/dev/demo/:slug/reports/:reportId', async (req, reply) => {
+    tenantBySlug(req.params.slug);
+    const sessionId = req.query.sessionId;
+    if (!sessionId || typeof sessionId !== 'string') {
+      throw Errors.validation({ sessionId: 'required query param' });
+    }
+    const store = await getDemoSaasStore();
+    if (!store) {
+      reply.code(503);
+      return { ok: false, error: 'DATABASE_URL not configured' };
+    }
+    const externalUserId = externalUserIdFromSession(sessionId);
+    const deleted = await store.deleteReport(externalUserId, req.params.reportId);
+    const snapshot = await store.getSnapshot(externalUserId);
+    return { ok: deleted, sessionId, externalUserId, ...snapshot };
+  });
+
+  app.delete<{
+    Params: { slug: string; member: string };
+    Querystring: { sessionId?: string };
+  }>('/api/v1/dev/demo/:slug/shares/:member', async (req, reply) => {
+    tenantBySlug(req.params.slug);
+    const sessionId = req.query.sessionId;
+    if (!sessionId || typeof sessionId !== 'string') {
+      throw Errors.validation({ sessionId: 'required query param' });
+    }
+    const store = await getDemoSaasStore();
+    if (!store) {
+      reply.code(503);
+      return { ok: false, error: 'DATABASE_URL not configured' };
+    }
+    const externalUserId = externalUserIdFromSession(sessionId);
+    const result = await store.revokeShare(externalUserId, decodeURIComponent(req.params.member));
+    const snapshot = await store.getSnapshot(externalUserId);
+    return { ok: result.revoked, sessionId, externalUserId, ...snapshot };
+  });
+
   // ---- Actions (policy surface) ----
   app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/actions', async (req) => {
     const t = tenantBySlug(req.params.slug);
@@ -74,40 +326,6 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
       rateLimitPerUserPerHour: a.rateLimitPerUserPerHour,
       description: a.description,
     }));
-  });
-
-  // ---- Playbook ----
-  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/playbook', async (req) => {
-    const t = tenantBySlug(req.params.slug);
-    const p = c.store.findActivePlaybook(t.id);
-    if (!p) return null;
-    return {
-      id: p.id,
-      version: p.version,
-      status: p.status,
-      defaultState: p.lifecycle.defaultState,
-      states: p.lifecycle.states.map((s) => ({
-        key: s.key,
-        label: s.label,
-        description: s.description,
-        persona: s.behavior.persona,
-        toneGuidelines: s.behavior.toneGuidelines,
-        openingBehavior: s.behavior.openingBehavior,
-        allowedActions: s.behavior.allowedActionKeys,
-        kbScopeIds: s.behavior.kbScopeIds,
-        confidenceFloor: s.behavior.confidenceFloor,
-        requireConfirmationForTier: s.behavior.requireConfirmationForTier,
-      })),
-      triggers: p.triggers.map((tr) => ({
-        id: tr.id,
-        label: tr.label,
-        enabled: tr.enabled,
-        event: tr.event,
-        condition: tr.condition,
-        action: tr.action,
-      })),
-      fallbackLadder: p.fallbackLadder,
-    };
   });
 
   // ---- Conversations + turns ----
@@ -221,29 +439,6 @@ export function registerApiRoutes(app: FastifyInstance, c: Container): void {
     }));
   });
 
-  // ---- Spec ingestion ----
-  app.post<{ Params: { slug: string }; Body: { raw: string; baseUrl?: string; exposeAll?: boolean } }>(
-    '/api/v1/t/:slug/specs',
-    async (req, reply) => {
-      const t = tenantBySlug(req.params.slug);
-      const { result } = c.specService.ingest({
-        tenantId: t.id,
-        raw: req.body.raw,
-        baseUrl: req.body.baseUrl,
-        exposeAll: req.body.exposeAll,
-      });
-      if (result.errors.length) {
-        reply.code(422);
-        return { errors: result.errors };
-      }
-      return {
-        format: result.format,
-        actionCount: result.parsedActions.length,
-        warnings: result.warnings,
-        actions: result.parsedActions.map((a) => ({ key: a.key, tier: a.suggestedTier })),
-      };
-    },
-  );
 }
 
 const SECRET_FIELDS = ['accessToken', 'authToken', 'botToken', 'signingSecret', 'webhookVerifyToken'];

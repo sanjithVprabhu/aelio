@@ -24,7 +24,11 @@ export interface Config {
 
   ANTHROPIC_API_KEY?: string;
   OPENAI_API_KEY?: string;
+  /** Preferred Google Gemini key (also accepts legacy GOOGLE_AI_API_KEY). */
+  GEMINI_API_KEY?: string;
   GOOGLE_AI_API_KEY?: string;
+  EMBEDDING_PROVIDER?: 'hash' | 'openai' | 'google' | 'gemini';
+  EMBEDDING_MODEL?: string;
 
   /** When unset, the platform uses the deterministic scripted LLM provider. */
   LLM_PROVIDER: 'anthropic' | 'openai' | 'google' | 'scripted';
@@ -79,11 +83,20 @@ const SPEC: Record<keyof Config, FieldSpec> = {
   },
   ANTHROPIC_API_KEY: { required: false },
   OPENAI_API_KEY: { required: false },
+  GEMINI_API_KEY: { required: false },
   GOOGLE_AI_API_KEY: { required: false },
+  EMBEDDING_PROVIDER: { required: false },
+  EMBEDDING_MODEL: { required: false },
   LLM_PROVIDER: {
     required: false,
     // Default to a real provider only if a key is present, else scripted.
-    default: (env) => (env.ANTHROPIC_API_KEY ? 'anthropic' : 'scripted'),
+    default: (env) => {
+      if (env.LLM_PROVIDER) return env.LLM_PROVIDER;
+      if (env.ANTHROPIC_API_KEY) return 'anthropic';
+      if (env.OPENAI_API_KEY) return 'openai';
+      if (env.GEMINI_API_KEY || env.GOOGLE_AI_API_KEY) return 'google';
+      return 'scripted';
+    },
     validate: (v) =>
       ['anthropic', 'openai', 'google', 'scripted'].includes(v as string)
         ? null
@@ -91,7 +104,14 @@ const SPEC: Record<keyof Config, FieldSpec> = {
   },
   LLM_MODEL: {
     required: false,
-    default: 'claude-sonnet-4-6',
+    default: (env) => {
+      if (env.LLM_MODEL) return env.LLM_MODEL;
+      if (env.LLM_PROVIDER === 'openai' || env.OPENAI_API_KEY) return 'gpt-4o';
+      if (env.LLM_PROVIDER === 'google' || env.GEMINI_API_KEY || env.GOOGLE_AI_API_KEY) {
+        return 'gemini-2.5-flash';
+      }
+      return 'claude-sonnet-4-6';
+    },
   },
 };
 

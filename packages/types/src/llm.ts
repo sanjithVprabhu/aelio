@@ -30,6 +30,8 @@ export interface LLMToolResult {
 export interface LLMMessage {
   role: 'user' | 'assistant' | 'system' | 'tool';
   content: string | LLMToolResult[];
+  /** Required on assistant turns that invoked tools (OpenAI tool_calls replay). */
+  toolCalls?: LLMToolCall[];
 }
 
 export interface LLMRequest {

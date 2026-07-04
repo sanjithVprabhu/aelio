@@ -12,6 +12,8 @@ export interface LogContext {
   spanId?: string;
   channelType?: string;
   playbookId?: string;
+  component?: string;
+  engine?: string;
 }
 
 type Level = 'debug' | 'info' | 'warn' | 'error';

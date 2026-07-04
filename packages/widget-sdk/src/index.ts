@@ -41,12 +41,23 @@ export interface AelioConfig {
   tenantSlug: string;
   /** Base URL of the Aelio API, e.g. `"https://api.aelio.com"`. */
   apiBaseUrl: string;
+  /**
+   * Optional pre-signed identity token or async provider. When supplied, the
+   * widget will bind the visitor session to a trusted customer identity before
+   * sending messages.
+   */
+  identityToken?: string;
+  identityTokenProvider?: (sessionId: string) => string | null | Promise<string | null>;
   /** Optional accent color (hex/CSS color). Defaults to brand black. */
   accentColor?: string;
   /** Optional panel header title. Defaults to the brand wordmark. */
   widgetName?: string;
   /** Optional launcher label. Defaults to `"Chat"`. */
   launcherText?: string;
+  /** Optional selector or element to mount into instead of `document.body`. */
+  container?: string | HTMLElement;
+  /** Optional inline mode for embedded harnesses rather than floating launchers. */
+  inline?: boolean;
 }
 
 /** The kinds of reply the server can send back. */
@@ -60,12 +71,29 @@ export interface Reply {
   url?: string;
 }
 
+/** Guided objective progress returned with Convox phase state. */
+export interface ObjectiveStatus {
+  key: string;
+  description: string;
+  completed: boolean;
+}
+
+/** Persisted Convox phase snapshot from the runtime. */
+export interface ConvoxPhase {
+  currentState: string;
+  confidence: number;
+  reason?: string;
+  completedObjectives: string[];
+}
+
 /** Shape of the JSON response returned by the chat API. */
 export interface ChatResponse {
   replies: Reply[];
   state: string;
   actions: string[];
   needsVerification: boolean;
+  convoxPhase?: ConvoxPhase;
+  objectives?: ObjectiveStatus[];
 }
 
 /** Which side of the conversation a bubble belongs to. */
@@ -185,15 +213,112 @@ export function renderStateChipHtml(state: string): string {
   return `<span class="state-chip">${escapeHtml(state)}</span>`;
 }
 
+/** Build the guided objectives strip shown under the header when states are active. */
+export function renderObjectivesHtml(objectives: ObjectiveStatus[]): string {
+  if (!objectives.length) return '';
+  const items = objectives
+    .map((o) => {
+      const mark = o.completed ? '✓' : '○';
+      const cls = o.completed ? 'objective done' : 'objective';
+      return `<li class="${cls}"><span class="mark">${mark}</span><span class="label">${escapeHtml(o.description)}</span></li>`;
+    })
+    .join('');
+  return `<ul class="objectives" aria-label="Guided objectives">${items}</ul>`;
+}
+
 /** Build the request body POSTed to the chat endpoint. */
 export function buildMessageBody(sessionId: string, text: string): { sessionId: string; text: string } {
   return { sessionId, text };
 }
 
+/** Build the request body POSTed to the identity endpoint. */
+export function buildIdentityBody(identityToken: string): { identityToken: string } {
+  return { identityToken };
+}
+
+/**
+ * Resolve `data-api` to an absolute API origin. Relative values like `.` or `/`
+ * are resolved against the embedding page URL so `/customer-demo` still hits
+ * the server root, not `/customer-demo/api/...`.
+ */
+export function resolveApiBase(apiBaseUrl: string, pageUrl?: string): string {
+  const trimmed = apiBaseUrl.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed.replace(/\/+$/, '');
+  }
+  if (pageUrl) {
+    const href = new URL(pageUrl).href;
+    const resolved = new URL(trimmed || '.', href).href.replace(/\/+$/, '');
+    return resolved;
+  }
+  if (trimmed === '.' || trimmed === '' || trimmed === '/') return '';
+  return trimmed.replace(/\/+$/, '');
+}
+
 /** Compose the chat message endpoint URL for a tenant. */
-export function messageEndpoint(apiBaseUrl: string, tenantSlug: string): string {
-  const base = apiBaseUrl.replace(/\/+$/, '');
-  return `${base}/api/v1/chat/${encodeURIComponent(tenantSlug)}/message`;
+export function messageEndpoint(
+  apiBaseUrl: string,
+  tenantSlug: string,
+  pageUrl?: string,
+): string {
+  const base = resolveApiBase(apiBaseUrl, pageUrl);
+  const path = `/api/v1/chat/${encodeURIComponent(tenantSlug)}/message`;
+  if (!base) return path;
+  return `${base}${path}`;
+}
+
+/** Compose the chat identity endpoint URL for a tenant. */
+export function identifyEndpoint(
+  apiBaseUrl: string,
+  tenantSlug: string,
+  pageUrl?: string,
+): string {
+  const base = resolveApiBase(apiBaseUrl, pageUrl);
+  const path = `/api/v1/chat/${encodeURIComponent(tenantSlug)}/identify`;
+  if (!base) return path;
+  return `${base}${path}`;
+}
+
+function parseObjectives(raw: unknown): ObjectiveStatus[] {
+  if (!Array.isArray(raw)) return [];
+  const out: ObjectiveStatus[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object') continue;
+    const o = item as Record<string, unknown>;
+    if (typeof o.key !== 'string' || typeof o.description !== 'string') continue;
+    out.push({
+      key: o.key,
+      description: o.description,
+      completed: o.completed === true,
+    });
+  }
+  return out;
+}
+
+function parseConvoxPhase(raw: unknown): ConvoxPhase | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const p = raw as Record<string, unknown>;
+  if (typeof p.currentState !== 'string') return undefined;
+  return {
+    currentState: p.currentState,
+    confidence: typeof p.confidence === 'number' ? p.confidence : 0.5,
+    reason: typeof p.reason === 'string' ? p.reason : undefined,
+    completedObjectives: Array.isArray(p.completedObjectives)
+      ? p.completedObjectives.filter((x): x is string => typeof x === 'string')
+      : [],
+  };
+}
+
+function parseActionKeys(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  const keys: string[] = [];
+  for (const item of raw) {
+    if (typeof item === 'string') keys.push(item);
+    else if (item && typeof item === 'object' && typeof (item as Record<string, unknown>).key === 'string') {
+      keys.push((item as Record<string, unknown>).key as string);
+    }
+  }
+  return keys;
 }
 
 /** Normalize a raw API payload into a strongly-typed {@link ChatResponse}. */
@@ -202,11 +327,11 @@ export function normalizeChatResponse(raw: unknown): ChatResponse {
   const rawReplies = Array.isArray(obj['replies']) ? (obj['replies'] as unknown[]) : [];
   const replies = rawReplies.map(classifyReply);
   const state = typeof obj['state'] === 'string' ? (obj['state'] as string) : '';
-  const actions = Array.isArray(obj['actions'])
-    ? (obj['actions'] as unknown[]).filter((a): a is string => typeof a === 'string')
-    : [];
+  const actions = parseActionKeys(obj['actions']);
   const needsVerification = obj['needsVerification'] === true;
-  return { replies, state, actions, needsVerification };
+  const convoxPhase = parseConvoxPhase(obj['convoxPhase']);
+  const objectives = parseObjectives(obj['objectives']);
+  return { replies, state, actions, needsVerification, convoxPhase, objectives };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -225,6 +350,9 @@ export function buildStylesheet(accent: string): string {
   position: fixed; bottom: 20px; right: 20px; z-index: 2147483000;
   font-family: ${TOKENS.font};
 }
+.root.inline {
+  position: absolute; inset: 24px;
+}
 .launcher {
   display: inline-flex; align-items: center; gap: 8px;
   background: ${accent}; color: ${TOKENS.white};
@@ -239,6 +367,11 @@ export function buildStylesheet(accent: string): string {
   background: ${TOKENS.white}; border-radius: 16px; overflow: hidden;
   box-shadow: 0 12px 48px rgba(10,10,10,0.28); border: 1px solid ${TOKENS.cream};
 }
+.root.inline .panel {
+  display: flex;
+  width: 100%; max-width: none; height: 100%; max-height: none;
+}
+.root.inline .launcher { display: none; }
 .root.open .panel { display: flex; }
 .root.open .launcher { display: none; }
 .header {
@@ -252,6 +385,20 @@ export function buildStylesheet(accent: string): string {
   border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 600;
   text-transform: capitalize;
 }
+.objectives-wrap {
+  background: ${TOKENS.cream}; border-bottom: 1px solid rgba(10,10,10,0.08);
+  padding: 8px 12px 10px;
+}
+.objectives {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 4px;
+}
+.objective {
+  display: grid; grid-template-columns: 16px 1fr; gap: 8px; align-items: start;
+  font-size: 11px; line-height: 1.35; color: ${TOKENS.black};
+}
+.objective.done { opacity: 0.55; }
+.objective .mark { font-size: 10px; font-weight: 700; color: ${accent}; }
+.objective .label { color: ${TOKENS.black}; }
 .close { background: transparent; border: none; color: ${TOKENS.white}; cursor: pointer; font-size: 18px; line-height: 1; }
 .messages { flex: 1; overflow-y: auto; padding: 16px; background: ${TOKENS.cream}; display: flex; flex-direction: column; gap: 10px; }
 .msg { display: flex; flex-direction: column; max-width: 85%; }
@@ -299,9 +446,13 @@ function resolveConfig(config: AelioConfig): Required<AelioConfig> {
   return {
     tenantSlug: config.tenantSlug,
     apiBaseUrl: config.apiBaseUrl,
+    identityToken: config.identityToken ?? '',
+    identityTokenProvider: config.identityTokenProvider ?? (() => null),
     accentColor: config.accentColor ?? DEFAULT_ACCENT,
     widgetName: config.widgetName ?? TOKENS.wordmark,
     launcherText: config.launcherText ?? 'Chat',
+    container: config.container ?? '',
+    inline: config.inline ?? false,
   };
 }
 
@@ -318,9 +469,12 @@ export class AelioWidget {
   private rootEl: HTMLElement | null = null;
   private messagesEl: HTMLElement | null = null;
   private stateChipEl: HTMLElement | null = null;
+  private objectivesEl: HTMLElement | null = null;
   private inputEl: HTMLInputElement | null = null;
   private sendBtn: HTMLButtonElement | null = null;
   private mounted = false;
+  private identified = false;
+  private identifyPromise: Promise<void> | null = null;
 
   constructor(config: AelioConfig) {
     if (!config || !config.tenantSlug || !config.apiBaseUrl) {
@@ -363,6 +517,22 @@ export class AelioWidget {
     this.mounted = false;
   }
 
+  /** Bind the current visitor session to a signed customer identity token. */
+  async identify(identityToken: string): Promise<void> {
+    const token = identityToken.trim();
+    if (!token) throw new Error('[aelio] identity token is required');
+    if (this.identified) return;
+    if (this.identifyPromise) return this.identifyPromise;
+    this.identifyPromise = this.postIdentity(token)
+      .then(() => {
+        this.identified = true;
+      })
+      .finally(() => {
+        this.identifyPromise = null;
+      });
+    return this.identifyPromise;
+  }
+
   /* ----------------------------- internals ------------------------------ */
 
   private hasDom(): boolean {
@@ -401,18 +571,19 @@ export class AelioWidget {
     root.appendChild(style);
 
     const rootEl = document.createElement('div');
-    rootEl.className = 'root';
+    rootEl.className = this.config.inline ? 'root inline open' : 'root';
     rootEl.innerHTML = this.shellHtml();
     root.appendChild(rootEl);
 
-    if (document.body) document.body.appendChild(host);
-    else document.documentElement.appendChild(host);
+    const mountParent = this.resolveMountParent();
+    mountParent.appendChild(host);
 
     this.host = host;
     this.root = root;
     this.rootEl = rootEl;
     this.messagesEl = root.querySelector('.messages');
     this.stateChipEl = root.querySelector('.header-right');
+    this.objectivesEl = root.querySelector('.objectives-wrap');
     this.inputEl = root.querySelector('.composer input');
     this.sendBtn = root.querySelector('.composer button');
 
@@ -433,6 +604,7 @@ export class AelioWidget {
       <button class="close" type="button" aria-label="Close chat">&times;</button>
     </span>
   </div>
+  <div class="objectives-wrap" hidden></div>
   <div class="messages" aria-live="polite"></div>
   <div class="brand">Powered by ${escapeHtml(TOKENS.wordmark)}</div>
   <form class="composer">
@@ -440,6 +612,17 @@ export class AelioWidget {
     <button type="submit">Send</button>
   </form>
 </div>`.trim();
+  }
+
+  private resolveMountParent(): HTMLElement {
+    const container = this.config.container;
+    if (container instanceof HTMLElement) return container;
+    if (typeof container === 'string' && container) {
+      const found = document.querySelector(container);
+      if (found instanceof HTMLElement) return found;
+    }
+    if (document.body) return document.body;
+    return document.documentElement as HTMLElement;
   }
 
   private wireEvents(root: ShadowRoot): void {
@@ -459,24 +642,55 @@ export class AelioWidget {
     if (this.inputEl) this.inputEl.value = '';
     this.setBusy(true);
     try {
+      await this.ensureIdentity();
       const res = await this.postMessage(text);
       this.updateStateChip(res.state);
+      this.updateObjectives(res.objectives ?? []);
       for (const reply of res.replies) this.appendMessage('bot', reply);
       if (res.replies.length === 0) {
         this.appendMessage('bot', { kind: 'text', text: '…' });
       }
-    } catch {
+    } catch (err) {
+      const detail =
+        err instanceof Error
+          ? err.message.replace(/^\[aelio\]\s*/, '')
+          : 'request failed';
       this.appendMessage('bot', {
         kind: 'text',
-        text: 'Sorry — something went wrong. Please try again.',
+        text: `Sorry, ${detail}. Please try again or contact support if the problem continues.`,
       });
     } finally {
       this.setBusy(false);
     }
   }
 
+  private async ensureIdentity(): Promise<void> {
+    if (this.identified) return;
+    const inlineToken = this.config.identityToken.trim();
+    if (inlineToken) {
+      await this.identify(inlineToken);
+      return;
+    }
+    const provided = await this.config.identityTokenProvider(this.sessionId);
+    const token = typeof provided === 'string' ? provided.trim() : '';
+    if (!token) return;
+    await this.identify(token);
+  }
+
+  private async postIdentity(identityToken: string): Promise<void> {
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+    const url = identifyEndpoint(this.config.apiBaseUrl, this.config.tenantSlug, pageUrl);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(buildIdentityBody(identityToken)),
+    });
+    if (!response.ok) throw new Error(`[aelio] identity request failed: ${response.status}`);
+  }
+
   private async postMessage(text: string): Promise<ChatResponse> {
-    const url = messageEndpoint(this.config.apiBaseUrl, this.config.tenantSlug);
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+    const url = messageEndpoint(this.config.apiBaseUrl, this.config.tenantSlug, pageUrl);
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -506,6 +720,17 @@ export class AelioWidget {
     tmp.innerHTML = renderStateChipHtml(state);
     const chip = tmp.firstElementChild;
     if (chip) this.stateChipEl.insertBefore(chip, close);
+  }
+
+  private updateObjectives(objectives: ObjectiveStatus[]): void {
+    if (!this.objectivesEl) return;
+    if (!objectives.length) {
+      this.objectivesEl.hidden = true;
+      this.objectivesEl.innerHTML = '';
+      return;
+    }
+    this.objectivesEl.hidden = false;
+    this.objectivesEl.innerHTML = renderObjectivesHtml(objectives);
   }
 
   private setBusy(busy: boolean): void {

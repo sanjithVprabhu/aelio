@@ -1,64 +1,45 @@
-import { apiGet, tenantPath, AuditEvent } from '../lib/api';
-import { OfflineState, fmtDate } from '../components/ui';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { AppShell } from '../components/Rail';
+import { useApi, PageBody, PageHead, Loading, ErrorState, Empty, TableWrap, th, td } from '../components/data';
 
-function summarizePayload(payload: unknown): string {
-  if (payload == null) return '—';
-  if (typeof payload === 'string') return payload;
-  try {
-    const s = JSON.stringify(payload);
-    return s.length > 120 ? s.slice(0, 120) + '…' : s;
-  } catch {
-    return String(payload);
-  }
-}
-
-export default async function AuditPage() {
-  const res = await apiGet<AuditEvent[]>(tenantPath('/audit'));
-
+export default function AuditPage() {
+  const { data, loading, error, reload } = useApi<any[]>('/audit');
   return (
-    <>
-      <div className="page-head">
-        <h2>Audit log</h2>
-        <p>Immutable event stream of policy decisions, actions, and escalations.</p>
-      </div>
-
-      {!res.ok ? (
-        <OfflineState error={res.error} />
-      ) : res.data.length === 0 ? (
-        <div className="empty">
-          <h3>No audit events</h3>
-          <p>Events are recorded as the assistant takes actions.</p>
-        </div>
-      ) : (
-        <div className="table-wrap">
-          <table>
+    <AppShell title="Audit log" breadcrumb="Observe">
+      <PageBody>
+        <PageHead title="Audit log" sub="A record of every privileged action and configuration change." />
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <ErrorState message={error} onRetry={reload} />
+        ) : !data || data.length === 0 ? (
+          <Empty title="No audit events yet" hint="Configuration changes and action invocations will be logged here." />
+        ) : (
+          <TableWrap>
             <thead>
               <tr>
-                <th>Event</th>
-                <th>Conversation</th>
-                <th>Detail</th>
-                <th>At</th>
+                <th style={th}>When</th>
+                <th style={th}>Actor</th>
+                <th style={th}>Event</th>
+                <th style={th}>Detail</th>
               </tr>
             </thead>
             <tbody>
-              {res.data.map((e) => (
-                <tr key={e.id}>
-                  <td>
-                    <span className="badge badge-soft">{e.eventType}</span>
+              {data.map((e, i) => (
+                <tr key={e.id || i}>
+                  <td style={{ ...td, color: 'var(--ink-45)', whiteSpace: 'nowrap' }}>{e.createdAt || e.timestamp ? new Date(e.createdAt || e.timestamp).toLocaleString() : '—'}</td>
+                  <td style={td}>{e.actor || e.actorEmail || e.userId || 'system'}</td>
+                  <td style={td}>
+                    <span style={{ fontSize: 11.5, fontWeight: 600, fontFamily: 'ui-monospace, monospace' }}>{e.event || e.action || e.type || '—'}</span>
                   </td>
-                  <td className="mono">{e.conversationId || '—'}</td>
-                  <td className="mono muted" style={{ maxWidth: 380 }}>
-                    {summarizePayload(e.payload)}
-                  </td>
-                  <td className="muted">{fmtDate(e.at)}</td>
+                  <td style={{ ...td, color: 'var(--ink-70)' }}>{typeof e.detail === 'object' ? JSON.stringify(e.detail) : e.detail || e.description || '—'}</td>
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-      )}
-    </>
+          </TableWrap>
+        )}
+      </PageBody>
+    </AppShell>
   );
 }

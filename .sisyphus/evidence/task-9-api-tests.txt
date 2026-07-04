@@ -1,0 +1,21 @@
+
+> @aelio/api@0.1.0 test /home/sanjith/SanjithTS/Aelio/apps/api
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/sanjith/SanjithTS/Aelio/apps/api
+
+ ✓ src/playbook/trigger-engine.test.ts (3 tests) 12ms
+ ✓ src/integration/tiering.test.ts (5 tests) 26ms
+ ✓ src/integration/parsers.test.ts (5 tests) 28ms
+ ✓ src/integration/openapi-parser.test.ts (3 tests) 27ms
+ ✓ src/auth/auth-service.test.ts (4 tests) 996ms
+   ✓ AuthService > logs in with correct credentials and rejects wrong ones 618ms
+ ✓ src/agent/runtime.test.ts (8 tests) 1047ms
+
+ Test Files  6 passed (6)
+      Tests  28 passed (28)
+   Start at  18:47:36
+   Duration  4.30s (transform 2.11s, setup 0ms, collect 4.75s, tests 2.14s, environment 7ms, prepare 2.65s)
+

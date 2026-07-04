@@ -6,12 +6,14 @@
   "main": "./src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
-    "demo": "tsx src/demo/run.ts",
+    "start": "node --env-file=../../.env --import tsx src/server.ts",
+    "start:plain": "tsx src/server.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit",
     "lint": "echo 'no lint'",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "vitest run src/e2e --pool=forks --poolOptions.forks.singleFork",
+    "test:e2e:report": "tsx scripts/generate-e2e-report.mts"
   },
   "dependencies": {
     "@aelio/types": "workspace:*",
@@ -20,11 +22,21 @@
     "@aelio/config": "workspace:*",
     "@aelio/crypto": "workspace:*",
     "@aelio/llm": "workspace:*",
+    "@aelio/convox-sdk": "workspace:*",
+    "@aelio/demo-saas": "workspace:*",
     "@aelio/db": "workspace:*",
+    "@aelio/embedder": "workspace:*",
+    "@aelio/memory-engine": "workspace:*",
+    "@aelio/sunjet-client": "workspace:*",
     "@fastify/static": "^8.0.3",
     "fastify": "^5.2.0",
     "ioredis": "^5.4.2",
     "drizzle-orm": "^0.36.4",
-    "@fastify/websocket": "^11.0.1"
+    "@fastify/websocket": "^11.0.1",
+    "@fastify/cors": "^10.0.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13"
   }
 }

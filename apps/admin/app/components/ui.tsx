@@ -1,128 +1,183 @@
+'use client';
+
 import React from 'react';
 
-export function OfflineState({ error }: { error: string }) {
+export function Spinner({ size = 14 }: { size?: number }) {
   return (
-    <div className="empty">
-      <h3>API offline</h3>
-      <p>
-        Could not reach the Aelio API. Start it with <code>pnpm --filter @aelio/api dev</code> (or{' '}
-        <code>apps/api</code>).
-      </p>
-      <p className="muted" style={{ marginTop: 10, fontSize: 12 }}>
-        {error}
-      </p>
+    <span
+      className="spinner"
+      style={{ width: size, height: size, borderWidth: Math.max(2, size / 7) }}
+    />
+  );
+}
+
+export function Card({
+  children,
+  style,
+  pad = 22,
+}: {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+  pad?: number;
+}) {
+  return (
+    <div
+      style={{
+        background: 'var(--white)',
+        border: '1px solid var(--ink-10)',
+        borderRadius: 12,
+        padding: pad,
+        ...style,
+      }}
+    >
+      {children}
     </div>
   );
 }
 
-function normTier(tier: string | number): string {
-  const s = String(tier).toUpperCase().replace(/^TIER[\s_-]?/, '').replace(/^T/, '');
-  return s;
-}
-
-export function TierBadge({ tier }: { tier: string | number }) {
-  const n = normTier(tier);
-  const idx = ['0', '1', '2', '3'].includes(n) ? n : '0';
-  return <span className={`badge tier tier-${idx}`}>T{idx}</span>;
-}
-
-const METHOD_NOTHING = '';
-
-export function MethodBadge({ method }: { method: string }) {
-  const m = (method || METHOD_NOTHING).toUpperCase();
-  const color =
-    m === 'GET'
-      ? 'var(--tier-1)'
-      : m === 'POST'
-        ? 'var(--tier-0)'
-        : m === 'DELETE'
-          ? 'var(--tier-3)'
-          : 'var(--tier-2)';
+export function ErrorBanner({ message }: { message: string }) {
   return (
-    <span className="method" style={{ color }}>
-      {m}
+    <div
+      style={{
+        background: 'var(--red-bg)',
+        border: '1px solid rgba(196,56,56,.22)',
+        color: 'var(--red)',
+        borderRadius: 10,
+        padding: '12px 16px',
+        fontSize: 13,
+        fontWeight: 500,
+      }}
+    >
+      {message}
+    </div>
+  );
+}
+
+export function Btn({
+  children,
+  onClick,
+  variant = 'dark',
+  disabled,
+  type = 'button',
+  style,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: 'dark' | 'ghost' | 'danger';
+  disabled?: boolean;
+  type?: 'button' | 'submit';
+  style?: React.CSSProperties;
+}) {
+  const base: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    fontFamily: 'inherit',
+    fontSize: 13,
+    fontWeight: 600,
+    padding: '8px 14px',
+    borderRadius: 8,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.55 : 1,
+    transition: 'opacity 0.15s, background 0.15s',
+    border: '1px solid transparent',
+    ...style,
+  };
+  const variants: Record<string, React.CSSProperties> = {
+    dark: { background: 'var(--ink)', color: 'var(--white)' },
+    ghost: { background: 'var(--white)', color: 'var(--ink-70)', borderColor: 'var(--ink-10)' },
+    danger: { background: 'var(--red)', color: 'var(--white)' },
+  };
+  return (
+    <button type={type} onClick={onClick} disabled={disabled} style={{ ...base, ...variants[variant] }}>
+      {children}
+    </button>
+  );
+}
+
+export function Toggle({ on, onClick, disabled }: { on: boolean; onClick?: () => void; disabled?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        width: 34,
+        height: 19,
+        borderRadius: 999,
+        background: on ? 'var(--green)' : 'var(--ink-10)',
+        position: 'relative',
+        border: 'none',
+        cursor: disabled ? 'default' : 'pointer',
+        flexShrink: 0,
+        transition: 'background 0.15s',
+        opacity: disabled ? 0.6 : 1,
+      }}
+    >
+      <span
+        style={{
+          position: 'absolute',
+          top: 2,
+          left: on ? 17 : 2,
+          width: 15,
+          height: 15,
+          borderRadius: '50%',
+          background: 'var(--white)',
+          transition: 'left 0.15s ease',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+        }}
+      />
+    </button>
+  );
+}
+
+export function Field({
+  label,
+  children,
+  hint,
+}: {
+  label: string;
+  children: React.ReactNode;
+  hint?: string;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
+      <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-70)' }}>{label}</label>
+      {children}
+      {hint && <span style={{ fontSize: 11.5, color: 'var(--ink-45)' }}>{hint}</span>}
+    </div>
+  );
+}
+
+export const inputStyle: React.CSSProperties = {
+  width: '100%',
+  border: '1px solid var(--ink-22)',
+  borderRadius: 8,
+  padding: '9px 12px',
+  fontSize: 13.5,
+  fontFamily: 'inherit',
+  background: 'var(--white)',
+  color: 'var(--ink)',
+  outline: 'none',
+};
+
+export function TierBadge({ tier }: { tier: number }) {
+  const colors = ['var(--green)', 'var(--blue)', 'var(--amber)', 'var(--red)'];
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        fontSize: 10.5,
+        fontWeight: 700,
+        letterSpacing: '0.04em',
+        padding: '2px 8px',
+        borderRadius: 999,
+        background: colors[tier] || 'var(--ink-45)',
+        color: 'var(--white)',
+      }}
+    >
+      TIER {tier}
     </span>
   );
-}
-
-export function StatusBadge({ status }: { status: string }) {
-  const s = (status || '').toLowerCase();
-  const good = ['active', 'connected', 'resolved', 'verified', 'live', 'ok', 'enabled', 'open'];
-  const bad = ['error', 'failed', 'disconnected', 'unverified', 'blocked', 'suspended'];
-  const warn = ['pending', 'escalated', 'paused', 'review', 'waiting', 'degraded'];
-  let cls = 'badge-soft';
-  let dot = 'var(--ink-45)';
-  if (good.includes(s)) dot = 'var(--tier-0)';
-  else if (bad.includes(s)) dot = 'var(--tier-3)';
-  else if (warn.includes(s)) dot = 'var(--tier-2)';
-  return (
-    <span className={`badge ${cls}`}>
-      <span className="dot" style={{ background: dot }} />
-      {status}
-    </span>
-  );
-}
-
-export function Toggle({ on }: { on: boolean }) {
-  return <span className={`toggle ${on ? 'on' : ''}`} role="switch" aria-checked={on} />;
-}
-
-export function PriorityBadge({ priority }: { priority: string }) {
-  const p = (priority || '').toLowerCase();
-  const color =
-    p === 'high' || p === 'urgent'
-      ? 'var(--tier-3)'
-      : p === 'medium'
-        ? 'var(--tier-2)'
-        : 'var(--ink-45)';
-  return (
-    <span className="badge badge-outline" style={{ color }}>
-      {priority}
-    </span>
-  );
-}
-
-export function maskValue(v: unknown): string {
-  if (v == null) return '—';
-  const s = String(v);
-  if (s.length <= 6) return '••••';
-  return `${s.slice(0, 3)}••••${s.slice(-3)}`;
-}
-
-const SECRET_KEYS = /token|secret|key|password|signing|webhook|apikey|api_key|auth/i;
-
-export function MaskedConfig({ config }: { config: Record<string, unknown> }) {
-  const entries = Object.entries(config || {});
-  if (entries.length === 0) return <span className="muted">No configuration</span>;
-  return (
-    <dl className="kv">
-      {entries.map(([k, v]) => (
-        <React.Fragment key={k}>
-          <dt>{k}</dt>
-          <dd className="mono">
-            {SECRET_KEYS.test(k) ? maskValue(v) : typeof v === 'object' ? JSON.stringify(v) : String(v)}
-          </dd>
-        </React.Fragment>
-      ))}
-    </dl>
-  );
-}
-
-export function fmtDate(iso?: string | null): string {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return String(iso);
-  return d.toLocaleString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
-export function pct(n: number): string {
-  if (n == null || isNaN(n)) return '—';
-  // accept either 0..1 or 0..100
-  const v = n <= 1 ? n * 100 : n;
-  return `${v.toFixed(v % 1 === 0 ? 0 : 1)}%`;
 }

@@ -8,9 +8,10 @@ import {
   type IdentityChannel,
   type UserContext,
 } from '@aelio/types';
+import type { IdentityAssertion } from '@aelio/convox-sdk';
 import type { Store } from '../store/store.js';
 import type { Kv } from '../store/kv.js';
-import type { MockSaaS } from '../policy/mock-saas.js';
+
 import type { StepUpPort } from '../policy/policy-service.js';
 import { uuid } from '../util/id.js';
 
@@ -35,7 +36,6 @@ export class IdentityService implements StepUpPort {
   constructor(
     private readonly store: Store,
     private readonly kv: Kv,
-    private readonly mockSaaS: MockSaaS,
     private readonly baseUrl: string,
   ) {}
 
@@ -116,6 +116,62 @@ export class IdentityService implements StepUpPort {
     return ic;
   }
 
+  /**
+   * Bind a widget session using a customer-signed Convox identity assertion.
+   * Skips magic-link verification when the customer's backend vouches for the user.
+   */
+  async bindIdentityAssertion(
+    tenantId: string,
+    channelType: ChannelType,
+    assertion: IdentityAssertion,
+  ): Promise<{ identity: EndUserIdentity; session: EndUserSession }> {
+    let identity = this.store.findIdentityByExternal(tenantId, assertion.userId);
+    const now = new Date();
+    if (!identity) {
+      identity = {
+        id: uuid(),
+        tenantId,
+        externalUserId: assertion.userId,
+        verificationStatus: VerificationStatus.Verified,
+        verifiedAt: now,
+        channels: [],
+        currentUserState: 'active',
+        stateInferredAt: now,
+        stateConfidence: 1,
+        metadata: {
+          ...(assertion.metadata ?? {}),
+          email: assertion.email,
+          name: assertion.metadata?.name ?? assertion.userId,
+        },
+        createdAt: now,
+        updatedAt: now,
+      };
+      this.store.putIdentity(identity);
+    } else {
+      identity.verificationStatus = VerificationStatus.Verified;
+      identity.verifiedAt = identity.verifiedAt ?? now;
+      identity.metadata = {
+        ...identity.metadata,
+        ...(assertion.metadata ?? {}),
+        email: assertion.email ?? identity.metadata.email,
+      };
+      identity.updatedAt = now;
+      this.store.putIdentity(identity);
+    }
+
+    const existing = this.store.findIdentityChannel(tenantId, channelType, assertion.sessionId);
+    if (existing) {
+      existing.trusted = true;
+      existing.lastSeenAt = now;
+      this.store.putIdentityChannel(existing);
+    } else {
+      this.linkChannel(identity, channelType, assertion.sessionId, true);
+    }
+
+    const session = await this.ensureSession(identity, channelType);
+    return { identity, session };
+  }
+
   // ---- Magic link ----
   async generateMagicLink(tenantId: string, identityId: string): Promise<string> {
     const token = randomToken();
@@ -142,7 +198,13 @@ export class IdentityService implements StepUpPort {
 
     // Fetch user context from the SaaS and cache it on the identity.
     const ctx = this.fetchContext(identity);
-    identity.metadata = { ...ctx.metadata, permissions: ctx.permissions ?? [] };
+    identity.metadata = {
+      ...ctx.metadata,
+      name: ctx.displayName,
+      email: ctx.email,
+      plan: ctx.plan,
+      permissions: ctx.permissions ?? [],
+    };
     identity.verificationStatus = VerificationStatus.Verified;
     identity.verifiedAt = new Date();
     identity.contextCachedAt = new Date();
@@ -164,16 +226,21 @@ export class IdentityService implements StepUpPort {
   }
 
   fetchContext(identity: EndUserIdentity): UserContext {
-    const raw = this.mockSaaS.userContext(identity.externalUserId);
+    const raw = identity.metadata as Record<string, unknown>;
     return {
       externalUserId: identity.externalUserId,
-      displayName: String(raw.name ?? ''),
-      email: String(raw.email ?? ''),
-      plan: raw.plan ? String(raw.plan) : undefined,
+      displayName: String(raw.name ?? 'Alex Rivera'),
+      email: String(raw.email ?? `${identity.externalUserId}@example.com`),
+      plan: raw.plan ? String(raw.plan) : 'pro',
       accountCreatedAt: raw.createdAt ? String(raw.createdAt) : undefined,
       lastLoginAt: raw.lastLogin ? String(raw.lastLogin) : undefined,
       permissions: [],
-      metadata: raw,
+      metadata: {
+        externalUserId: identity.externalUserId,
+        name: String(raw.name ?? 'Alex Rivera'),
+        email: String(raw.email ?? `${identity.externalUserId}@example.com`),
+        plan: raw.plan ?? 'pro',
+      },
     };
   }
 

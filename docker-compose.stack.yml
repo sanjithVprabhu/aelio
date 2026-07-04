@@ -1,0 +1,80 @@
+# Full local stack: Postgres + SunJet + API
+#   docker compose -f docker-compose.stack.yml up --build
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d aelio_dev"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: aelio_dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  sunjet:
+    build:
+      context: ./Sunjet/Astrolobe
+      dockerfile: Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      LL_DATA_DIR: /data
+      LL_BIND: 0.0.0.0:8080
+      LL_API_KEYS: dev_sunjet_key
+    volumes:
+      - sunjet-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/v1/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  sunjet-daemon:
+    build:
+      context: ./Sunjet/Astrolobe
+      dockerfile: Dockerfile.daemon
+    ports: ["8081:8081"]
+    environment:
+      SUNJET_DAEMON_BIND: 0.0.0.0:8081
+      SUNJET_DAEMON_API_KEYS: dev_daemon_key
+      SUNJET_LLSERVER_URL: http://sunjet:8080
+      SUNJET_LLSERVER_API_KEY: dev_sunjet_key
+      AELIO_API_URL: http://api:3000
+      SUNJET_DAEMON_API_KEYS: dev_daemon_key
+    depends_on:
+      sunjet:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    ports: ["3100:3000"]
+    environment:
+      DATABASE_URL: postgres://dev:dev@postgres:5432/aelio_dev
+      SUNJET_URL: http://sunjet:8080
+      SUNJET_API_KEY: dev_sunjet_key
+      SUNJET_DAEMON_URL: http://sunjet-daemon:8081
+      SUNJET_DAEMON_API_KEY: dev_daemon_key
+      BASE_URL: http://localhost:3100
+      LLM_PROVIDER: scripted
+      EMBEDDING_PROVIDER: hash
+      MEMORY_ENGINE: sunjet
+      CONVOX_IN_PROCESS: "1"
+      SUNJET_DAEMON_API_KEYS: dev_daemon_key
+      PORT: "3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      sunjet:
+        condition: service_healthy
+      sunjet-daemon:
+        condition: service_started
+
+volumes:
+  pgdata:
+  sunjet-data:

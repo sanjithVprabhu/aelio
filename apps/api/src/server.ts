@@ -1,15 +1,16 @@
 import { createLogger } from '@aelio/logger';
 import { buildApp } from './app.js';
+import { resolveServerRuntimeConfig } from './runtime/server-config.js';
 
 const log = createLogger({});
 
 async function main(): Promise<void> {
-  const port = Number(process.env.PORT ?? 3000);
+  const runtime = resolveServerRuntimeConfig();
   const { app, container } = await buildApp();
-  await app.listen({ port, host: '0.0.0.0' });
+  await app.listen({ port: runtime.port, host: runtime.host });
 
   const base = container.baseUrl;
-  log.info({ port }, 'aelio api listening');
+  log.info({ port: runtime.port, host: runtime.host }, 'aelio api listening');
   // eslint-disable-next-line no-console
   console.log(`
   Aelio is running.
@@ -17,11 +18,17 @@ async function main(): Promise<void> {
     Landing page      ${base}/
     Onboarding        ${base}/onboarding
     Dashboard         ${base}/app
-    Live chat demo    ${base}/chat
+    Chat widget       ${base}${runtime.publicChatPath}
+    Demo harness      ${base}${runtime.demoRoot}/chat
+    Demo telemetry    ${base}${runtime.demoRoot}/telemetry
+    Demo SaaS view    ${base}${runtime.demoRoot}/live
     Health            ${base}/healthz
 
   Demo tenant: "${container.store.getTenantBySlug(container.demoTenantSlug)?.name}" (slug: ${container.demoTenantSlug})
-  LLM provider: ${process.env.LLM_PROVIDER ?? 'scripted'} (set ANTHROPIC_API_KEY + LLM_PROVIDER=anthropic for the real model)
+  Persistence: ${runtime.persistenceMode}
+  Memory core: ${runtime.memoryMode}
+  LLM provider: ${process.env.LLM_PROVIDER ?? (process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY ? 'google' : 'scripted')}
+  Embeddings: ${process.env.EMBEDDING_PROVIDER ?? (process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY ? 'google' : 'hash')}
 `);
 }
 

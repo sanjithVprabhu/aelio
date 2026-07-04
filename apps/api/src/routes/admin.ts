@@ -172,36 +172,37 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
     },
   );
 
-  // ---- Playbooks (deploy / versioning) ----
-  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/playbooks', async (req) => {
+  // ---- Convox registry (live tools from customer SDK connections) ----
+  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/convox/tools', async (req) => {
     const tn = t(req.params.slug);
-    return c.playbooks.list(tn.id).map((p) => ({
-      id: p.id,
-      version: p.version,
-      status: p.status,
-      deploymentMode: p.deploymentMode,
-      gradualRolloutPercent: p.gradualRolloutPercent,
-      states: p.lifecycle.states.length,
-      publishedAt: p.publishedAt,
-    }));
+    c.convoxBridge.syncFromRegistry(tn.id);
+    return {
+      connections: c.convox.listConnections(tn.id).map((conn) => ({
+        connectionId: conn.connectionId,
+        instanceId: conn.instanceId,
+        toolCount: conn.tools.size,
+      })),
+      liveTools: c.convox.listTools(tn.id),
+      liveStates: c.convox.listStates(tn.id),
+      curatedActions: c.store.listActions(tn.id),
+    };
   });
+
+  // Legacy playbook routes — retired in the Convox architecture.
+  app.get<{ Params: { slug: string } }>('/api/v1/t/:slug/playbooks', async () => []);
 
   app.get<{ Params: { slug: string; id: string } }>('/api/v1/t/:slug/playbooks/:id/preflight', async (req) => {
     const tn = t(req.params.slug);
     const p = c.store.getPlaybook(tn.id, req.params.id);
     if (!p) return null;
-    return c.playbooks.preflight(tn.id, p);
+    return { ok: false, reason: 'Playbooks are retired — use Convox tool registration.' };
   });
 
-  app.post<{ Params: { slug: string; id: string }; Body: { mode: 'immediate' | 'shadow' | 'gradual'; gradualRolloutPercent?: number } }>(
+  app.post<{ Params: { slug: string; id: string } }>(
     '/api/v1/t/:slug/playbooks/:id/deploy',
-    async (req) => {
-      const tn = t(req.params.slug);
-      const p = c.playbooks.deploy(tn.id, req.params.id, {
-        mode: req.body.mode,
-        gradualRolloutPercent: req.body.gradualRolloutPercent,
-      });
-      return { ok: true, status: p.status, mode: p.deploymentMode };
+    async (_req, reply) => {
+      reply.code(410);
+      return { ok: false, error: 'Playbooks are retired — register tools via Convox SDK.' };
     },
   );
 
@@ -254,7 +255,22 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
         reply.code(400);
         return { ok: false, error: 'Only Tier 0 (read) actions can be test-called.' };
       }
-      const data = c.mockSaaS.call(req.body.externalUserId ?? 'ext_demo', action.key, req.body.args ?? {});
+      const apiKey = c.store.getTenantApiKey(tn.id);
+      if (!apiKey) {
+        reply.code(503);
+        return { ok: false, error: 'Tenant Convox API key is not configured.' };
+      }
+      const data = await c.convox.execute(tn.id, apiKey, {
+        tool: action.key,
+        args: req.body.args ?? {},
+        context: {
+          invocationId: `admin_test_${uuid()}`,
+          tenantId: tn.id,
+          externalUserId: req.body.externalUserId ?? 'ext_demo',
+          verified: true,
+          stepUpValid: false,
+        },
+      });
       return { ok: true, data };
     },
   );
@@ -281,19 +297,17 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
 
   app.post<{ Params: { slug: string }; Body: { name: string; description?: string } }>(
     '/api/v1/t/:slug/kb/collections',
-    async (req) => {
-      const tn = t(req.params.slug);
-      const col = c.rag.createCollection(tn.id, req.body.name, req.body.description);
-      return { id: col.id, name: col.name };
+    async (_req, reply) => {
+      reply.code(410);
+      return { ok: false, error: 'Knowledge base is retired pending the VSS memory layer.' };
     },
   );
 
   app.post<{ Params: { slug: string; id: string }; Body: { type: 'file' | 'url' | 'text'; name: string; url?: string; content: string } }>(
     '/api/v1/t/:slug/kb/collections/:id/sources',
-    async (req) => {
-      const tn = t(req.params.slug);
-      const source = await c.rag.addSource(tn.id, req.params.id, req.body);
-      return { id: source.id, status: source.status, chunkCount: source.chunkCount };
+    async (_req, reply) => {
+      reply.code(410);
+      return { ok: false, error: 'Knowledge base is retired pending the VSS memory layer.' };
     },
   );
 
@@ -310,7 +324,9 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
     '/api/v1/t/:slug/kb/collections/:id/test',
     async (req) => {
       const tn = t(req.params.slug);
-      return { chunks: await c.rag.retrieve(tn.id, req.body.query, [req.params.id]) };
+      void tn;
+      void req;
+      return { chunks: [] };
     },
   );
 
@@ -411,11 +427,14 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
 
   app.post<{ Params: { slug: string } }>('/api/v1/t/:slug/onboarding/go-live', async (req) => {
     const tn = t(req.params.slug);
-    const playbook = c.store.findActivePlaybook(tn.id);
     const checklist = [
       { label: '≥1 action exposed', passed: c.store.listExposedActions(tn.id).length > 0, blocker: true },
       { label: '≥1 channel connected', passed: c.store.listChannels(tn.id).length > 0, blocker: true },
-      { label: 'Playbook has ≥1 state', passed: !!playbook && playbook.lifecycle.states.length > 0, blocker: true },
+      {
+        label: 'Convox tools registered',
+        passed: c.convox.listTools(tn.id).length > 0,
+        blocker: true,
+      },
       { label: 'SOC2 report uploaded', passed: false, blocker: false },
     ];
     const ready = checklist.every((c2) => !c2.blocker || c2.passed);
@@ -472,8 +491,7 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
 
   app.post<{ Params: { slug: string; id: string } }>('/api/v1/t/:slug/evals/suites/:id/run', async (req) => {
     const tn = t(req.params.slug);
-    const playbook = c.store.findActivePlaybook(tn.id);
-    const run = await evalRunner.runSuite(tn.id, req.params.id, playbook?.version ?? '1.0.0');
+    const run = await evalRunner.runSuite(tn.id, req.params.id, 'convox');
     return run;
   });
 
@@ -484,8 +502,9 @@ export function registerAdminRoutes(app: FastifyInstance, c: Container): void {
 
   app.post<{ Params: { slug: string; id: string } }>('/api/v1/t/:slug/playbooks/:id/archive', async (req) => {
     const tn = t(req.params.slug);
-    c.playbooks.archive(tn.id, req.params.id);
-    return { ok: true };
+    void tn;
+    void req;
+    return { ok: false, error: 'Playbooks are retired.' };
   });
 
   // ---- Playbook editing (states / triggers / fallback / templates) ----

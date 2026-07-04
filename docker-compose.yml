@@ -1,11 +1,16 @@
-# Local dev infrastructure. NOTE: apps/api runs fine WITHOUT any of this —
-# it falls back to in-memory persistence and a scripted LLM provider when the
-# corresponding env vars are unset. Bring this up only when you want to exercise
-# the real Postgres / Redis / S3 / mail paths.
+# Aelio dev stack: Postgres + SunJet (ll-server + daemon).
+#   docker compose up -d postgres sunjet sunjet-daemon
+#   SUNJET_URL=http://localhost:8080 SUNJET_DAEMON_URL=http://localhost:8081 pnpm api:live
+#   pnpm demo:backend:live
 services:
   postgres:
     image: pgvector/pgvector:pg16
     ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d aelio_dev"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: dev
@@ -13,9 +18,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  redis:
-    image: redis:7-alpine
-    ports: ["6379:6379"]
+  # redis removed — hot state uses SunJet runtime_state (see SunJetKv)
 
   mailhog:
     image: mailhog/mailhog
@@ -29,5 +32,38 @@ services:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio12345
 
+  sunjet:
+    build:
+      context: ./Sunjet/Astrolobe
+      dockerfile: Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      LL_DATA_DIR: /data
+      LL_BIND: 0.0.0.0:8080
+      LL_API_KEYS: dev_sunjet_key
+    volumes:
+      - sunjet-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/v1/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  sunjet-daemon:
+    build:
+      context: ./Sunjet/Astrolobe
+      dockerfile: Dockerfile.daemon
+    ports: ["8081:8081"]
+    environment:
+      SUNJET_DAEMON_BIND: 0.0.0.0:8081
+      SUNJET_DAEMON_API_KEYS: dev_daemon_key
+      SUNJET_LLSERVER_URL: http://sunjet:8080
+      SUNJET_LLSERVER_API_KEY: dev_sunjet_key
+      AELIO_API_URL: http://host.docker.internal:3100
+    depends_on:
+      sunjet:
+        condition: service_healthy
+
 volumes:
   pgdata:
+  sunjet-data:
